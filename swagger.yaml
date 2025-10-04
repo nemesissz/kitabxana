@@ -1,0 +1,1790 @@
+openapi: 3.0.0
+info:
+  title: Vergi API
+  description: Vergi portalı üçün API
+  version: 1.0.0
+
+servers:
+  - url: https://api.muhasibatjurnal.az
+    description: Production API Server
+  - url: http://localhost:3000
+    description: Development API Server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        role:
+          type: integer
+          description: "Rəqəmsal rol: 1=User, 2=Admin, 3=Supadmin"
+          enum: [1, 2, 3]
+        isVerified:
+          type: boolean
+        eduEmail:
+          type: boolean
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        fullName:
+          type: string
+        phone:
+          type: string
+        company:
+          type: string
+        position:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: integer
+        plan:
+          type: string
+          enum: [1m, 3m, 6m]
+        price:
+          type: number
+          description: Abunəlik qiyməti
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [active, cancelled]
+        createdAt:
+          type: string
+          format: date-time
+
+    SubscriptionPlan:
+      type: object
+      properties:
+        price:
+          type: number
+          description: Plan qiyməti
+          example: 24.99
+        duration:
+          type: string
+          description: Plan müddəti (göstərim üçün)
+          example: "3 ay"
+        description:
+          type: string
+          description: Plan təsviri
+          example: "3 aylıq abunəlik"
+        durationMonths:
+          type: integer
+          description: Müddət (ay sayı)
+          example: 3
+
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+        amount:
+          type: number
+        type:
+          type: string
+          enum: [subscription, single-pdf]
+        status:
+          type: string
+          enum: [pending, success, failed]
+        createdAt:
+          type: string
+          format: date-time
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Kateqoriyanın adı
+        pdfCount:
+          type: integer
+          description: Kateqoriyada olan PDF sayı
+        createdAt:
+          type: string
+          format: date-time
+        pdfs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pdf'
+
+    Pdf:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        language:
+          type: string
+          enum: [az, ru, az-ru]
+        filePath:
+          type: string
+        price:
+          type: number
+        downloads:
+          type: integer
+        categoryId:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    News:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Xəbər ID-si
+        title:
+          type: string
+          description: Xəbər başlığı
+        content:
+          type: string
+          description: Xəbər məzmunu (HTML formatında)
+        image:
+          type: string
+          description: Xəbər şəklinin yolu
+        language:
+          type: string
+          enum: [az, ru, en]
+          description: Xəbərin dili
+        categoryId:
+          type: integer
+          description: Xəbər kateqoriyasının ID-si
+        category:
+          $ref: '#/components/schemas/Category'
+        createdAt:
+          type: string
+          format: date-time
+          description: Xəbər tarixi
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Xəta mesajı
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: İstifadəçi qeydiyyatı
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Qeydiyyat uğurlu
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: İstifadəçi girişi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Giriş uğurlu
+
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Bütün istifadəçiləri əldə etmək (Admin only)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: İstifadəçilər uğurla əldə edildi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Admin icazəsi tələb olunur
+
+    post:
+      tags:
+        - Users
+      summary: Yeni istifadəçi yaratmaq (Admin only)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: integer
+                  enum: [1, 2, 3]
+                fullName:
+                  type: string
+                phone:
+                  type: string
+                company:
+                  type: string
+      responses:
+        '201':
+          description: İstifadəçi uğurla yaradıldı
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: İstifadəçini ID-yə görə əldə etmək
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: İstifadəçi uğurla əldə edildi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+
+    patch:
+      tags:
+        - Users
+      summary: İstifadəçini yeniləmək
+      description: İstifadəçi öz profilini və ya Admin digərlərini yeniləyə bilər
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                role:
+                  type: integer
+                  description: "Yalnız Admin dəyişə bilər"
+                  enum: [1, 2, 3]
+                fullName:
+                  type: string
+                phone:
+                  type: string
+                company:
+                  type: string
+      responses:
+        '200':
+          description: İstifadəçi uğurla yeniləndi
+
+    delete:
+      tags:
+        - Users
+      summary: İstifadəçini silmək (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: İstifadəçi uğurla silindi
+                description:
+                  type: string
+                  example: Məqalə yaratmaq icazəsi
+      responses:
+        '201':
+          description: İcazə uğurla yaradıldı
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      permission:
+                        $ref: '#/components/schemas/Permission'
+        '400':
+          description: Yanlış məlumatlar
+
+  /news:
+    get:
+      tags:
+        - News
+      summary: Bütün xəbərləri əldə etmək
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Səhifə nömrəsi
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Səhifə başına xəbər sayı
+        - in: query
+          name: language
+          schema:
+            type: string
+            enum: [az, ru, en]
+          description: Dil filtri
+      responses:
+        '200':
+          description: Xəbərlər uğurla əldə edildi
+
+    post:
+      tags:
+        - News
+      summary: Yeni xəbər yaratmaq (Admin only)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                language:
+                  type: string
+                  enum: [az, ru, en]
+                categoryId:
+                  type: integer
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Xəbər uğurla yaradıldı
+
+  /news/{id}:
+    get:
+      tags:
+        - News
+      summary: Xəbəri ID-yə görə əldə etmək
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xəbər uğurla əldə edildi
+
+    put:
+      tags:
+        - News
+      summary: Xəbəri yeniləmək (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xəbər uğurla yeniləndi
+
+    delete:
+      tags:
+        - News
+      summary: Xəbəri silmək (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xəbər uğurla silindi
+
+  /pdfs:
+    get:
+      tags:
+        - PDFs
+      summary: Bütün PDF-ləri əldə etmək
+      responses:
+        '200':
+          description: PDF-lər uğurla əldə edildi
+
+    post:
+      tags:
+        - PDFs
+      summary: Yeni PDF yaratmaq (Admin only)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                language:
+                  type: string
+                  enum: [az, ru, az-ru]
+                price:
+                  type: number
+                categoryId:
+                  type: integer
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: PDF uğurla yaradıldı
+
+  /pdfs/{id}:
+    get:
+      tags:
+        - PDFs
+      summary: PDF-i ID-yə görə əldə etmək
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: PDF uğurla əldə edildi
+
+    put:
+      tags:
+        - PDFs
+      summary: PDF-i yeniləmək (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: PDF uğurla yeniləndi
+
+    delete:
+      tags:
+        - PDFs
+      summary: PDF-i silmək (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: PDF uğurla silindi
+
+  /pdfs/{id}/download:
+    get:
+      tags:
+        - PDFs
+      summary: PDF-i yükləmək
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: PDF uğurla yükləndi
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Uğurlu giriş
+        '401':
+          description: Yanlış email və ya şifrə
+
+  /auth/verify-email:
+    post:
+      tags:
+        - Auth
+      summary: Email təsdiqləmə
+      requestBody:
+        required: true
+        content:
+          application/json:
+
+  /news:
+    post:
+      tags:
+        - News
+      summary: Yeni xəbər əlavə etmək
+      description: |
+        Sistemə yeni xəbər əlavə etmək üçün istifadə olunur.
+        QEYD:
+        - Yalnız şəkil faylları (JPEG, PNG, GIF) qəbul edilir
+        - Maksimum şəkil ölçüsü: 5MB
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+                - image
+                - language
+                - categoryId
+              properties:
+                title:
+                  type: string
+                  description: Xəbər başlığı
+                content:
+                  type: string
+                  description: Xəbərin ətraflı məlumatı (HTML formatında)
+                image:
+                  type: string
+                  format: binary
+                  description: Xəbər şəkli (maksimum 5MB, JPEG/PNG/GIF)
+                language:
+                  type: string
+                  enum: [az, ru, en]
+                  description: Xəbərin dili
+                categoryId:
+                  type: integer
+                  description: Xəbər kateqoriyasının ID-si
+      responses:
+        '201':
+          description: Xəbər uğurla əlavə edildi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
+        '400':
+          description: Yanlış fayl formatı və ya məlumatlar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Autorizasiya xətası
+        '413':
+          description: Fayl ölçüsü limitdən böyükdür (5MB)
+
+  /auth/forgot-password:
+    post:
+      tags:
+        - Auth
+      summary: Şifrə bərpası
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Şifrə bərpası emaili göndərildi
+
+  # Subscription Routes
+  /subscriptions/create:
+    post:
+      tags:
+        - Subscriptions
+      summary: Yeni abunəlik yaratmaq
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - plan
+              properties:
+                plan:
+                  type: string
+                  enum: [1m, 3m, 6m]
+      responses:
+        '201':
+          description: Abunəlik yaradıldı
+
+  /subscriptions/my:
+    get:
+      tags:
+        - Subscriptions
+      summary: İstifadəçinin bütün abunəlikləri
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Abunəliklər
+
+  /subscriptions/active:
+    get:
+      tags:
+        - Subscriptions
+      summary: İstifadəçinin aktiv abunəliyi
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Aktiv abunəlik
+
+  /subscriptions/{subscriptionId}/cancel:
+    post:
+      tags:
+        - Subscriptions
+      summary: Abunəliyi ləğv etmək
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: subscriptionId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Abunəlik ləğv edildi
+
+  /subscriptions/prices:
+    get:
+      tags:
+        - Subscriptions
+      summary: Subscription plan qiymətlərini əldə etmək
+      description: Bütün mövcud subscription planlarının qiymət və müddət məlumatları
+      responses:
+        '200':
+          description: Plan qiymətləri uğurla əldə edildi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      plans:
+                        type: object
+                        properties:
+                          '1m':
+                            $ref: '#/components/schemas/SubscriptionPlan'
+                          '3m':
+                            $ref: '#/components/schemas/SubscriptionPlan'
+                          '6m':
+                            $ref: '#/components/schemas/SubscriptionPlan'
+
+  # Payment Routes
+  /payments/checkout:
+    post:
+      tags:
+        - Payments
+      summary: Ödəniş başlatmaq
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+              properties:
+                type:
+                  type: string
+                  enum: [subscription, single-pdf]
+                pdfId:
+                  type: integer
+                plan:
+                  type: string
+                  enum: [1m, 3m, 6m]
+      responses:
+        '200':
+          description: Ödəniş başladıldı
+
+  /payments/webhook:
+    post:
+      tags:
+        - Payments
+      summary: Ödəniş webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Webhook qəbul edildi
+
+  # PDF Routes
+  /pdfs:
+    get:
+      tags:
+        - PDFs
+      summary: PDF-ləri axtar və filtrlə
+      parameters:
+        - in: query
+          name: categoryId
+          schema:
+            type: integer
+          description: Kateqoriyaya görə filtir
+        - in: query
+          name: language
+          schema:
+            type: string
+            enum: [az, ru, az-ru]
+          description: Dilə görə filtir
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Başlıq və ya kateqoriya adına görə axtarış
+        - in: query
+          name: minPrice
+          schema:
+            type: number
+          description: Minimum qiymət filtri
+        - in: query
+          name: maxPrice
+          schema:
+            type: number
+          description: Maksimum qiymət filtri
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum: [title, price, downloads, createdAt]
+          description: Sıralama sahəsi
+        - in: query
+          name: sortOrder
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sıralama istiqaməti
+      responses:
+        '200':
+          description: PDF siyahısı
+
+    post:
+      tags:
+        - PDFs
+      summary: Yeni PDF əlavə etmək
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - file
+                - categoryId
+                - price
+              properties:
+                title:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+                categoryId:
+                  type: integer
+                price:
+                  type: number
+                language:
+                  type: string
+                  enum: [az, ru, az-ru]
+      responses:
+        '201':
+          description: PDF əlavə edildi
+
+  # Category Routes
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Bütün kateqoriyaları almaq
+      description: Bütün kateqoriyaları və onların PDF saylarını əldə edir
+      responses:
+        '200':
+          description: Kateqoriya siyahısı uğurla əldə edildi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      categories:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Category'
+
+    post:
+      tags:
+        - Categories
+      summary: Yeni kateqoriya əlavə etmək
+      description: Admin səviyyəli istifadəçilər üçün yeni kateqoriya yaratmaq
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Kateqoriya adı
+      responses:
+        '201':
+          description: Kateqoriya uğurla yaradıldı
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      category:
+                        $ref: '#/components/schemas/Category'
+        '400':
+          description: Yanlış məlumat və ya kateqoriya artıq mövcuddur
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+
+  /categories/{id}:
+    get:
+      tags:
+        - Categories
+      summary: Kateqoriya məlumatlarını ID-yə görə almaq
+      description: Tək bir kateqoriyanın məlumatlarını və PDF-lərini əldə edir
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Kateqoriya ID-si
+      responses:
+        '200':
+          description: Kateqoriya məlumatları uğurla əldə edildi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      category:
+                        $ref: '#/components/schemas/Category'
+        '404':
+          description: Kateqoriya tapılmadı
+
+    put:
+      tags:
+        - Categories
+      summary: Kateqoriya məlumatlarını yeniləmək
+      description: Admin səviyyəli istifadəçilər üçün kateqoriya məlumatlarını yeniləmək
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Kateqoriya ID-si
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Yeni kateqoriya adı
+      responses:
+        '200':
+          description: Kateqoriya uğurla yeniləndi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      category:
+                        $ref: '#/components/schemas/Category'
+        '400':
+          description: Yanlış məlumat və ya kateqoriya adı artıq mövcuddur
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+        '404':
+          description: Kateqoriya tapılmadı
+
+    delete:
+      tags:
+        - Categories
+      summary: Kateqoriyanı silmək
+      description: Admin səviyyəli istifadəçilər üçün kateqoriyanı silmək
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Kateqoriya ID-si
+      responses:
+        '200':
+          description: Kateqoriya uğurla silindi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Category deleted successfully
+        '400':
+          description: Kateqoriyada PDF-lər var
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+        '404':
+          description: Kateqoriya tapılmadı
+
+  # News Routes
+  /news:
+    get:
+      tags:
+        - News
+      summary: Bütün xəbərləri almaq
+      description: Səhifələnmiş şəkildə bütün xəbərləri əldə edir
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Səhifə nömrəsi
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+          description: Hər səhifədəki xəbər sayı
+      responses:
+        '200':
+          description: Xəbərlər uğurla əldə edildi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      news:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/News'
+                      pagination:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                          page:
+                            type: integer
+                          pages:
+                            type: integer
+
+    post:
+      tags:
+        - News
+      summary: Yeni xəbər əlavə etmək
+      description: Admin səviyyəli istifadəçilər üçün yeni xəbər yaratmaq
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+              properties:
+                title:
+                  type: string
+                  description: Xəbər başlığı
+                content:
+                  type: string
+                  description: Xəbər məzmunu
+                image:
+                  type: string
+                  format: binary
+                  description: Xəbər şəkli
+      responses:
+        '201':
+          description: Xəbər uğurla yaradıldı
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      news:
+                        $ref: '#/components/schemas/News'
+        '400':
+          description: Yanlış məlumat
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+
+  /news/{id}:
+    get:
+      tags:
+        - News
+      summary: Xəbər məlumatlarını ID-yə görə almaq
+      description: Tək bir xəbərin məlumatlarını əldə edir
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Xəbər ID-si
+      responses:
+        '200':
+          description: Xəbər məlumatları uğurla əldə edildi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      news:
+                        $ref: '#/components/schemas/News'
+        '404':
+          description: Xəbər tapılmadı
+
+    put:
+      tags:
+        - News
+      summary: Xəbər məlumatlarını yeniləmək
+      description: Admin səviyyəli istifadəçilər üçün xəbər məlumatlarını yeniləmək
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Xəbər ID-si
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Yeni xəbər başlığı
+                content:
+                  type: string
+                  description: Yeni xəbər məzmunu
+                image:
+                  type: string
+                  format: binary
+                  description: Yeni xəbər şəkli
+      responses:
+        '200':
+          description: Xəbər uğurla yeniləndi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      news:
+                        $ref: '#/components/schemas/News'
+        '400':
+          description: Yanlış məlumat
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+        '404':
+          description: Xəbər tapılmadı
+
+    delete:
+      tags:
+        - News
+      summary: Xəbəri silmək
+      description: Admin səviyyəli istifadəçilər üçün xəbəri silmək
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Xəbər ID-si
+      responses:
+        '200':
+          description: Xəbər uğurla silindi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: News deleted successfully
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+        '404':
+          description: Xəbər tapılmadı
+
+  # Admin Routes
+  /admin/stats:
+    get:
+      tags:
+        - Admin
+      summary: Sistem statistikasını əldə etmək
+      description: Sistem üzrə ümumi statistik məlumatları əldə edir
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Uğurlu əməliyyat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usersCount:
+                    type: integer
+                    description: Ümumi istifadəçi sayı
+                  activeSubscriptions:
+                    type: integer
+                    description: Aktiv abunəliklərin sayı
+                  totalRevenue:
+                    type: number
+                    description: Ümumi gəlir
+                  newUsers:
+                    type: object
+                    description: Yeni qeydiyyat statistikaları
+                    properties:
+                      today:
+                        type: integer
+                        description: Bu gün qeydiyyatdan keçənlərin sayı
+                      thisMonth:
+                        type: integer
+                        description: Bu ay qeydiyyatdan keçənlərin sayı
+                  subscriptionStats:
+                    type: object
+                    description: Abunəlik statistikaları
+                    properties:
+                      active:
+                        type: integer
+                        description: Aktiv abunəliklərin sayı
+                      byPlan:
+                        type: object
+                        description: Planlara görə abunəlik sayları
+                        properties:
+                          '1m':
+                            type: integer
+                          '3m':
+                            type: integer
+                          '6m':
+                            type: integer
+                  paymentStats:
+                    type: object
+                    description: Ödəniş statistikaları
+                    properties:
+                      byType:
+                        type: object
+                        description: Növlərə görə ödəniş sayları
+                        properties:
+                          subscription:
+                            type: integer
+                          single-pdf:
+                            type: integer
+                      revenueByType:
+                        type: object
+                        description: Növlərə görə ümumi gəlir
+                        properties:
+                          subscription:
+                            type: number
+                          single-pdf:
+                            type: number
+                  eduEmailStats:
+                    type: object
+                    description: Təhsil emaili statistikası
+                    properties:
+                      verified:
+                        type: integer
+                        description: Təsdiqlənmiş təhsil emaili olan istifadəçi sayı
+                      unverified:
+                        type: integer
+                        description: Təsdiqlənməmiş istifadəçi sayı
+                  topPdfs:
+                    type: array
+                    description: Ən çox yüklənən PDF sənədlər
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                        downloads:
+                          type: integer
+                        language:
+                          type: string
+                        category:
+                          type: string
+                  recentPayments:
+                    type: array
+                    description: Son ödənişlər
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        amount:
+                          type: number
+                        type:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        userEmail:
+                          type: string
+                        userName:
+                          type: string
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+        '500':
+          description: Server xətası
+
+  /admin/users:
+    get:
+      tags:
+        - Admin
+      summary: Bütün istifadəçiləri əldə etmək
+      description: Sistem üzrə bütün istifadəçilərin siyahısını əldə edir
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: role
+          schema:
+            type: string
+            enum: [user, admin, superadmin]
+          description: İstifadəçi rolu üzrə filtir
+        - in: query
+          name: isVerified
+          schema:
+            type: boolean
+          description: Təsdiqlənmiş istifadəçilər üzrə filtir
+        - in: query
+          name: eduEmail
+          schema:
+            type: boolean
+          description: Təhsil emaili olan istifadəçilər üzrə filtir
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Email üzrə axtarış
+      responses:
+        '200':
+          description: Uğurlu əməliyyat
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+        '500':
+          description: Server xətası
+
+  /admin/users/{id}/role:
+    put:
+      tags:
+        - Admin
+      summary: İstifadəçi rolunu yeniləmək
+      description: İstifadəçinin rəqəmsal rolunu yeniləyir
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: İstifadəçi ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - role
+              properties:
+                role:
+                  type: integer
+                  enum: [1, 2, 3]
+                  description: "1=User, 2=Admin, 3=Supadmin"
+      responses:
+        '200':
+          description: Uğurlu əməliyyat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Yanlış sorğu
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+        '404':
+          description: İstifadəçi tapılmadı
+        '500':
+          description: Server xətası
+
+  /admin/dashboard:
+    get:
+      tags:
+        - Admin
+      summary: Dashboard məlumatlarını əldə etmək
+      description: Dashboard üçün lazım olan bütün statistika məlumatlarını əldə edir
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Uğurlu əməliyyat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  monthlyStats:
+                    type: array
+                    description: Son 12 ayın aylıq statistikası
+                    items:
+                      type: object
+                      properties:
+                        month:
+                          type: string
+                        amount:
+                          type: number
+                  categoryStats:
+                    type: array
+                    description: Kateqoriyalar üzrə statistika
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        pdfCount:
+                          type: integer
+                        totalDownloads:
+                          type: integer
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Giriş qadağandır
+        '500':
+          description: Server xətası
+
+  /admin/subscription-plans:
+    get:
+      tags:
+        - Admin
+      summary: Subscription planlarını əldə etmək
+      description: Admin paneldə subscription planlarının qiymət və müddət məlumatlarını əldə etmək
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Uğurlu əməliyyat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      plans:
+                        type: object
+                        properties:
+                          '1m':
+                            $ref: '#/components/schemas/SubscriptionPlan'
+                          '3m':
+                            $ref: '#/components/schemas/SubscriptionPlan'
+                          '6m':
+                            $ref: '#/components/schemas/SubscriptionPlan'
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Admin səlahiyyəti tələb olunur
+
+  /admin/subscription-plans/{planId}:
+    put:
+      tags:
+        - Admin
+      summary: Subscription planını yeniləmək
+      description: Admin paneldə subscription planının qiymət və müddətini dəyişdirmək
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: planId
+          in: path
+          required: true
+          description: Plan ID (1m, 3m, 6m)
+          schema:
+            type: string
+            enum: [1m, 3m, 6m]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - price
+                - durationMonths
+                - description
+              properties:
+                price:
+                  type: number
+                  description: Yeni qiymət
+                  example: 29.99
+                durationMonths:
+                  type: integer
+                  description: Müddət (ay ilə)
+                  example: 3
+                description:
+                  type: string
+                  description: Plan təsviri
+                  example: "3 aylıq premium abunəlik"
+      responses:
+        '200':
+          description: Plan uğurla yeniləndi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      plan:
+                        type: object
+                        properties:
+                          planId:
+                            type: string
+                          price:
+                            type: number
+                          durationMonths:
+                            type: integer
+                          description:
+                            type: string
+                          updatedAt:
+                            type: string
+                            format: date-time
+                  message:
+                    type: string
+                    example: "Plan uğurla yeniləndi"
+        '400':
+          description: Səhv məlumat
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Admin səlahiyyəti tələb olunur
+
+  /admin/subscriptions:
+    get:
+      tags:
+        - Admin
+      summary: Bütün subscription-ları əldə etmək
+      description: Admin paneldə bütün aktiv və keçmiş subscription-ları görəmək
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Uğurlu əməliyyat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      subscriptions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            plan:
+                              type: string
+                              enum: [1m, 3m, 6m]
+                            price:
+                              type: number
+                            status:
+                              type: string
+                              enum: [active, cancelled]
+                            startDate:
+                              type: string
+                              format: date-time
+                            endDate:
+                              type: string
+                              format: date-time
+                            createdAt:
+                              type: string
+                              format: date-time
+                            user:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                email:
+                                  type: string
+                                profile:
+                                  type: object
+                                  properties:
+                                    fullName:
+                                      type: string
+        '401':
+          description: Səlahiyyət xətası
+        '403':
+          description: Admin səlahiyyəti tələb olunur

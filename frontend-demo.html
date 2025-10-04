@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vergi API Demo - Frontend Developer Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .endpoint {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .method {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get { background: #28a745; }
+        .post { background: #007bff; }
+        .put { background: #ffc107; color: black; }
+        .delete { background: #dc3545; }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #007bff;
+        }
+        .form-demo {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .form-demo input, .form-demo textarea, .form-demo select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .response {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .auth-token {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Vergi API - Frontend Developer Demo</h1>
+    <p><strong>Base URL:</strong> <code>https://api.muhasibatjurnal.az</code></p>
+    <p><strong>Bu demo səhifə frontend developerlərin API ilə necə işləyəcəyini göstərir.</strong></p>
+
+    <div class="auth-token">
+        <h3>🔑 Authentication Token</h3>
+        <p>API çağırışları üçün login olduqdan sonra aldığınız JWT token-i istifadə edin:</p>
+        <input type="text" id="authToken" placeholder="Bearer token buraya daxil edin..." style="width: 100%; padding: 8px;">
+        <button class="btn" onclick="saveToken()">Token-i yadda saxla</button>
+    </div>
+
+    <!-- AUTH SECTION -->
+    <div class="container">
+        <h2>🔐 Authentication (Giriş/Qeydiyyat)</h2>
+        
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/auth/register</strong> - Qeydiyyat
+            <div class="form-demo">
+                <input type="email" id="regEmail" placeholder="Email">
+                <input type="password" id="regPassword" placeholder="Şifrə">
+                <button class="btn" onclick="register()">Qeydiyyat</button>
+            </div>
+            <pre>// Request body
+{
+    "email": "user@example.com",
+    "password": "123456"
+}</pre>
+        </div>
+
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/auth/login</strong> - Giriş
+            <div class="form-demo">
+                <input type="email" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Şifrə">
+                <button class="btn" onclick="login()">Giriş</button>
+            </div>
+            <pre>// Response
+{
+    "status": "success",
+    "data": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "user": {
+            "id": 1,
+            "email": "user@example.com",
+            "role": 1
+        }
+    }
+}</pre>
+        </div>
+    </div>
+
+    <!-- NEWS SECTION -->
+    <div class="container">
+        <h2>📰 News (Xəbərlər)</h2>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> <strong>/news</strong> - Xəbərləri əldə et
+            <button class="btn" onclick="getNews()">Xəbərləri gətir</button>
+            <pre>// Response
+{
+    "status": "success",
+    "data": {
+        "news": [
+            {
+                "id": 1,
+                "title": "Xəbər başlığı",
+                "content": "Xəbər məzmunu...",
+                "image": "/uploads/images/1759582414833-721248698-image.png",
+                "language": "az",
+                "categoryId": 1,
+                "createdAt": "2025-01-04T10:00:00.000Z"
+            }
+        ],
+        "pagination": {
+            "total": 10,
+            "page": 1,
+            "pages": 1
+        }
+    }
+}</pre>
+        </div>
+
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/news</strong> - Yeni xəbər əlavə et (Admin only)
+            <div class="form-demo">
+                <input type="text" id="newsTitle" placeholder="Xəbər başlığı">
+                <textarea id="newsContent" placeholder="Xəbər məzmunu" rows="4"></textarea>
+                <select id="newsLanguage">
+                    <option value="az">Azərbaycan</option>
+                    <option value="ru">Русский</option>
+                    <option value="en">English</option>
+                </select>
+                <input type="number" id="newsCategoryId" placeholder="Kateqoriya ID">
+                <input type="file" id="newsImage" accept="image/*">
+                <button class="btn" onclick="createNews()">Xəbər əlavə et</button>
+            </div>
+            <pre>// FormData ilə göndərin:
+const formData = new FormData();
+formData.append('title', 'Xəbər başlığı');
+formData.append('content', 'Xəbər məzmunu');
+formData.append('language', 'az');
+formData.append('categoryId', '1');
+formData.append('image', fileInput.files[0]);</pre>
+        </div>
+    </div>
+
+    <!-- CATEGORIES SECTION -->
+    <div class="container">
+        <h2>📂 Categories (Kateqoriyalar)</h2>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> <strong>/categories</strong> - Kateqoriyaları əldə et
+            <button class="btn" onclick="getCategories()">Kateqoriyaları gətir</button>
+            <pre>// Response
+{
+    "status": "success",
+    "data": {
+        "categories": [
+            {
+                "id": 1,
+                "name": "Vergi Qanunvericiliyi",
+                "pdfCount": 5,
+                "createdAt": "2025-01-04T10:00:00.000Z"
+            }
+        ]
+    }
+}</pre>
+        </div>
+
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/categories</strong> - Yeni kateqoriya (Admin only)
+            <div class="form-demo">
+                <input type="text" id="categoryName" placeholder="Kateqoriya adı">
+                <button class="btn" onclick="createCategory()">Kateqoriya əlavə et</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDFS SECTION -->
+    <div class="container">
+        <h2>📄 PDFs (PDF Sənədlər)</h2>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> <strong>/pdfs</strong> - PDF-ləri əldə et
+            <button class="btn" onclick="getPdfs()">PDF-ləri gətir</button>
+            <pre>// Query parametrləri:
+?categoryId=1&language=az&search=vergi&minPrice=10&maxPrice=50&sortBy=title&sortOrder=asc
+
+// Response
+{
+    "status": "success",
+    "data": {
+        "pdfs": [
+            {
+                "id": 1,
+                "title": "Vergi Məcəlləsi",
+                "language": "az",
+                "filePath": "/uploads/pdfs/document.pdf",
+                "price": 25.99,
+                "downloads": 150,
+                "categoryId": 1,
+                "category": {
+                    "id": 1,
+                    "name": "Vergi Qanunvericiliyi"
+                }
+            }
+        ]
+    }
+}</pre>
+        </div>
+
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/pdfs</strong> - Yeni PDF əlavə et (Admin only)
+            <div class="form-demo">
+                <input type="text" id="pdfTitle" placeholder="PDF başlığı">
+                <select id="pdfLanguage">
+                    <option value="az">Azərbaycan</option>
+                    <option value="ru">Русский</option>
+                    <option value="az-ru">Az-Ru</option>
+                </select>
+                <input type="number" id="pdfPrice" placeholder="Qiymət" step="0.01">
+                <input type="number" id="pdfCategoryId" placeholder="Kateqoriya ID">
+                <input type="file" id="pdfFile" accept=".pdf">
+                <button class="btn" onclick="createPdf()">PDF əlavə et</button>
+            </div>
+            <pre>// FormData ilə göndərin:
+const formData = new FormData();
+formData.append('title', 'PDF başlığı');
+formData.append('language', 'az');
+formData.append('price', '25.99');
+formData.append('categoryId', '1');
+formData.append('file', pdfFileInput.files[0]);</pre>
+        </div>
+
+        <div class="endpoint">
+            <span class="method get">GET</span> <strong>/pdfs/{id}/download</strong> - PDF yüklə
+            <div class="form-demo">
+                <input type="number" id="downloadPdfId" placeholder="PDF ID">
+                <button class="btn" onclick="downloadPdf()">PDF yüklə</button>
+            </div>
+            <pre>// Headers ilə token göndərin
+// Response: PDF faylı binary formatda</pre>
+        </div>
+    </div>
+
+    <!-- SUBSCRIPTIONS SECTION -->
+    <div class="container">
+        <h2>💳 Subscriptions (Abunəliklər)</h2>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> <strong>/subscriptions/prices</strong> - Plan qiymətləri
+            <button class="btn" onclick="getSubscriptionPrices()">Qiymətləri gətir</button>
+            <pre>// Response
+{
+    "status": "success",
+    "data": {
+        "plans": {
+            "1m": {
+                "price": 9.99,
+                "duration": "1 ay",
+                "description": "1 aylıq abunəlik",
+                "durationMonths": 1
+            },
+            "3m": {
+                "price": 24.99,
+                "duration": "3 ay",
+                "description": "3 aylıq abunəlik",
+                "durationMonths": 3
+            },
+            "6m": {
+                "price": 44.99,
+                "duration": "6 ay",
+                "description": "6 aylıq abunəlik",
+                "durationMonths": 6
+            }
+        }
+    }
+}</pre>
+        </div>
+
+        <div class="endpoint">
+            <span class="method post">POST</span> <strong>/subscriptions/create</strong> - Abunəlik yarat
+            <div class="form-demo">
+                <select id="subscriptionPlan">
+                    <option value="1m">1 ay - $9.99</option>
+                    <option value="3m">3 ay - $24.99</option>
+                    <option value="6m">6 ay - $44.99</option>
+                </select>
+                <button class="btn" onclick="createSubscription()">Abunəlik yarat</button>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <span class="method get">GET</span> <strong>/subscriptions/my</strong> - Mənim abunəliklərim
+            <button class="btn" onclick="getMySubscriptions()">Abunəliklərim</button>
+        </div>
+    </div>
+
+    <!-- USERS SECTION -->
+    <div class="container">
+        <h2>👤 Users (İstifadəçilər)</h2>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> <strong>/users/{id}</strong> - İstifadəçi məlumatları
+            <div class="form-demo">
+                <input type="number" id="userId" placeholder="User ID">
+                <button class="btn" onclick="getUser()">İstifadəçi məlumatları</button>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <span class="method patch">PATCH</span> <strong>/users/{id}</strong> - İstifadəçi yenilə
+            <div class="form-demo">
+                <input type="text" id="updateFullName" placeholder="Ad Soyad">
+                <input type="text" id="updatePhone" placeholder="Telefon">
+                <input type="text" id="updateCompany" placeholder="Şirkət">
+                <button class="btn" onclick="updateUser()">Məlumatları yenilə</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESPONSE AREA -->
+    <div class="container">
+        <h2>📋 API Response</h2>
+        <div id="responseArea" class="response">
+            <p>API cavabları burada görünəcək...</p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://api.muhasibatjurnal.az';
+        let authToken = '';
+
+        function saveToken() {
+            authToken = document.getElementById('authToken').value;
+            localStorage.setItem('demoAuthToken', authToken);
+            showResponse('✅ Token yadda saxlanıldı', false);
+        }
+
+        // Load saved token
+        window.onload = function() {
+            const savedToken = localStorage.getItem('demoAuthToken');
+            if (savedToken) {
+                authToken = savedToken;
+                document.getElementById('authToken').value = savedToken;
+            }
+        }
+
+        function showResponse(data, isError = false) {
+            const responseArea = document.getElementById('responseArea');
+            responseArea.className = isError ? 'response error' : 'response';
+            responseArea.innerHTML = `<pre>${typeof data === 'string' ? data : JSON.stringify(data, null, 2)}</pre>`;
+        }
+
+        function getHeaders(includeAuth = true) {
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            if (includeAuth && authToken) {
+                headers['Authorization'] = authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`;
+            }
+            return headers;
+        }
+
+        async function makeRequest(endpoint, method = 'GET', body = null, isFormData = false) {
+            try {
+                const config = {
+                    method,
+                    headers: isFormData ? {} : getHeaders()
+                };
+
+                if (!isFormData && authToken) {
+                    config.headers['Authorization'] = authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`;
+                }
+
+                if (isFormData && authToken) {
+                    config.headers = {
+                        'Authorization': authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`
+                    };
+                }
+
+                if (body) {
+                    config.body = isFormData ? body : JSON.stringify(body);
+                }
+
+                const response = await fetch(`${API_BASE}${endpoint}`, config);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    showResponse(`❌ Error ${response.status}: ${data.message || 'Unknown error'}`, true);
+                } else {
+                    showResponse(data);
+                }
+            } catch (error) {
+                showResponse(`❌ Network Error: ${error.message}`, true);
+            }
+        }
+
+        // Auth functions
+        async function register() {
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            await makeRequest('/auth/register', 'POST', { email, password });
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const response = await fetch(`${API_BASE}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await response.json();
+            
+            if (response.ok && data.data?.token) {
+                authToken = data.data.token;
+                document.getElementById('authToken').value = authToken;
+                localStorage.setItem('demoAuthToken', authToken);
+                showResponse(data);
+            } else {
+                showResponse(data, true);
+            }
+        }
+
+        // News functions
+        async function getNews() {
+            await makeRequest('/news?page=1&limit=10');
+        }
+
+        async function createNews() {
+            const formData = new FormData();
+            formData.append('title', document.getElementById('newsTitle').value);
+            formData.append('content', document.getElementById('newsContent').value);
+            formData.append('language', document.getElementById('newsLanguage').value);
+            formData.append('categoryId', document.getElementById('newsCategoryId').value);
+            
+            const imageFile = document.getElementById('newsImage').files[0];
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+            
+            await makeRequest('/news', 'POST', formData, true);
+        }
+
+        // Category functions
+        async function getCategories() {
+            await makeRequest('/categories');
+        }
+
+        async function createCategory() {
+            const name = document.getElementById('categoryName').value;
+            await makeRequest('/categories', 'POST', { name });
+        }
+
+        // PDF functions
+        async function getPdfs() {
+            await makeRequest('/pdfs?page=1&limit=10');
+        }
+
+        async function createPdf() {
+            const formData = new FormData();
+            formData.append('title', document.getElementById('pdfTitle').value);
+            formData.append('language', document.getElementById('pdfLanguage').value);
+            formData.append('price', document.getElementById('pdfPrice').value);
+            formData.append('categoryId', document.getElementById('pdfCategoryId').value);
+            
+            const pdfFile = document.getElementById('pdfFile').files[0];
+            if (pdfFile) {
+                formData.append('file', pdfFile);
+            }
+            
+            await makeRequest('/pdfs', 'POST', formData, true);
+        }
+
+        async function downloadPdf() {
+            const pdfId = document.getElementById('downloadPdfId').value;
+            try {
+                const response = await fetch(`${API_BASE}/pdfs/${pdfId}/download`, {
+                    headers: {
+                        'Authorization': authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `document-${pdfId}.pdf`;
+                    a.click();
+                    showResponse('✅ PDF yükləndi');
+                } else {
+                    const error = await response.json();
+                    showResponse(error, true);
+                }
+            } catch (error) {
+                showResponse(`❌ Error: ${error.message}`, true);
+            }
+        }
+
+        // Subscription functions
+        async function getSubscriptionPrices() {
+            await makeRequest('/subscriptions/prices', 'GET', null, false);
+        }
+
+        async function createSubscription() {
+            const plan = document.getElementById('subscriptionPlan').value;
+            await makeRequest('/subscriptions/create', 'POST', { plan });
+        }
+
+        async function getMySubscriptions() {
+            await makeRequest('/subscriptions/my');
+        }
+
+        // User functions
+        async function getUser() {
+            const userId = document.getElementById('userId').value;
+            await makeRequest(`/users/${userId}`);
+        }
+
+        async function updateUser() {
+            const userId = document.getElementById('userId').value;
+            const updateData = {
+                fullName: document.getElementById('updateFullName').value,
+                phone: document.getElementById('updatePhone').value,
+                company: document.getElementById('updateCompany').value
+            };
+            
+            // Remove empty fields
+            Object.keys(updateData).forEach(key => {
+                if (!updateData[key]) delete updateData[key];
+            });
+            
+            await makeRequest(`/users/${userId}`, 'PATCH', updateData);
+        }
+    </script>
+</body>
+</html>
