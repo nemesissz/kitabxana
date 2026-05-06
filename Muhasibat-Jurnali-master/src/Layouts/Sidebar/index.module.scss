@@ -1,0 +1,68 @@
+.glassSideBar {
+  width: 100vw;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.319);
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+}
+.sideBar {
+  z-index: 4;
+  background-color: #ffde20;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  padding: 20px;
+  transition: .2s;
+  ul {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    list-style: none;
+    color: white;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 14px;
+    li {
+      // margin: 0 10px;
+      width: 250px;
+      background-color: #032062;
+      padding: 5px 10px;
+      cursor: pointer;
+      color: white;
+      border-radius: 5px;
+      transition: 0.2s;
+      &:hover {
+        background-color: #fff;
+        color: #032062;
+      }
+    }
+    select {
+      border-radius: 5px;
+      width: 250px;
+      outline: none;
+      cursor: pointer;
+      //   height: 100%;
+      //   width: 100%;
+      background-color: #032062;
+      padding: 5px 10px;
+      appearance: none;
+      border: none;
+      font-size: 14px;
+      color: white;
+      //   text-align: center ;
+      &:hover {
+        background-color: #fff;
+        color: #032062;
+      }
+      //   option {
+      //     &:hover{
+      //       background-color: #fff;
+      //     }
+      //   }
+    }
+  }
+}

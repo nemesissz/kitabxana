@@ -77,6 +77,49 @@ export const getUserPayments = async (req, res, next) => {
   }
 };
 
+/**
+ * E-point callback/webhook handler
+ * E-point ödəniş nəticəsini bu endpoint-ə göndərir
+ */
+export const handleEpointCallback = async (req, res, next) => {
+  try {
+    console.log('📥 E-point callback received');
+    console.log('Request body:', req.body);
+
+    const { data, signature } = req.body;
+    
+    // Data və signature-ın gəldiyini yoxlayırıq
+    if (!data || !signature) {
+      console.error('❌ Missing data or signature in callback');
+      return res.status(400).json({
+        status: 'error',
+        message: 'Missing data or signature'
+      });
+    }
+
+    // Callback-u process edirik
+    const result = await paymentService.handleEpointCallback(data, signature);
+
+    // E-point-ə cavab qaytarırıq
+    res.status(200).json({
+      status: 'success',
+      message: result.message
+    });
+
+  } catch (error) {
+    console.error('❌ E-point callback error:', error);
+    
+    // E-point-ə xəta qaytarırıq
+    res.status(200).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+};
+
+/**
+ * Köhnə webhook handler (legacy support)
+ */
 export const handleWebhook = async (req, res, next) => {
   try {
     const { data, signature } = req.body;

@@ -54,12 +54,32 @@ async function setupDatabase() {
         console.log('   - users');
         console.log('   - user_profiles');
         console.log('   - categories');
+        console.log('   - category_pdfs');
         console.log('   - pdfs');
         console.log('   - news');
         console.log('   - subscriptions');
         console.log('   - payments');
         console.log('   - audit_logs');
         console.log('');
+        
+        // Create default "none" subscription
+        await connection.execute(`
+            INSERT IGNORE INTO subscriptions (id, plan, price, start_date, end_date, status, created_at)
+            VALUES (1, 'none', NULL, NULL, NULL, NULL, NOW())
+        `);
+        console.log('📦 Default "none" subscription created');
+        
+        // Create default PDF categories
+        await connection.execute(`
+            INSERT IGNORE INTO category_pdfs (name) VALUES 
+            ('Vergi Qanunvericiliyi'),
+            ('Gömrük Qanunvericiliyi'),
+            ('Əmək Qanunvericiliyi'),
+            ('Sahibkarlıq Qanunvericiliyi')
+        `);
+        console.log('📂 Default PDF categories created');
+        console.log('');
+        
         console.log('👤 Default admin user created:');
         console.log('   Email: admin@vergi.az');
         console.log('   Password: admin123');

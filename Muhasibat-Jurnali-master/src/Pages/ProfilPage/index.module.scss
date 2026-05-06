@@ -1,0 +1,478 @@
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #f0f4ff, #dfe9f3);
+  padding: 20px;
+  padding-top: 80px;
+  min-height: 100vh;
+  gap: 30px;
+}
+
+.profileCard {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.3s ease;
+
+}
+
+.avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  border: 5px solid #4a90e2;
+  box-shadow: 0 0 15px rgba(74, 144, 226, 0.4);
+  background: #eee;
+}
+
+.email {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 25px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+
+  p {
+    margin: 0;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background: #f8faff;
+    text-align: left;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    strong {
+      color: #4a90e2;
+      font-weight: 600;
+    }
+  }
+}
+
+.logoutButton {
+  padding: 12px 20px;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff6b6b, #d64545);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  transition: background 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #d64545, #a83232);
+  }
+}
+.changePasswordButton {
+  padding: 12px 20px;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4dabf7, #1c7ed6);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(77, 171, 247, 0.3);
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 15px;
+  &:hover {
+    background: linear-gradient(135deg, #1c7ed6, #1864ab);
+    box-shadow: 0 6px 14px rgba(77, 171, 247, 0.4);
+  }
+}
+
+.passwordForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+  input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 0.95rem;
+    outline: none;
+    transition: 0.2s ease;
+
+    &:focus {
+      border-color: #1c7ed6;
+      box-shadow: 0 0 0 3px rgba(28, 126, 214, 0.15);
+    }
+  }
+
+  .savePasswordButton {
+    padding: 12px 20px;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #51cf66, #37b24d);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(81, 207, 102, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      background: linear-gradient(135deg, #37b24d, #2b8a3e);
+      box-shadow: 0 6px 14px rgba(81, 207, 102, 0.4);
+    }
+  }
+
+  .message {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #333;
+    text-align: center;
+  }
+}
+
+/* Abonelik Kartı */
+.subscriptionCard {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #032062;
+    margin: 0 0 20px 0;
+    text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  .loadingSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px 0;
+
+    p {
+      color: #6b7280;
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+
+  .subscriptionDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .infoRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: #f8faff;
+      border-radius: 10px;
+      border-left: 4px solid #4a90e2;
+
+      .label {
+        font-weight: 600;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .value {
+        font-weight: 600;
+        color: #032062;
+        font-size: 14px;
+
+        &.active {
+          color: #37b24d;
+        }
+
+        &.inactive {
+          color: #ff6b6b;
+        }
+      }
+    }
+  }
+
+  .noSubscription {
+    text-align: center;
+    padding: 30px 0;
+
+    p {
+      color: #666;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .subscribeButton {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: linear-gradient(135deg, #6d28d9, #5b21b6);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(139, 92, 246, 0.4);
+      }
+    }
+  }
+
+  .allSubscriptions {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 2px solid #e5e7eb;
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #032062;
+      margin: 0 0 20px 0;
+      text-align: center;
+    }
+
+    .subscriptionTable {
+      overflow-x: auto;
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+        thead {
+          background: #032062;
+          
+          th {
+            padding: 12px 15px;
+            text-align: left;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+        }
+
+        tbody {
+          tr {
+            border-bottom: 1px solid #e5e7eb;
+            transition: background 0.2s;
+
+            &:hover {
+              background: #f8f9fa;
+            }
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            td {
+              padding: 12px 15px;
+              font-size: 14px;
+              color: #333;
+            }
+          }
+        }
+      }
+    }
+
+    .statusBadge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      &.active {
+        background-color: #d5f4e6;
+        color: #27ae60;
+      }
+
+      &.inactive {
+        background-color: #fadbd8;
+        color: #e74c3c;
+      }
+    }
+  }
+}
+
+/* PDF Listesi Kartı */
+.pdfListCard {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  width: 100%;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #032062;
+    margin: 0 0 20px 0;
+    text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  .loadingSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px 0;
+
+    p {
+      color: #6b7280;
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+
+  .pdfList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .pdfItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: #f8faff;
+      border-radius: 12px;
+      border-left: 4px solid #032062;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .pdfInfo {
+        flex: 1;
+
+        h3 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #032062;
+          margin: 0 0 10px 0;
+        }
+
+        .pdfMeta {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+
+          span {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+          }
+
+          .category {
+            background: #e3f2fd;
+            color: #1976d2;
+          }
+
+          .accessType {
+            background: #f3e5f5;
+            color: #8b5cf6;
+          }
+        }
+      }
+
+      .viewButton {
+        padding: 10px 25px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #16a085, #27ae60);
+        color: white;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: linear-gradient(135deg, #27ae60, #16a085);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(22, 160, 133, 0.3);
+        }
+      }
+    }
+  }
+
+  .noPdfs {
+    text-align: center;
+    padding: 30px 0;
+
+    p {
+      color: #666;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .browseButton {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #032062, #1e3a8a);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(3, 32, 98, 0.3);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: linear-gradient(135deg, #1e3a8a, #032062);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(3, 32, 98, 0.4);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .pdfListCard .pdfList .pdfItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+
+    .viewButton {
+      width: 100%;
+    }
+  }
+}

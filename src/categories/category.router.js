@@ -13,14 +13,20 @@ const router = express.Router();
 
 /**
  * @swagger
- * /categories:
- * get:
  * tags:
- * - Categories
- * summary: Bütün kateqoriyaları əldə etmək
- * responses:
- * 200:
- * description: Kateqoriyalar uğurla əldə edildi
+ *   name: News Categories
+ *   description: News Categories management endpoints
+ */
+
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     summary: Get all news categories
+ *     tags: [News Categories]
+ *     responses:
+ *       200:
+ *         description: News categories retrieved successfully
  */
 router.get('/', getAllCategories);
 

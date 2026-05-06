@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 TEST Ödəniş - E-point Mock</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        .mock-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .payment-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .payment-details div {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .payment-details div:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .loading {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mock-badge">🧪 TEST MODE</div>
+        <h1>E-point Mock Ödəniş</h1>
+        
+        <div class="info-box">
+            <strong>⚠️ Diqqət:</strong> Bu test rejimidir. Real ödəniş həyata keçməyəcək.
+            E-point API key-lərini aldıqdan sonra real ödəniş sistemi işə düşəcək.
+        </div>
+
+        <div class="payment-details">
+            <div>
+                <span>📦 Sifariş ID:</span>
+                <span id="orderId">-</span>
+            </div>
+            <div>
+                <span>💳 Transaction ID:</span>
+                <span id="transactionId">-</span>
+            </div>
+            <div>
+                <span>💰 Məbləğ:</span>
+                <span id="amount">10.00 AZN</span>
+            </div>
+        </div>
+
+        <div id="paymentForm">
+            <p style="color: #666; margin-bottom: 20px;">
+                Test ödənişi tamamlamaq üçün aşağıdakı düymələrdən birini seçin:
+            </p>
+            
+            <button class="btn btn-success" onclick="completePayment(true)">
+                ✅ Ödənişi Uğurla Tamamla
+            </button>
+            
+            <button class="btn btn-danger" onclick="completePayment(false)">
+                ❌ Ödənişi Rədd Et
+            </button>
+        </div>
+
+        <div id="loadingDiv" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Ödəniş emal olunur...</p>
+        </div>
+    </div>
+
+    <script>
+        // URL parametrlərini al
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('order_id');
+        const transactionId = urlParams.get('transaction_id');
+        const amount = urlParams.get('amount') || '10.00';
+
+        // Məlumatları göstər
+        document.getElementById('orderId').textContent = orderId || 'TEST_ORDER';
+        document.getElementById('transactionId').textContent = transactionId || 'MOCK_TRANSACTION';
+        document.getElementById('amount').textContent = amount + ' AZN';
+
+        async function completePayment(isSuccess) {
+            // Formu gizlət, loading göstər
+            document.getElementById('paymentForm').classList.add('hidden');
+            document.getElementById('loadingDiv').classList.remove('hidden');
+
+            // 2 saniyə gözlə (real ödəniş kimi)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Callback göndər (backend-ə)
+            try {
+                const callbackData = {
+                    status: isSuccess ? 'approved' : 'declined',
+                    transaction_id: transactionId,
+                    order_id: orderId,
+                    amount: amount,
+                    currency: 'AZN',
+                    card_mask: '****1234',
+                    message: isSuccess ? 'Test ödənişi uğurlu' : 'Test ödənişi rədd edildi'
+                };
+
+                // Encode data (UTF-8 dəstəyi ilə)
+                const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(callbackData))));
+                const mockSignature = 'mock_signature_' + Date.now();
+
+                // Backend callback endpoint-ə POST (otomatik URL tespiti)
+                const protocol = window.location.protocol;
+                const hostname = window.location.hostname;
+                const port = window.location.port ? ':' + window.location.port : '';
+                
+                // Callback URL - Same origin ise relative, değilse absolute
+                let callbackUrl = '/payments/epoint/callback';
+                if (!hostname.includes('localhost') && !hostname.includes('127.0.0.1')) {
+                    // Production environment - absolute URL kullan
+                    // Eğer hostname zaten api. içeriyorsa tekrar ekleme
+                    const apiHost = hostname.includes('api.') ? hostname : `api.${hostname}`;
+                    callbackUrl = `${protocol}//${apiHost}/payments/epoint/callback`;
+                }
+                
+                await fetch(callbackUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        data: encodedData,
+                        signature: mockSignature
+                    })
+                });
+
+                // Redirect URL - Production için domain'i kullan
+                let redirectBaseUrl = `${protocol}//${hostname}${port}`;
+                
+                if (!hostname.includes('localhost') && !hostname.includes('127.0.0.1')) {
+                    // Production environment
+                    const domain = hostname.replace('api.', ''); // Eğer api.muhasibatjurnal.az ise muhasibatjurnal.az yap
+                    redirectBaseUrl = `${protocol}//${domain}`;
+                }
+                
+                if (isSuccess) {
+                    window.location.href = redirectBaseUrl + '/payment/success?order_id=' + orderId + '&amount=' + amount;
+                } else {
+                    window.location.href = redirectBaseUrl + '/payment/error?order_id=' + orderId + '&reason=declined';
+                }
+            } catch (error) {
+                console.error('Callback error:', error);
+                alert('Xəta baş verdi: ' + error.message);
+                document.getElementById('paymentForm').classList.remove('hidden');
+                document.getElementById('loadingDiv').classList.add('hidden');
+            }
+        }
+
+        // Auto-redirect test (optional)
+        console.log('Mock Payment Data:', {
+            orderId,
+            transactionId,
+            amount
+        });
+    </script>
+</body>
+</html>

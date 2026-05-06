@@ -3,13 +3,16 @@ import upload from '../utils/upload.js'; // Bu dosya news için yanlış, imageU
 
 export const getAllNews = async (req, res, next) => {
   try {
-    const { page, limit, language, categoryId } = req.query;
-    const result = await newsService.getAllNews(
-      parseInt(page) || 1,
-      parseInt(limit) || 10,
+    const { page, limit, language, categoryId, search, startDate, endDate } = req.query;
+    const result = await newsService.getAllNews({
+      page,
+      limit,
       language,
-      categoryId
-    );
+      categoryId,
+      search,
+      startDate,
+      endDate
+    });
 
     res.status(200).json({
       status: 'success',
@@ -145,6 +148,23 @@ export const deleteNews = async (req, res, next) => {
         message: 'News not found'
       });
     }
+    next(error);
+  }
+};
+
+export const getNewsPreview = async (req, res, next) => {
+  try {
+    const { limit, language } = req.query;
+    const news = await newsService.getNewsPreview(limit, language);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        news,
+        count: news.length
+      }
+    });
+  } catch (error) {
     next(error);
   }
 };

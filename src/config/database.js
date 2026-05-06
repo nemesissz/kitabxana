@@ -117,24 +117,36 @@ export async function getOne(sql, params = []) {
 
 // Insert and get inserted ID
 export async function insert(tableName, data) {
+    // Filter out undefined values and convert to null
+    const cleanData = {};
+    Object.keys(data).forEach(key => {
+        cleanData[key] = data[key] === undefined ? null : data[key];
+    });
+    
+    const fields = Object.keys(cleanData).join(', ');
+    const placeholders = Object.keys(cleanData).map(() => '?').join(', ');
+    const values = Object.values(cleanData);
+    const sql = `INSERT INTO ${tableName} (${fields}) VALUES (${placeholders})`;
+    
     try {
-        // Filter out undefined values and convert to null
-        const cleanData = {};
-        Object.keys(data).forEach(key => {
-            cleanData[key] = data[key] === undefined ? null : data[key];
-        });
-        
-        const fields = Object.keys(cleanData).join(', ');
-        const placeholders = Object.keys(cleanData).map(() => '?').join(', ');
-        const values = Object.values(cleanData);
-        
-        const sql = `INSERT INTO ${tableName} (${fields}) VALUES (${placeholders})`;
         const [result] = await pool.execute(sql, values);
         return result.insertId;
     } catch (error) {
         console.error('Insert error:', error.message);
+        console.error('Error code:', error.code);
+        console.error('SQL State:', error.sqlState);
         console.error('Table:', tableName);
-        console.error('Data:', data);
+        console.error('Data:', cleanData);
+        console.error('SQL:', sql);
+        
+        // Constraint hatası üçün daha açıq mesaj
+        if (error.code === 'ER_CHECK_CONSTRAINT_VIOLATED' || error.message.includes('CONSTRAINT')) {
+            const constraintError = new Error(`Veritabanı constraint xətası: ${error.message}. Zəhmət olmasa veritabanında mövcud olmayan constraint-ləri silin.`);
+            constraintError.code = 'CONSTRAINT_ERROR';
+            constraintError.originalError = error;
+            throw constraintError;
+        }
+        
         throw error;
     }
 }

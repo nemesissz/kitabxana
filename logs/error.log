@@ -1,0 +1,1605 @@
+[2025-10-22T05:25:47.832Z] [ERROR] Request error occurred
+{
+  "stack": "Error: E-point ödəniş yaradılarkən xəta baş verdi\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:133:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:79:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "E-point ödəniş yaradılarkən xəta baş verdi",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:25:47.834Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "683ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:27:39.168Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:155:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:79:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:27:39.174Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "699ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:27:50.306Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:155:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:79:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:27:50.308Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "677ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:28:06.254Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:155:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:79:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "subscription",
+    "plan": "1m"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:28:06.256Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "537ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:28:40.537Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:79:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:28:40.540Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "711ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:30:26.694Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:79:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:30:26.700Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "657ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:33:39.812Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:33:39.815Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "729ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:33:43.033Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "subscription",
+    "plan": "1m"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:33:43.034Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "322ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:33:55.186Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:33:55.189Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "560ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:33:57.251Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "subscription",
+    "plan": "1m"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:33:57.252Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "256ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:34:32.468Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:34:32.470Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "656ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:34:34.401Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "subscription",
+    "plan": "1m"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:34:34.403Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "265ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:35:40.765Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:35:40.767Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "607ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:35:43.095Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "subscription",
+    "plan": "1m"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:35:43.098Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "307ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:36:40.841Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "13",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:36:40.843Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "570ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T05:36:43.224Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "subscription",
+    "plan": "1m"
+  },
+  "query": {},
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T05:36:43.226Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "278ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 5,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T07:10:04.232Z] [ERROR] Request error occurred
+{
+  "stack": "Error: PDF price not set\n    at PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:60:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "PDF price not set",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": 6,
+    "amount": "0.00"
+  },
+  "query": {},
+  "user": {
+    "id": 15,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T07:10:04.235Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "23ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 15,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-22T07:10:08.607Z] [ERROR] Request error occurred
+{
+  "stack": "Error: PDF price not set\n    at PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:60:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "PDF price not set",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": 6,
+    "amount": "0.00"
+  },
+  "query": {},
+  "user": {
+    "id": 15,
+    "email": "01terlaneliyev@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-22T07:10:08.608Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "6ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 15,
+    "email": "01terlaneliyev@gmail.com"
+  }
+}
+[2025-10-26T10:48:54.831Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'u.name' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at SubscriptionService.getAllSubscriptions (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/subscriptions/subscription.service.js:123:33)\n    at getAllSubscriptions (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/subscriptions/subscription.controller.js:108:53)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/auth.middleware.js:36:5)",
+  "error": "Unknown column 'u.name' in 'field list'",
+  "method": "GET",
+  "path": "/subscriptions/admin/all",
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T10:48:54.834Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/subscriptions/admin/all",
+  "statusCode": 500,
+  "duration": "14ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-26T10:49:04.296Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'u.name' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at SubscriptionService.getAllSubscriptions (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/subscriptions/subscription.service.js:123:33)\n    at getAllSubscriptions (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/subscriptions/subscription.controller.js:108:53)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/auth.middleware.js:36:5)",
+  "error": "Unknown column 'u.name' in 'field list'",
+  "method": "GET",
+  "path": "/subscriptions/admin/all",
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T10:49:04.299Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/subscriptions/admin/all",
+  "statusCode": 500,
+  "duration": "10ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-26T10:49:22.784Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'u.name' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at SubscriptionService.getAllSubscriptions (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/subscriptions/subscription.service.js:123:33)\n    at getAllSubscriptions (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/subscriptions/subscription.controller.js:108:53)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/auth.middleware.js:36:5)",
+  "error": "Unknown column 'u.name' in 'field list'",
+  "method": "GET",
+  "path": "/subscriptions/admin/all",
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T10:49:22.788Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/subscriptions/admin/all",
+  "statusCode": 500,
+  "duration": "19ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-26T11:17:16.093Z] [ERROR] Request error occurred
+{
+  "stack": "Error: PDF not found\n    at PdfService.updatePdf (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:200:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async updatePdf (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:241:17)",
+  "error": "PDF not found",
+  "method": "PUT",
+  "path": "/pdfs/132",
+  "body": {
+    "title": "salamsss",
+    "description": "salam",
+    "categoryId": 3,
+    "price": "20.00",
+    "language": "az"
+  },
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T11:17:16.099Z] [ERROR] Server error
+{
+  "method": "PUT",
+  "path": "/pdfs/132",
+  "statusCode": 500,
+  "duration": "56ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-26T11:30:29.117Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Cannot delete PDF category that is in use by PDFs\n    at CategoryPdfService.deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/categories/category-pdf.service.js:61:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/categories/category-pdf.controller.js:93:22)",
+  "error": "Cannot delete PDF category that is in use by PDFs",
+  "method": "DELETE",
+  "path": "/categories/pdfs/3",
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T11:30:29.123Z] [ERROR] Server error
+{
+  "method": "DELETE",
+  "path": "/categories/pdfs/3",
+  "statusCode": 500,
+  "duration": "29ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-26T11:48:42.946Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'status' in 'where clause'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at AdminService.getDetailedStats (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:101:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async AdminService.getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:71:27)\n    at async getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.controller.js:67:27)",
+  "error": "Unknown column 'status' in 'where clause'",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T11:48:42.953Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "92ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-26T11:49:04.120Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'status' in 'where clause'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at AdminService.getDetailedStats (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:101:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async AdminService.getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:71:27)\n    at async getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.controller.js:67:27)",
+  "error": "Unknown column 'status' in 'where clause'",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T11:49:04.124Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "79ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-26T11:49:11.068Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'status' in 'where clause'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at AdminService.getDetailedStats (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:101:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async AdminService.getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:71:27)\n    at async getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.controller.js:67:27)",
+  "error": "Unknown column 'status' in 'where clause'",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T11:49:11.076Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "79ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-26T11:49:17.775Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'status' in 'where clause'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at AdminService.getDetailedStats (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:101:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async AdminService.getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:71:27)\n    at async getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.controller.js:67:27)",
+  "error": "Unknown column 'status' in 'where clause'",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T11:49:17.781Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "69ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-26T11:49:25.613Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'status' in 'where clause'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at AdminService.getDetailedStats (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:101:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async AdminService.getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.service.js:71:27)\n    at async getDashboardData (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/admin/admin.controller.js:67:27)",
+  "error": "Unknown column 'status' in 'where clause'",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 2,
+    "email": "string"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-26T11:49:25.618Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "47ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 2,
+    "email": "string"
+  }
+}
+[2025-10-30T06:48:46.655Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "115",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 10,
+    "email": "eliyev91terlan91@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-30T06:48:46.658Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "1340ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 10,
+    "email": "eliyev91terlan91@gmail.com"
+  }
+}
+[2025-10-30T06:49:09.271Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid response from E-point API\n    at EpointService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/epoint.service.js:170:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async PaymentService.createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.service.js:88:30)\n    at async createPayment (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/payments/payment.controller.js:29:21)",
+  "error": "Invalid response from E-point API",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "115",
+    "amount": "10.00"
+  },
+  "query": {},
+  "user": {
+    "id": 10,
+    "email": "eliyev91terlan91@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+}
+[2025-10-30T06:49:09.275Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "1291ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+  "user": {
+    "id": 10,
+    "email": "eliyev91terlan91@gmail.com"
+  }
+}
+[2025-11-05T10:53:50.748Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Lock wait timeout exceeded; try restarting transaction\n    at PromisePoolConnection.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\connection.js:47:22)\n    at file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/users/user.service.js:305:26\n    at transaction (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:191:30)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async UserService.updateUserById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/users/user.service.js:270:12)\n    at async UserService.findUserById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/users/user.service.js:184:7)\n    at async file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/users/user.service.js:351:14\n    at async transaction (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:191:24)\n    at async UserService.updateUserById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/users/user.service.js:270:12)\n    at async AuthService.login (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/auth/auth.service.js:74:7)",
+  "error": "Lock wait timeout exceeded; try restarting transaction",
+  "method": "POST",
+  "path": "/auth/login",
+  "body": {
+    "email": "aliyev.tarlan.ilkin.2025@unec.edu.az",
+    "password": "string"
+  },
+  "query": {},
+  "user": null,
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-05T10:59:13.716Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.image_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:101:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:66:20)",
+  "error": "Unknown column 'p.image_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "search": ""
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-05T10:59:13.720Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "45ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2025-11-05T10:59:58.204Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.image_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:101:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:66:20)",
+  "error": "Unknown column 'p.image_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "search": "",
+    "language": "",
+    "categoryId": "",
+    "minPrice": "",
+    "maxPrice": "",
+    "startDate": "",
+    "endDate": ""
+  },
+  "user": {
+    "id": 19,
+    "email": "aliyev.tarlan.ilkin.2025@unec.edu.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-05T10:59:58.214Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "52ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 19,
+    "email": "aliyev.tarlan.ilkin.2025@unec.edu.az"
+  }
+}
+[2025-11-05T11:00:00.177Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.image_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:101:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:66:20)",
+  "error": "Unknown column 'p.image_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "search": "",
+    "language": "",
+    "categoryId": "",
+    "minPrice": "",
+    "maxPrice": "",
+    "startDate": "",
+    "endDate": ""
+  },
+  "user": {
+    "id": 19,
+    "email": "aliyev.tarlan.ilkin.2025@unec.edu.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-05T11:00:00.179Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "7ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 19,
+    "email": "aliyev.tarlan.ilkin.2025@unec.edu.az"
+  }
+}
+[2025-11-05T11:00:05.808Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.image_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:101:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:66:20)",
+  "error": "Unknown column 'p.image_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "search": ""
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-05T11:00:05.812Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "24ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2025-11-05T11:00:08.391Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.image_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:101:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:66:20)",
+  "error": "Unknown column 'p.image_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "search": ""
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-05T11:00:08.393Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "11ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2025-11-05T11:00:17.201Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.image_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:101:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:66:20)",
+  "error": "Unknown column 'p.image_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "search": "",
+    "language": "",
+    "categoryId": "",
+    "minPrice": "",
+    "maxPrice": "",
+    "startDate": "",
+    "endDate": ""
+  },
+  "user": {
+    "id": 19,
+    "email": "aliyev.tarlan.ilkin.2025@unec.edu.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-05T11:00:17.203Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "21ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 19,
+    "email": "aliyev.tarlan.ilkin.2025@unec.edu.az"
+  }
+}
+[2025-11-05T11:00:25.821Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.image_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:101:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getAllPdfs (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:66:20)",
+  "error": "Unknown column 'p.image_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "search": "",
+    "language": "",
+    "categoryId": "",
+    "minPrice": "",
+    "maxPrice": "",
+    "startDate": "",
+    "endDate": ""
+  },
+  "user": {
+    "id": 19,
+    "email": "aliyev.tarlan.ilkin.2025@unec.edu.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-05T11:00:25.822Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "6ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 19,
+    "email": "aliyev.tarlan.ilkin.2025@unec.edu.az"
+  }
+}
+[2025-11-14T21:03:58.370Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.content_images_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at PdfService.getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:143:23)\n    at getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:344:34)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at optionalAuthMiddleware (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/optionalAuth.middleware.js:15:14)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Unknown column 'p.content_images_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs/171",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-14T21:03:58.376Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs/171",
+  "statusCode": 500,
+  "duration": "11ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": null
+}
+[2025-11-14T21:04:16.164Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.content_images_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at PdfService.getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:143:23)\n    at getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:344:34)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at optionalAuthMiddleware (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/optionalAuth.middleware.js:15:14)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Unknown column 'p.content_images_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs/171",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-14T21:04:16.167Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs/171",
+  "statusCode": 500,
+  "duration": "23ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": null
+}
+[2025-11-14T21:04:34.638Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.content_images_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at PdfService.getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:143:23)\n    at getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:344:34)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at optionalAuthMiddleware (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/optionalAuth.middleware.js:15:14)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Unknown column 'p.content_images_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs/171",
+  "query": {},
+  "user": null,
+  "ip": "::ffff:127.0.0.1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-14T21:04:34.640Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs/171",
+  "statusCode": 500,
+  "duration": "5ms",
+  "ip": "::ffff:127.0.0.1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": null
+}
+[2025-11-14T21:04:36.629Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.content_images_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at PdfService.getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:143:23)\n    at getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:344:34)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at optionalAuthMiddleware (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/optionalAuth.middleware.js:15:14)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Unknown column 'p.content_images_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs/171",
+  "query": {},
+  "user": null,
+  "ip": "::ffff:127.0.0.1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-14T21:04:36.632Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs/171",
+  "statusCode": 500,
+  "duration": "5ms",
+  "ip": "::ffff:127.0.0.1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": null
+}
+[2025-11-14T21:04:47.065Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'p.content_images_paths' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/config/database.js:114:24)\n    at PdfService.getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.service.js:143:23)\n    at getPdfById (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/pdfs/pdf.controller.js:344:34)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)\n    at optionalAuthMiddleware (file:///C:/Users/Terlan%20Aliyev/Desktop/Vergi/src/middlewares/optionalAuth.middleware.js:15:14)\n    at Layer.handleRequest (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Unknown column 'p.content_images_paths' in 'field list'",
+  "method": "GET",
+  "path": "/pdfs/171",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-11-14T21:04:47.071Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs/171",
+  "statusCode": 500,
+  "duration": "9ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": null
+}
+[2025-12-06T10:21:06.042Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'pdfDate' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Hazir Proyektler-FREELANCE\\MuhasibatJurnal\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at update (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/config/database.js:174:37)\n    at PdfService.updatePdf (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/pdfs/pdf.service.js:273:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async updatePdf (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/pdfs/pdf.controller.js:423:17)",
+  "error": "Unknown column 'pdfDate' in 'field list'",
+  "method": "PUT",
+  "path": "/pdfs/170",
+  "body": {
+    "title": "Dekabr 2025",
+    "description": "Dekabr 2025 ayi ucun vergi ve muhasibatliq jurnali",
+    "categoryId": "4",
+    "price": "0.00",
+    "language": "az",
+    "pdfDate": "2025-12-01"
+  },
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-12-06T10:21:06.065Z] [ERROR] Server error
+{
+  "method": "PUT",
+  "path": "/pdfs/170",
+  "statusCode": 500,
+  "duration": "91ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2025-12-06T10:21:18.898Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'pdfDate' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Hazir Proyektler-FREELANCE\\MuhasibatJurnal\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at update (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/config/database.js:174:37)\n    at PdfService.updatePdf (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/pdfs/pdf.service.js:273:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async updatePdf (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/pdfs/pdf.controller.js:423:17)",
+  "error": "Unknown column 'pdfDate' in 'field list'",
+  "method": "PUT",
+  "path": "/pdfs/170",
+  "body": {
+    "title": "Dekabr 2025",
+    "description": "Dekabr 2025 ayi ucun vergi ve muhasibatliq jurnali",
+    "categoryId": "4",
+    "price": "0.00",
+    "language": "az",
+    "pdfDate": "2025-12-01"
+  },
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-12-06T10:21:18.914Z] [ERROR] Server error
+{
+  "method": "PUT",
+  "path": "/pdfs/170",
+  "statusCode": 500,
+  "duration": "57ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2025-12-06T10:21:51.496Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'pdfDate' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Hazir Proyektler-FREELANCE\\MuhasibatJurnal\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at update (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/config/database.js:174:37)\n    at PdfService.updatePdf (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/pdfs/pdf.service.js:273:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async updatePdf (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/pdfs/pdf.controller.js:423:17)",
+  "error": "Unknown column 'pdfDate' in 'field list'",
+  "method": "PUT",
+  "path": "/pdfs/170",
+  "body": {
+    "title": "Dekabr 2025",
+    "description": "Dekabr 2025 ayi ucun vergi ve muhasibatliq jurnali",
+    "categoryId": "4",
+    "price": "2.00",
+    "language": "az",
+    "pdfDate": "2025-12-01"
+  },
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+}
+[2025-12-06T10:21:51.515Z] [ERROR] Server error
+{
+  "method": "PUT",
+  "path": "/pdfs/170",
+  "statusCode": 500,
+  "duration": "66ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-01-06T06:52:27.369Z] [ERROR] Request error occurred
+{
+  "stack": "TypeError: ad.start_date.split is not a function\n    at file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/ads/ad.service.js:135:56\n    at Array.map (<anonymous>)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/ads/ad.service.js:128:58)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getAdsByPosition (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/ads/ad.controller.js:158:17)",
+  "error": "ad.start_date.split is not a function",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+}
+[2026-01-06T06:52:27.375Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "20ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-01-06T06:52:34.353Z] [ERROR] Request error occurred
+{
+  "stack": "TypeError: ad.start_date.split is not a function\n    at file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/ads/ad.service.js:135:56\n    at Array.map (<anonymous>)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/ads/ad.service.js:128:58)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getAdsByPosition (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/ads/ad.controller.js:158:17)",
+  "error": "ad.start_date.split is not a function",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+}
+[2026-01-06T06:52:34.361Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "28ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-01-18T18:01:56.175Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Cannot delete PDF category that is in use by PDFs\n    at CategoryPdfService.deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.service.js:75:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.controller.js:93:22)",
+  "error": "Cannot delete PDF category that is in use by PDFs",
+  "method": "DELETE",
+  "path": "/categories/pdfs/2",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+}
+[2026-01-18T18:01:56.179Z] [ERROR] Server error
+{
+  "method": "DELETE",
+  "path": "/categories/pdfs/2",
+  "statusCode": 500,
+  "duration": "12ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-01-18T18:01:58.323Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Cannot delete PDF category that is in use by PDFs\n    at CategoryPdfService.deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.service.js:75:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.controller.js:93:22)",
+  "error": "Cannot delete PDF category that is in use by PDFs",
+  "method": "DELETE",
+  "path": "/categories/pdfs/3",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+}
+[2026-01-18T18:01:58.327Z] [ERROR] Server error
+{
+  "method": "DELETE",
+  "path": "/categories/pdfs/3",
+  "statusCode": 500,
+  "duration": "13ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-01-18T18:02:00.090Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Cannot delete PDF category that is in use by PDFs\n    at CategoryPdfService.deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.service.js:75:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.controller.js:93:22)",
+  "error": "Cannot delete PDF category that is in use by PDFs",
+  "method": "DELETE",
+  "path": "/categories/pdfs/3",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+}
+[2026-01-18T18:02:00.093Z] [ERROR] Server error
+{
+  "method": "DELETE",
+  "path": "/categories/pdfs/3",
+  "statusCode": 500,
+  "duration": "9ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-01-18T18:02:02.676Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Cannot delete PDF category that is in use by PDFs\n    at CategoryPdfService.deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.service.js:75:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.controller.js:93:22)",
+  "error": "Cannot delete PDF category that is in use by PDFs",
+  "method": "DELETE",
+  "path": "/categories/pdfs/1",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+}
+[2026-01-18T18:02:02.679Z] [ERROR] Server error
+{
+  "method": "DELETE",
+  "path": "/categories/pdfs/1",
+  "statusCode": 500,
+  "duration": "10ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-01-18T18:02:04.661Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Cannot delete PDF category that is in use by PDFs\n    at CategoryPdfService.deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.service.js:75:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async deleteCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.controller.js:93:22)",
+  "error": "Cannot delete PDF category that is in use by PDFs",
+  "method": "DELETE",
+  "path": "/categories/pdfs/4",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+}
+[2026-01-18T18:02:04.665Z] [ERROR] Server error
+{
+  "method": "DELETE",
+  "path": "/categories/pdfs/4",
+  "statusCode": 500,
+  "duration": "12ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-01-18T18:02:10.059Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'display_type' in 'field list'\n    at PromisePool.execute (C:\\Users\\Terlan Aliyev\\Desktop\\Hazir Proyektler-FREELANCE\\MuhasibatJurnal\\Vergi\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at insert (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/config/database.js:132:37)\n    at CategoryPdfService.createCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.service.js:31:30)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createCategory (file:///C:/Users/Terlan%20Aliyev/Desktop/Hazir%20Proyektler-FREELANCE/MuhasibatJurnal/Vergi/src/categories/category-pdf.controller.js:63:24)",
+  "error": "Unknown column 'display_type' in 'field list'",
+  "method": "POST",
+  "path": "/categories/pdfs",
+  "body": {
+    "name": "sair",
+    "display_type": "other-books"
+  },
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+}
+[2026-01-18T18:02:10.061Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/categories/pdfs",
+  "statusCode": 500,
+  "duration": "35ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-02-12T10:31:53.964Z] [ERROR] Request error occurred
+{
+  "stack": "Error: ENOENT: no such file or directory, stat 'C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\uploads\\pdfs\\1763150190354-250992625-muxtar.pdf'",
+  "error": "ENOENT: no such file or directory, stat 'C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\uploads\\pdfs\\1763150190354-250992625-muxtar.pdf'",
+  "method": "GET",
+  "path": "/pdfs/131/download",
+  "query": {},
+  "user": {
+    "id": 20,
+    "email": "eliyev91terlan99@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+[2026-02-12T10:31:59.780Z] [ERROR] Request error occurred
+{
+  "stack": "Error: ENOENT: no such file or directory, stat 'C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\uploads\\pdfs\\1763150190354-250992625-muxtar.pdf'",
+  "error": "ENOENT: no such file or directory, stat 'C:\\Users\\Terlan Aliyev\\Desktop\\Vergi\\uploads\\pdfs\\1763150190354-250992625-muxtar.pdf'",
+  "method": "GET",
+  "path": "/pdfs/131/download",
+  "query": {},
+  "user": {
+    "id": 20,
+    "email": "eliyev91terlan99@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}

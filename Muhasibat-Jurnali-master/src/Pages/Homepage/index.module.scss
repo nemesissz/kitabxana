@@ -1,0 +1,675 @@
+main {
+  padding-bottom: 60px;
+}
+.loader {
+  width: 100%;
+  min-height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
+  .bgImage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    .glass {
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: calc(100% - 80px);
+      position: absolute;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      //   justify-content: center;
+      .arrow {
+        position: absolute;
+        bottom: 20px;
+        right: 50%;
+        transform: translateX(50%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: 0.2s;
+        color: #032062;
+        .icon {
+          transform: rotateZ(90deg);
+        }
+        cursor: pointer;
+        &:hover {
+          transform: translate(50%, 10px);
+        }
+      }
+      .container {
+        width: 80%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        @media screen and (max-width: 600px) {
+          justify-content: center;
+          align-items: center;
+        }
+        
+        .heroContent {
+          display: flex;
+          align-items: flex-start;
+          gap: 30px;
+          
+          @media screen and (max-width: 1024px) {
+            flex-direction: column;
+            gap: 20px;
+          }
+          
+          .leftContent {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            
+            h1 {
+              font-size: 40px;
+              width: 520px;
+              text-wrap: wrap;
+              line-height: 50px;
+              color: #032062;
+              margin: 0;
+              
+              @media screen and (max-width: 1024px) {
+                width: 100%;
+              }
+              
+              @media screen and (max-width: 900px) {
+                width: 100%;
+                line-height: 45px;
+                font-size: 35px;
+              }
+              
+              @media screen and (max-width: 600px) {
+                text-align: center;
+                width: 100%;
+                line-height: 35px;
+                font-size: 25px;
+              }
+            }
+            
+            .btns {
+              ul {
+                display: flex;
+                gap: 20px;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                
+                li {
+                  font-size: 18px;
+                  padding: 10px 20px;
+                  background-color: #032062;
+                  color: white;
+                  border-radius: 20px;
+                  cursor: pointer;
+                  transition: 0.2s;
+                  
+                  @media screen and (max-width: 900px) {
+                    font-size: 18px;
+                  }
+                  
+                  @media screen and (max-width: 600px) {
+                    font-size: 14px;
+                  }
+
+                  &:hover {
+                    background-color: #fff;
+                    color: #032062;
+                  }
+                }
+              }
+            }
+          }
+          
+          .rightContent {
+            flex-shrink: 0;
+            
+            @media screen and (max-width: 1024px) {
+              width: 100%;
+            }
+          }
+        }
+        
+        .studentDiscount {
+          background: linear-gradient(135deg, rgba(3, 32, 98, 0.95) 0%, rgba(30, 58, 138, 0.9) 100%);
+          backdrop-filter: blur(10px);
+          border: 3px solid rgba(255, 255, 255, 0.4);
+          border-radius: 25px;
+          padding: 30px 40px;
+          display: flex;
+          align-items: center;
+          gap: 25px;
+          box-shadow: 0 8px 32px rgba(3, 32, 98, 0.4), 0 0 20px rgba(39, 174, 96, 0.3);
+          transition: all 0.3s ease;
+          animation: slideInRight 0.6s ease-out, pulseGlow 2s ease-in-out infinite;
+          max-width: 500px;
+          position: relative;
+          overflow: hidden;
+          
+          &::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+          }
+          
+          @media screen and (max-width: 1024px) {
+            max-width: 100%;
+            width: 100%;
+          }
+          
+          &:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(3, 32, 98, 0.5), 0 0 30px rgba(39, 174, 96, 0.5);
+            border-color: rgba(39, 174, 96, 0.6);
+          }
+          
+          .discountIcon {
+            font-size: 56px;
+            line-height: 1;
+            flex-shrink: 0;
+            animation: bounce 2s ease-in-out infinite;
+            
+            @media screen and (max-width: 768px) {
+              font-size: 48px;
+            }
+            
+            @media screen and (max-width: 600px) {
+              font-size: 40px;
+            }
+          }
+          
+          .discountContent {
+            flex: 1;
+            
+            h3 {
+              color: #fff;
+              font-size: 28px;
+              font-weight: 700;
+              margin: 0 0 10px 0;
+              text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+              animation: textPulse 2s ease-in-out infinite;
+              
+              @media screen and (max-width: 768px) {
+                font-size: 22px;
+              }
+              
+              @media screen and (max-width: 600px) {
+                font-size: 20px;
+              }
+            }
+            
+            p {
+              color: rgba(255, 255, 255, 0.98);
+              font-size: 18px;
+              margin: 0;
+              line-height: 1.6;
+              
+              strong {
+                color: #27ae60;
+                font-weight: 700;
+                font-size: 20px;
+                text-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+                animation: textGlow 2s ease-in-out infinite;
+                
+                @media screen and (max-width: 768px) {
+                  font-size: 18px;
+                }
+              }
+              
+              @media screen and (max-width: 768px) {
+                font-size: 16px;
+              }
+              
+              @media screen and (max-width: 600px) {
+                font-size: 14px;
+              }
+            }
+          }
+          
+          .discountBadge {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: #fff;
+            font-size: 32px;
+            font-weight: 700;
+            padding: 18px 25px;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(39, 174, 96, 0.5), 0 0 15px rgba(39, 174, 96, 0.4);
+            flex-shrink: 0;
+            text-align: center;
+            min-width: 90px;
+            animation: badgePulse 2s ease-in-out infinite;
+            
+            @media screen and (max-width: 768px) {
+              font-size: 28px;
+              padding: 15px 20px;
+              min-width: 80px;
+            }
+            
+            @media screen and (max-width: 600px) {
+              font-size: 24px;
+              padding: 12px 18px;
+              min-width: 70px;
+            }
+          }
+          
+          @media screen and (max-width: 768px) {
+            padding: 20px 25px;
+            gap: 20px;
+          }
+          
+          @media screen and (max-width: 600px) {
+            flex-direction: column;
+            text-align: center;
+            padding: 25px 20px;
+            gap: 18px;
+            
+            .discountBadge {
+              width: 100%;
+            }
+          }
+        }
+        
+        @keyframes pulseGlow {
+          0%, 100% {
+            box-shadow: 0 8px 32px rgba(3, 32, 98, 0.4), 0 0 20px rgba(39, 174, 96, 0.3);
+          }
+          50% {
+            box-shadow: 0 8px 32px rgba(3, 32, 98, 0.4), 0 0 35px rgba(39, 174, 96, 0.6);
+          }
+        }
+        
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+          }
+          100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+          }
+        }
+        
+        @keyframes bounce {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+        
+        @keyframes textPulse {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.9;
+            transform: scale(1.02);
+          }
+        }
+        
+        @keyframes textGlow {
+          0%, 100% {
+            text-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+          }
+          50% {
+            text-shadow: 0 0 20px rgba(39, 174, 96, 0.8), 0 0 30px rgba(39, 174, 96, 0.6);
+          }
+        }
+        
+        @keyframes badgePulse {
+          0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 4px 20px rgba(39, 174, 96, 0.5), 0 0 15px rgba(39, 174, 96, 0.4);
+          }
+          50% {
+            transform: scale(1.05);
+            box-shadow: 0 4px 25px rgba(39, 174, 96, 0.7), 0 0 25px rgba(39, 174, 96, 0.6);
+          }
+        }
+        
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+      }
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+.section {
+  padding-top: 40px;
+  padding-bottom: 20px;
+
+  .header {
+    text-align: center;
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-wrap: nowrap;
+    gap: 10px;
+    h2 {
+      color: #032062;
+      padding: 5px 20px;
+      border-radius: 10px;
+      // margin-bottom: 30px;
+      margin: 0;
+      padding: 0;
+    }
+    .hr {
+      height: 1px;
+      width: 130px;
+      border: 2px solid #032062;
+    }
+  }
+  .container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 50px;
+  }
+  .footer {
+    text-align: center;
+    padding-top: 20px;
+    span {
+      cursor: pointer;
+      transition: 0.2s;
+      color: grey;
+      &:hover {
+        color: black;
+      }
+    }
+  }
+}
+.services {
+  .card {
+    width: calc(100% / 3);
+    @media screen and (max-width: 900px) {
+      width: calc(100% / 2);
+    }
+    @media screen and (max-width: 750px) {
+      width: calc(100% / 2);
+    }
+    @media screen and (max-width: 400px) {
+      width: calc(100% / 1);
+    }
+    height: 225px;
+    padding: 10px;
+    .cardContent {
+      cursor: pointer;
+      transition: 0.2s;
+      &:hover {
+        transform: scale(0.95);
+      }
+      padding: 25px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      align-items: center;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      .title {
+        text-align: center;
+        color: #032062;
+      }
+      .icons {
+        // border: 1px solid red;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        .hr {
+          width: 100px;
+          height: 1px;
+          gap: 10px;
+          border: 1px solid #032062;
+        }
+      }
+    }
+  }
+}
+.library {
+  .card {
+    width: calc(100% / 3);
+    padding: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    @media screen and (max-width: 900px) {
+      width: calc(100% / 3);
+    }
+    @media screen and (max-width: 750px) {
+      width: calc(100% / 2);
+      span {
+        font-size: 12px;
+      }
+      .cardInfo {
+        flex-direction: column;
+      }
+    }
+    @media screen and (max-width: 500px) {
+      width: 100%;
+    }
+    .cardContent {
+      width: 100%;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow: hidden;
+      cursor: pointer;
+      .cardImage {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+      }
+      .cardHeader {
+        height: auto;
+        min-height: 80px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        h2 {
+          font-size: 18px;
+          text-align: start;
+          border-bottom: 1px solid #032062;
+          padding: 0px 10px 10px 10px;
+          display: flex;
+          justify-content: space-between;
+        }
+        h5 {
+          padding: 0px 15px 10px 15px;
+        }
+      }
+      .cardBody {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 15px 15px 15px;
+      }
+      .cardInfo {
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+      }
+      .cardButtons {
+        height: auto;
+        min-height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        span {
+          background-color: #032062;
+          color: white;
+          padding: 8px 15px;
+          border-radius: 10px;
+          width: 100%;
+          cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          transition: 0.2s;
+          font-size: 14px;
+          b {
+            text-wrap: nowrap;
+          }
+          &.accessible {
+            background-color: #28a745;
+            cursor: default;
+
+            b {
+              font-size: 20px;
+            }
+          }
+          &:hover {
+            opacity: 0.7;
+          }
+        }
+        .discountPricing {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 4px;
+
+          .originalPrice {
+            text-decoration: line-through;
+            opacity: 0.6;
+            font-size: 0.95em;
+          }
+
+          .discountedPrice {
+            color: #e74c3c;
+            font-size: 1.05em;
+          }
+
+          .discountPercent {
+            color: #27ae60;
+            font-weight: 700;
+            font-size: 1.25em;
+          }
+        }
+      }
+    }
+  }
+}
+
+.news {
+  .card {
+    width: calc(100% / 4);
+    @media screen and (max-width: 900px) {
+      width: calc(100% / 3);
+    }
+    @media screen and (max-width: 750px) {
+      width: calc(100% / 2);
+    }
+    @media screen and (max-width: 400px) {
+      width: calc(100% / 1);
+    }
+    padding: 10px;
+    .cardContent {
+      cursor: pointer;
+      transition: 0.2s;
+      &:hover {
+        transform: scale(0.98);
+      }
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      .cardImage {
+        width: 100%;
+        aspect-ratio: 3 / 2;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      .cardText {
+        width: 100%;
+        height: 100px;
+        padding: 10px 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 3px;
+
+        .title {
+          font-size: 13px;
+          line-height: 1.4;
+          white-space: normal; // ✅ mətnin sətirə keçməsinə icazə verir
+          word-wrap: break-word; // ✅ uzun sözləri qırır
+          overflow-wrap: break-word; // ✅ əlavə et
+          display: block; // ✅ flex olmamalıdır!
+          height: 80%;
+          overflow: hidden;
+        }
+
+        p:last-of-type {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 12px;
+
+          span:nth-of-type(2) {
+            color: white;
+            padding: 3px 15px;
+            background-color: #1976d2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+

@@ -29,14 +29,29 @@ class UserService {
     // Get subscriptions for each user
     for (const user of users) {
       const subscriptions = await executeQuery(`
-        SELECT id, plan, status, start_date as startDate, end_date as endDate, 
-               price, created_at as createdAt
-        FROM subscriptions 
-        WHERE user_id = ? 
-        ORDER BY created_at DESC
+        SELECT s.id, s.plan, s.status, s.start_date as startDate, s.end_date as endDate, 
+               s.price, s.created_at as createdAt
+        FROM subscriptions s
+        JOIN user_subscriptions us ON s.id = us.subscription_id
+        WHERE us.user_id = ? 
+        ORDER BY s.created_at DESC
       `, [user.id]);
       
-      user.subscriptions = subscriptions;
+      // If no subscriptions, return default subscription structure
+      if (subscriptions.length === 0) {
+        user.subscriptions = [{
+          id: null,
+          plan: "none",
+          status: null,
+          startDate: null,
+          endDate: null,
+          price: null,
+          createdAt: null
+        }];
+      } else {
+        user.subscriptions = subscriptions;
+      }
+      
       user.profile = user.profile_id ? {
         id: user.profile_id,
         fullName: user.profile_fullName,
@@ -70,7 +85,9 @@ class UserService {
     }
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const isEduEmail = email.toLowerCase().endsWith('.edu');
+    // .edu və .edu.az email yoxlaması
+    const emailLower = email.toLowerCase();
+    const isEduEmail = emailLower.endsWith('.edu') || emailLower.endsWith('.edu.az');
 
     return await transaction(async (connection) => {
       // Create profile first if profile data provided
@@ -159,14 +176,52 @@ class UserService {
 
     // Get subscriptions
     const subscriptions = await executeQuery(`
-      SELECT id, plan, status, start_date as startDate, end_date as endDate, 
-             price, created_at as createdAt
-      FROM subscriptions 
-      WHERE user_id = ? 
-      ORDER BY created_at DESC
+      SELECT s.id, s.plan, s.status, s.start_date as startDate, s.end_date as endDate, 
+             s.price, s.created_at as createdAt
+      FROM subscriptions s
+      JOIN user_subscriptions us ON s.id = us.subscription_id
+      WHERE us.user_id = ? 
+      ORDER BY s.created_at DESC
     `, [user.id]);
     
-    user.subscriptions = subscriptions;
+    // If no subscriptions, return default subscription structure
+    if (subscriptions.length === 0) {
+      user.subscriptions = [{
+        id: null,
+        plan: "none",
+        status: null,
+        startDate: null,
+        endDate: null,
+        price: null,
+        createdAt: null
+      }];
+    } else {
+      user.subscriptions = subscriptions;
+    }
+
+    // Get purchased PDFs - həmişə göstər (subscription yoxlama frontend-də olur)
+    const purchasedPdfs = await executeQuery(`
+      SELECT 
+        p.id,
+        p.title,
+        p.description,
+        p.price,
+        p.file_path as filePath,
+        pay.created_at as purchasedAt,
+        pay.amount as paidAmount
+      FROM payments pay
+      JOIN pdfs p ON pay.pdf_id = p.id
+      WHERE pay.user_id = ? 
+        AND pay.type = 'single-pdf' 
+        AND pay.status = 'success'
+      ORDER BY pay.created_at DESC
+    `, [user.id]);
+    
+    // PDF URL-ni gizlədək - downloadUrl əlavə edək
+    user.purchasedPdfs = (purchasedPdfs || []).map(pdf => ({
+      ...pdf,
+      downloadUrl: `/pdfs/${pdf.id}/download`
+    }));
     
     if (user.profile_id) {
       user.profile = {
@@ -220,7 +275,15 @@ class UserService {
       // Build dynamic update query for users table
       Object.keys(updateData).forEach(key => {
         if (updateData[key] !== undefined) {
-          updateFields.push(`${key} = ?`);
+          // Map camelCase to snake_case for database
+          let dbField = key;
+          if (key === 'isVerified') {
+            dbField = 'is_verified';
+          } else if (key === 'eduEmail') {
+            dbField = 'edu_email';
+          }
+          
+          updateFields.push(`${dbField} = ?`);
           updateValues.push(updateData[key]);
         }
       });
@@ -297,6 +360,22 @@ class UserService {
 
       return { message: 'User successfully deleted' };
     });
+  }
+
+  // Check if user has active subscription
+  async checkActiveSubscription(userId) {
+    const subscription = await getOne(`
+      SELECT s.* 
+      FROM subscriptions s
+      WHERE s.user_id = ? 
+        AND s.status = 'active' 
+        AND s.end_date > NOW()
+        AND s.plan != 'none'
+      ORDER BY s.end_date DESC
+      LIMIT 1
+    `, [userId]);
+
+    return !!subscription;
   }
 
   // Helper method for auth

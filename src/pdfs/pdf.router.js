@@ -5,11 +5,16 @@ import {
   getPdfById,
   updatePdf,
   deletePdf,
-  downloadPdf
+  downloadPdf,
+  getPdfsPreview,
+  getMyAccessiblePdfs,
+  checkPdfAccess
 } from './pdf.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { optionalAuthMiddleware } from '../middlewares/optionalAuth.middleware.js';
 import roleCheck from '../middlewares/roleCheck.middleware.js';
-import upload from '../utils/upload.js';
+import mixedUpload from '../utils/mixedUpload.js';
+// limiter'lar çıxarıldı
 
 const router = express.Router();
 
@@ -34,7 +39,102 @@ const router = express.Router();
  * 200:
  * description: PDF-lər uğurla əldə edildi
  */
-router.get('/', getAllPdfs);
+router.get('/', optionalAuthMiddleware, getAllPdfs);
+
+/**
+ * @swagger
+ * /pdfs/preview:
+ *   get:
+ *     tags:
+ *       - PDFs
+ *     summary: Son əlavə edilmiş PDF-lərin önizləməsi
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 20
+ *           default: 5
+ *         description: Qaytarılacaq PDF sayı
+ *       - in: query
+ *         name: categoryId
+ *         schema:
+ *           type: integer
+ *         description: Kateqoriya filtri
+ *     responses:
+ *       200:
+ *         description: Son PDF-lər uğurla əldə edildi
+ */
+router.get('/preview', optionalAuthMiddleware, getPdfsPreview);
+
+/**
+ * @swagger
+ * /pdfs/my-accessible:
+ * get:
+ * tags:
+ * - PDFs
+ * summary: İstifadəçinin girişi olan bütün PDF-ləri əldə etmək
+ * description: Subscription və ya tək-tək alınmış PDF-ləri qaytarır
+ * security:
+ * - BearerAuth: []
+ * responses:
+ * 200:
+ * description: Giriş olan PDF-lər uğurla əldə edildi
+ */
+router.get('/my-accessible',
+  authMiddleware,
+  getMyAccessiblePdfs
+);
+
+/**
+ * @swagger
+ * /pdfs/{id}/check-access:
+ * get:
+ * tags:
+ * - PDFs
+ * summary: PDF-ə giriş imkanını yoxlamaq
+ * security:
+ * - BearerAuth: []
+ * parameters:
+ * - in: path
+ * name: id
+ * required: true
+ * schema:
+ * type: integer
+ * responses:
+ * 200:
+ * description: Giriş statusu uğurla yoxlandı
+ */
+router.get('/:id/check-access',
+  authMiddleware,
+  checkPdfAccess
+);
+
+/**
+ * @swagger
+ * /pdfs/{id}/download:
+ * get:
+ * tags:
+ * - PDFs
+ * summary: PDF-i yükləmək
+ * security:
+ * - BearerAuth: []
+ * parameters:
+ * - in: path
+ * name: id
+ * required: true
+ * schema:
+ * type: integer
+ * responses:
+ * 200:
+ * description: PDF uğurla yükləndi
+ * 403:
+ * description: Giriş rədd edildi - ödəniş tələb olunur
+ * 404:
+ * description: PDF tapılmadı
+ */
+router.get('/:id/download', authMiddleware, downloadPdf);
 
 /**
  * @swagger
@@ -55,7 +155,7 @@ router.get('/', getAllPdfs);
  * 404:
  * description: PDF tapılmadı
  */
-router.get('/:id', getPdfById);
+router.get('/:id', optionalAuthMiddleware, getPdfById);
 
 /**
  * @swagger
@@ -109,7 +209,11 @@ router.get('/:id', getPdfById);
 router.post('/',
   authMiddleware,
   roleCheck(2),
-  upload.single('file'),
+  mixedUpload.fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'coverImage', maxCount: 1 },
+    { name: 'contentImages', maxCount: 20 }
+  ]),
   createPdf
 );
 
@@ -155,7 +259,10 @@ router.post('/',
 router.put('/:id',
   authMiddleware,
   roleCheck(2),
-  upload.single('file'),
+  mixedUpload.fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'image', maxCount: 1 }
+  ]),
   updatePdf
 );
 
@@ -184,32 +291,6 @@ router.delete('/:id',
   authMiddleware,
   roleCheck(2),
   deletePdf
-);
-
-/**
- * @swagger
- * /pdfs/{id}/download:
- * get:
- * tags:
- * - PDFs
- * summary: PDF-i yükləmək
- * security:
- * - BearerAuth: []
- * parameters:
- * - in: path
- * name: id
- * required: true
- * schema:
- * type: integer
- * responses:
- * 200:
- * description: PDF uğurla yükləndi
- * 404:
- * description: PDF tapılmadı
- */
-router.get('/:id/download',
-  authMiddleware,
-  downloadPdf
 );
 
 export default router;

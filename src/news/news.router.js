@@ -4,7 +4,8 @@ import {
   getNewsById,
   createNews,
   updateNews,
-  deleteNews
+  deleteNews,
+  getNewsPreview
 } from './news.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import roleCheck from '../middlewares/roleCheck.middleware.js';
@@ -35,6 +36,33 @@ const router = express.Router();
  * description: Xəbərlər uğurla əldə edildi
  */
 router.get('/', getAllNews);
+
+/**
+ * @swagger
+ * /news/preview:
+ *   get:
+ *     tags:
+ *       - News
+ *     summary: Son əlavə edilmiş xəbərlərin önizləməsi
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 20
+ *           default: 5
+ *         description: Qaytarılacaq xəbər sayı
+ *       - in: query
+ *         name: language
+ *         schema:
+ *           type: string
+ *         description: Dil filtri
+ *     responses:
+ *       200:
+ *         description: Son xəbərlər uğurla əldə edildi
+ */
+router.get('/preview', getNewsPreview);
 
 /**
  * @swagger

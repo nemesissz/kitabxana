@@ -1,0 +1,676 @@
+[2025-10-21T17:07:21.075Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_1_1761066441039_ad923bf2",
+  "amount": "9.99",
+  "currency": "AZN",
+  "description": "undefined - Abunəlik",
+  "timestamp": "2025-10-21T17:07:21.074Z"
+}
+[2025-10-21T17:07:21.704Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SUBSCRIPTION_1_1761066441039_ad923bf2",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-21T17:07:21.704Z"
+}
+[2025-10-21T17:07:21.826Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_1_1761066441809_d9f36e0e",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-21T17:07:21.826Z"
+}
+[2025-10-21T17:07:22.155Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_1_1761066441809_d9f36e0e",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-21T17:07:22.155Z"
+}
+[2025-10-21T17:08:04.428Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_1_1761066484409_4ccc6278",
+  "amount": "9.99",
+  "currency": "AZN",
+  "description": "undefined - Abunəlik",
+  "timestamp": "2025-10-21T17:08:04.427Z"
+}
+[2025-10-21T17:08:04.892Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SUBSCRIPTION_1_1761066484409_4ccc6278",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-21T17:08:04.892Z"
+}
+[2025-10-21T17:08:04.921Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_1_1761066484916_71f77570",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-21T17:08:04.921Z"
+}
+[2025-10-21T17:08:05.131Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_1_1761066484916_71f77570",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-21T17:08:05.131Z"
+}
+[2025-10-22T05:25:47.175Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761110747170_8607e0ee",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:25:47.175Z"
+}
+[2025-10-22T05:25:47.820Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761110747170_8607e0ee",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:25:47.820Z"
+}
+[2025-10-22T05:27:38.505Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761110858499_91b8543c",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:27:38.505Z"
+}
+[2025-10-22T05:27:39.157Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761110858499_91b8543c",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:27:39.157Z"
+}
+[2025-10-22T05:27:49.667Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761110869661_06277cc3",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:27:49.667Z"
+}
+[2025-10-22T05:27:50.301Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761110869661_06277cc3",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:27:50.301Z"
+}
+[2025-10-22T05:28:05.728Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_5_1761110885723_9e4ac24b",
+  "amount": "9.99",
+  "currency": "AZN",
+  "description": "1 Aylıq Abunəlik - Abunəlik",
+  "timestamp": "2025-10-22T05:28:05.728Z"
+}
+[2025-10-22T05:28:06.247Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SUBSCRIPTION_5_1761110885723_9e4ac24b",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:28:06.247Z"
+}
+[2025-10-22T05:28:39.905Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761110919894_8e4b710f",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:28:39.905Z"
+}
+[2025-10-22T05:28:40.525Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761110919894_8e4b710f",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:28:40.525Z"
+}
+[2025-10-22T05:30:26.096Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761111026089_8314db16",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:30:26.096Z"
+}
+[2025-10-22T05:30:26.683Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761111026089_8314db16",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:30:26.683Z"
+}
+[2025-10-22T05:33:39.129Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761111219121_fa156451",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:33:39.129Z"
+}
+[2025-10-22T05:33:39.803Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761111219121_fa156451",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:33:39.803Z"
+}
+[2025-10-22T05:33:42.722Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_5_1761111222717_f801f7a8",
+  "amount": "9.99",
+  "currency": "AZN",
+  "description": "1 Aylıq Abunəlik - Abunəlik",
+  "timestamp": "2025-10-22T05:33:42.722Z"
+}
+[2025-10-22T05:33:43.028Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SUBSCRIPTION_5_1761111222717_f801f7a8",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:33:43.028Z"
+}
+[2025-10-22T05:33:54.662Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761111234657_721974c9",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:33:54.662Z"
+}
+[2025-10-22T05:33:55.178Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761111234657_721974c9",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:33:55.178Z"
+}
+[2025-10-22T05:33:57.002Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_5_1761111237000_92e0e2ae",
+  "amount": "9.99",
+  "currency": "AZN",
+  "description": "1 Aylıq Abunəlik - Abunəlik",
+  "timestamp": "2025-10-22T05:33:57.002Z"
+}
+[2025-10-22T05:33:57.245Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SUBSCRIPTION_5_1761111237000_92e0e2ae",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:33:57.245Z"
+}
+[2025-10-22T05:34:31.859Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761111271851_57c8bbce",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:34:31.858Z"
+}
+[2025-10-22T05:34:32.461Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761111271851_57c8bbce",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:34:32.460Z"
+}
+[2025-10-22T05:34:34.146Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_5_1761111274141_7d160c15",
+  "amount": "9.99",
+  "currency": "AZN",
+  "description": "1 Aylıq Abunəlik - Abunəlik",
+  "timestamp": "2025-10-22T05:34:34.146Z"
+}
+[2025-10-22T05:34:34.394Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SUBSCRIPTION_5_1761111274141_7d160c15",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:34:34.394Z"
+}
+[2025-10-22T05:35:40.190Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761111340185_25764555",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:35:40.190Z"
+}
+[2025-10-22T05:35:40.760Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761111340185_25764555",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:35:40.760Z"
+}
+[2025-10-22T05:35:42.800Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_5_1761111342795_53e28693",
+  "amount": "9.99",
+  "currency": "AZN",
+  "description": "1 Aylıq Abunəlik - Abunəlik",
+  "timestamp": "2025-10-22T05:35:42.800Z"
+}
+[2025-10-22T05:35:43.090Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SUBSCRIPTION_5_1761111342795_53e28693",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:35:43.090Z"
+}
+[2025-10-22T05:36:40.300Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_5_1761111400295_ae319663",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: string",
+  "timestamp": "2025-10-22T05:36:40.300Z"
+}
+[2025-10-22T05:36:40.835Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_5_1761111400295_ae319663",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:36:40.835Z"
+}
+[2025-10-22T05:36:42.955Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_5_1761111402951_19bccad3",
+  "amount": "9.99",
+  "currency": "AZN",
+  "description": "1 Aylıq Abunəlik - Abunəlik",
+  "timestamp": "2025-10-22T05:36:42.955Z"
+}
+[2025-10-22T05:36:43.219Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SUBSCRIPTION_5_1761111402951_19bccad3",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-22T05:36:43.219Z"
+}
+[2025-10-30T06:48:45.342Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_10_1761806925324_139f5183",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: stringsa",
+  "timestamp": "2025-10-30T06:48:45.342Z"
+}
+[2025-10-30T06:48:46.644Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_10_1761806925324_139f5183",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-30T06:48:46.644Z"
+}
+[2025-10-30T06:49:08.020Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_10_1761806948014_2a784b5e",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: stringsa",
+  "timestamp": "2025-10-30T06:49:08.020Z"
+}
+[2025-10-30T06:49:09.259Z] [PAYMENT] Payment CREATE_FAILED
+{
+  "action": "CREATE_FAILED",
+  "order_id": "SINGLE-PDF_10_1761806948014_2a784b5e",
+  "error": "Invalid response from E-point API",
+  "timestamp": "2025-10-30T06:49:09.259Z"
+}
+[2025-10-30T06:50:03.109Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_10_1761807003103_176c6e95",
+  "amount": "10.00",
+  "currency": "AZN",
+  "description": "PDF: stringsa",
+  "timestamp": "2025-10-30T06:50:03.109Z"
+}
+[2025-10-30T06:50:04.368Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010176378",
+  "order_id": "SINGLE-PDF_10_1761807003103_176c6e95",
+  "status": "success",
+  "timestamp": "2025-10-30T06:50:04.368Z"
+}
+[2025-10-30T06:50:58.092Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_10_1761807058088_db25eebc",
+  "amount": "0.01",
+  "currency": "AZN",
+  "description": "PDF: stringsa",
+  "timestamp": "2025-10-30T06:50:58.092Z"
+}
+[2025-10-30T06:50:59.457Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010176389",
+  "order_id": "SINGLE-PDF_10_1761807058088_db25eebc",
+  "status": "success",
+  "timestamp": "2025-10-30T06:50:59.457Z"
+}
+[2025-10-30T06:55:23.682Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_17_1761807323670_dffdbc10",
+  "amount": "0.01",
+  "currency": "AZN",
+  "description": "PDF: stringsa",
+  "timestamp": "2025-10-30T06:55:23.682Z"
+}
+[2025-10-30T06:55:25.040Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010176482",
+  "order_id": "SINGLE-PDF_17_1761807323670_dffdbc10",
+  "status": "success",
+  "timestamp": "2025-10-30T06:55:25.040Z"
+}
+[2025-10-30T06:59:43.859Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_18_1761807583854_d39226f7",
+  "amount": "0.01",
+  "currency": "AZN",
+  "description": "PDF: stringsa",
+  "timestamp": "2025-10-30T06:59:43.859Z"
+}
+[2025-10-30T06:59:45.197Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010176602",
+  "order_id": "SINGLE-PDF_18_1761807583854_d39226f7",
+  "status": "success",
+  "timestamp": "2025-10-30T06:59:45.197Z"
+}
+[2025-11-05T10:50:15.941Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_19_1762339815937_19535bcf",
+  "amount": "9.99",
+  "currency": "AZN",
+  "description": "1 Aylıq Abunəlik - Abunəlik",
+  "timestamp": "2025-11-05T10:50:15.941Z"
+}
+[2025-11-05T10:50:17.835Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010342326",
+  "order_id": "SUBSCRIPTION_19_1762339815937_19535bcf",
+  "status": "success",
+  "timestamp": "2025-11-05T10:50:17.835Z"
+}
+[2025-11-05T10:55:29.154Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_19_1762340129151_77877fb5",
+  "amount": "5.00",
+  "currency": "AZN",
+  "description": "1 Aylıq Abunəlik - Abunəlik (Tələbə endirimi)",
+  "timestamp": "2025-11-05T10:55:29.154Z"
+}
+[2025-11-05T10:55:30.395Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010342481",
+  "order_id": "SUBSCRIPTION_19_1762340129151_77877fb5",
+  "status": "success",
+  "timestamp": "2025-11-05T10:55:30.395Z"
+}
+[2025-11-05T10:55:34.798Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_19_1762340134796_0e562c0e",
+  "amount": "12.49",
+  "currency": "AZN",
+  "description": "3 Aylıq Abunəlik - Abunəlik (Tələbə endirimi)",
+  "timestamp": "2025-11-05T10:55:34.798Z"
+}
+[2025-11-05T10:55:35.656Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010342486",
+  "order_id": "SUBSCRIPTION_19_1762340134796_0e562c0e",
+  "status": "success",
+  "timestamp": "2025-11-05T10:55:35.656Z"
+}
+[2025-11-05T10:55:37.971Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_19_1762340137969_8af04262",
+  "amount": "20.00",
+  "currency": "AZN",
+  "description": "6 Aylıq Abunəlik - Abunəlik (Tələbə endirimi)",
+  "timestamp": "2025-11-05T10:55:37.971Z"
+}
+[2025-11-05T10:55:38.860Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010342489",
+  "order_id": "SUBSCRIPTION_19_1762340137969_8af04262",
+  "status": "success",
+  "timestamp": "2025-11-05T10:55:38.860Z"
+}
+[2025-11-05T11:22:58.547Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_18_1762341778539_15e384e2",
+  "amount": "0.01",
+  "currency": "AZN",
+  "description": "PDF: stringsa",
+  "timestamp": "2025-11-05T11:22:58.547Z"
+}
+[2025-11-05T11:22:59.893Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010343348",
+  "order_id": "SINGLE-PDF_18_1762341778539_15e384e2",
+  "status": "success",
+  "timestamp": "2025-11-05T11:22:59.893Z"
+}
+[2025-11-05T11:51:06.237Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_19_1762343466210_fe5b0d3a",
+  "amount": "6.00",
+  "currency": "AZN",
+  "description": "PDF: SILLLLLLLL (Tələbə endirimi)",
+  "timestamp": "2025-11-05T11:51:06.237Z"
+}
+[2025-11-05T11:51:07.523Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010344298",
+  "order_id": "SINGLE-PDF_19_1762343466210_fe5b0d3a",
+  "status": "success",
+  "timestamp": "2025-11-05T11:51:07.523Z"
+}
+[2025-11-05T12:28:20.424Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_18_1762345700421_5bc699ae",
+  "amount": "12.00",
+  "currency": "AZN",
+  "description": "PDF: SILLLLLLLL",
+  "timestamp": "2025-11-05T12:28:20.424Z"
+}
+[2025-11-05T12:28:21.614Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_18_1762345701610_b68e914e",
+  "amount": "12.00",
+  "currency": "AZN",
+  "description": "PDF: SILLLLLLLL",
+  "timestamp": "2025-11-05T12:28:21.613Z"
+}
+[2025-11-05T12:28:22.953Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010345602",
+  "order_id": "SINGLE-PDF_18_1762345701610_b68e914e",
+  "status": "success",
+  "timestamp": "2025-11-05T12:28:22.953Z"
+}
+[2025-11-05T15:04:19.689Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_18_1762355059686_bafa60b3",
+  "amount": "1.00",
+  "currency": "AZN",
+  "description": "PDF: DDDDDDDDDDDDDDDDDDD",
+  "timestamp": "2025-11-05T15:04:19.689Z"
+}
+[2025-11-05T15:04:21.014Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010351083",
+  "order_id": "SINGLE-PDF_18_1762355059686_bafa60b3",
+  "status": "success",
+  "timestamp": "2025-11-05T15:04:21.014Z"
+}
+[2025-11-05T15:07:20.378Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_19_1762355240369_26fd3648",
+  "amount": "20.00",
+  "currency": "AZN",
+  "description": "6 Aylıq Abunəlik - Abunəlik (Tələbə endirimi)",
+  "timestamp": "2025-11-05T15:07:20.378Z"
+}
+[2025-11-05T15:07:22.799Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_19_1762355242789_77dd1f1d",
+  "amount": "20.00",
+  "currency": "AZN",
+  "description": "6 Aylıq Abunəlik - Abunəlik (Tələbə endirimi)",
+  "timestamp": "2025-11-05T15:07:22.799Z"
+}
+[2025-11-05T15:07:24.089Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010351175",
+  "order_id": "SUBSCRIPTION_19_1762355242789_77dd1f1d",
+  "status": "success",
+  "timestamp": "2025-11-05T15:07:24.089Z"
+}
+[2025-11-05T15:14:22.937Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_19_1762355662932_0015a833",
+  "amount": "10.50",
+  "currency": "AZN",
+  "description": "PDF: AAAAAAAAAAAA (Tələbə endirimi)",
+  "timestamp": "2025-11-05T15:14:22.937Z"
+}
+[2025-11-05T15:14:24.504Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010351441",
+  "order_id": "SINGLE-PDF_19_1762355662932_0015a833",
+  "status": "success",
+  "timestamp": "2025-11-05T15:14:24.504Z"
+}
+[2025-11-05T15:14:42.339Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_19_1762355682332_6a73d618",
+  "amount": "10.50",
+  "currency": "AZN",
+  "description": "PDF: AAAAAAAAAAAA (Tələbə endirimi)",
+  "timestamp": "2025-11-05T15:14:42.339Z"
+}
+[2025-11-05T15:14:43.654Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010351454",
+  "order_id": "SINGLE-PDF_19_1762355682332_6a73d618",
+  "status": "success",
+  "timestamp": "2025-11-05T15:14:43.654Z"
+}
+[2025-11-05T16:35:18.912Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_19_1762360518907_ec5cc7c0",
+  "amount": "0.05",
+  "currency": "AZN",
+  "description": "PDF: DDDDDDDDDDDDDDDDDDD (Tələbə endirimi)",
+  "timestamp": "2025-11-05T16:35:18.912Z"
+}
+[2025-11-05T16:35:20.157Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010354453",
+  "order_id": "SINGLE-PDF_19_1762360518907_ec5cc7c0",
+  "status": "success",
+  "timestamp": "2025-11-05T16:35:20.156Z"
+}
+[2025-11-10T10:47:15.323Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SUBSCRIPTION_18_1762771635319_a639e535",
+  "amount": "0.01",
+  "currency": "AZN",
+  "description": "1 Aylıq Abunəlik - Abunəlik",
+  "timestamp": "2025-11-10T10:47:15.323Z"
+}
+[2025-11-10T10:47:16.674Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010485406",
+  "order_id": "SUBSCRIPTION_18_1762771635319_a639e535",
+  "status": "success",
+  "timestamp": "2025-11-10T10:47:16.674Z"
+}
+[2025-11-10T11:05:42.900Z] [PAYMENT] Payment CREATE_REQUEST
+{
+  "action": "CREATE_REQUEST",
+  "order_id": "SINGLE-PDF_18_1762772742896_7b3be31e",
+  "amount": "0.01",
+  "currency": "AZN",
+  "description": "PDF: stringsa",
+  "timestamp": "2025-11-10T11:05:42.900Z"
+}
+[2025-11-10T11:05:43.885Z] [PAYMENT] Payment CREATE_SUCCESS
+{
+  "action": "CREATE_SUCCESS",
+  "transaction_id": "te010485891",
+  "order_id": "SINGLE-PDF_18_1762772742896_7b3be31e",
+  "status": "success",
+  "timestamp": "2025-11-10T11:05:43.885Z"
+}

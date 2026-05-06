@@ -11,8 +11,9 @@ class AuthService {
       throw new Error('User already exists');
     }
 
-    // .edu email yoxlaması
-    const isEduEmail = email.toLowerCase().endsWith('.edu');
+    // .edu və .edu.az email yoxlaması
+    const emailLower = email.toLowerCase();
+    const isEduEmail = emailLower.endsWith('.edu') || emailLower.endsWith('.edu.az');
     
     // İstifadəçini yaradırıq (default role = 1)
     const user = await userService.createUser({
@@ -39,7 +40,8 @@ class AuthService {
     
     try {
       // Email təsdiqləmə linki göndər
-      await emailService.sendVerificationEmail(user.email, token);
+      const verificationToken = generateToken(user, '24h');
+      await emailService.sendVerificationEmail(user.email, verificationToken);
       console.log('Verification email sent successfully to:', user.email);
     } catch (error) {
       console.error('Failed to send verification email:', error.message);
@@ -61,18 +63,53 @@ class AuthService {
       throw new Error('Invalid credentials');
     }
 
+    // Check active subscription
+    const hasActiveSubscription = await userService.checkActiveSubscription(user.id);
+    user.hasActiveSubscription = hasActiveSubscription;
+
     const token = generateToken(user);
     return { user, token };
   }
 
   async verifyEmail(token) {
     const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
+    if (!decoded || (!decoded.id && !decoded.userId)) {
       throw new Error('Invalid or expired token');
     }
 
-    const user = await userService.updateUserById(decoded.id, { isVerified: true });
+    // Support both old and new token formats
+    const userId = decoded.id || decoded.userId;
+    const user = await userService.updateUserById(userId, { isVerified: true });
     return user;
+  }
+
+  async resendVerificationEmail(email) {
+    console.log('Resending verification email to:', email);
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      throw new Error('Invalid email format');
+    }
+    
+    const user = await userService.findUserByEmail(email);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    if (user.isVerified) {
+      throw new Error('Email is already verified');
+    }
+
+    try {
+      const verificationToken = generateToken(user, '24h');
+      await emailService.sendVerificationEmail(user.email, verificationToken);
+      console.log('Verification email resent successfully to:', user.email);
+      return true;
+    } catch (error) {
+      console.error('Failed to resend verification email:', error.message);
+      throw new Error('Failed to resend verification email');
+    }
   }
 
   async forgotPassword(email) {
@@ -100,11 +137,13 @@ class AuthService {
 
   async resetPassword(token, newPassword) {
     const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
+    if (!decoded || (!decoded.id && !decoded.userId)) {
       throw new Error('Invalid or expired token');
     }
 
-    const user = await userService.updateUserById(decoded.id, { password: newPassword });
+    // Support both old and new token formats
+    const userId = decoded.id || decoded.userId;
+    const user = await userService.updateUserById(userId, { password: newPassword });
     return user;
   }
 }
