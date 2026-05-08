@@ -1,93 +1,151 @@
 import styles from "./index.module.scss";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditDocumentIcon from "@mui/icons-material/EditDocument";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import Tooltip from "@mui/material/Tooltip";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Base_Url_Server, { formatServerFilePath } from "../../Constants/baseUrl";
 import dataContext from "../../Contexts/GlobalState";
+import CircularProgress from "@mui/material/CircularProgress";
+
+const LANG_LABELS = { az: "AZ", ru: "RU", en: "EN" };
+const STATUS_LABELS = { pending: "Gözləyən", approved: "Qəbul" };
+
+const EMPTY_FILTERS = { category: "", language: "", status: "", uploadedBy: "" };
 
 function AdminLibraryPage() {
   const navigate = useNavigate();
   const store = useContext(dataContext);
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [editingBook, setEditingBook] = useState(null);
-  const [editData, setEditData] = useState({
-    title: "",
-    description: "",
-    categoryId: "",
-    price: "",
-    language: "",
-    pdfDate: "",
-    image: null,
-  });
-  const [searchTerm, setSearchTerm] = useState("");
-  const [pageCount, setPageCount] = useState(1);
+  const [users, setUsers] = useState([]);
+  const [pagination, setPagination] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [imageErrors, setImageErrors] = useState(new Set());
-  
-  // 1. Yeni: Məlumat çəkmə məntiqini təkrar istifadə oluna bilən funksiyaya ayırdıq
-  const fetchPdfs = async (currentPage = page, currentSearch = searchTerm) => {
-    store.loader.setData(true);
-    const tokenAdmin = localStorage.getItem("tokenAdmin");
 
-    try {
-      // Base URL-in düzgün formatını təmin etmək üçün
-      const baseUrl = Base_Url_Server.endsWith('/') ? Base_Url_Server : `${Base_Url_Server}/`;
-      
-      const [pdfRes, catRes] = await Promise.all([
-        // PDF-ləri çəkirik
-        axios.get(`${baseUrl}pdfs?page=${currentPage}&search=${currentSearch}`, {
-          headers: { Authorization: `Bearer ${tokenAdmin}` },
-        }),
-        // Kateqoriyaları çəkirik
-        axios.get(`${baseUrl}categories/pdfs`),
-      ]);
-      setBooks(pdfRes.data.data.pdfs || []);
-      setCategories(catRes.data.data.categories || []);
-      setPageCount(pdfRes.data.data.pagination.total_pages);
-    } catch (err) {
-      console.error("PDF və ya kateqoriya məlumatları çəkilmədi:", err);
-    } finally {
-      store.loader.setData(false);
-    }
-  };
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [draftFilters, setDraftFilters] = useState(EMPTY_FILTERS);
+  const filterRef = useRef(null);
+  const debounceRef = useRef(null);
 
-  // Admin auth yoxlanışı (Dəyişməyib)
+  const [editingBook, setEditingBook] = useState(null);
+  const [editData, setEditData] = useState({});
+  const [editLoading, setEditLoading] = useState(false);
+
   useEffect(() => {
     const tokenAdmin = localStorage.getItem("tokenAdmin");
     const adminID = localStorage.getItem("admin");
+    if (!tokenAdmin || !adminID) { navigate("/admin/login"); return; }
+    axios.get(Base_Url_Server + "users/" + adminID, {
+      headers: { Authorization: `Bearer ${tokenAdmin}` },
+    }).then((r) => store.admin.setData(r.data.data.user))
+      .catch(() => navigate("/admin/login"));
+  }, []);
 
-    if (!tokenAdmin || !adminID) {
-      store.admin.setData(null);
-      navigate("/admin/login");
-    } else {
-      axios
-        .get(Base_Url_Server + "users/" + adminID, {
-          headers: { Authorization: `Bearer ${tokenAdmin}` },
-        })
-        .then((res) => store.admin.setData(res.data.data.user))
-        .catch(() => {
-          store.admin.setData(null);
-          localStorage.removeItem("tokenAdmin");
-          localStorage.removeItem("admin");
-          navigate("/admin/login");
-        });
+  useEffect(() => {
+    axios.get(Base_Url_Server + "categories/pdfs")
+      .then((r) => setCategories(r.data.data.categories || []))
+      .catch(() => {});
+    const tokenAdmin = localStorage.getItem("tokenAdmin");
+    axios.get(Base_Url_Server + "users", { headers: { Authorization: `Bearer ${tokenAdmin}` } })
+      .then((r) => setUsers(r.data.data.users || []))
+      .catch(() => {});
+  }, []);
+
+  // Close filter panel when clicking outside
+  useEffect(() => {
+    const handler = (e) => {
+      if (filterRef.current && !filterRef.current.contains(e.target)) {
+        setFilterOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const fetchPdfs = useCallback(async (p = 1, q = search, f = filters) => {
+    setLoading(true);
+    const tokenAdmin = localStorage.getItem("tokenAdmin");
+    try {
+      const params = new URLSearchParams({ page: p, limit: 20 });
+      if (q.trim()) params.append("search", q.trim());
+      if (f.category) params.append("categoryId", f.category);
+      if (f.language) params.append("language", f.language);
+      if (f.status) params.append("status", f.status);
+      if (f.uploadedBy) params.append("uploadedBy", f.uploadedBy);
+      const res = await axios.get(`${Base_Url_Server}pdfs?${params}`, {
+        headers: { Authorization: `Bearer ${tokenAdmin}` },
+      });
+      setBooks(res.data.data.pdfs || []);
+      setPagination(res.data.data.pagination || null);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
-  // Kitablar və kateqoriyalar - fetchPdfs istifadə edilir
-  useEffect(() => {
-    fetchPdfs();
-  }, [page, searchTerm]);
+  useEffect(() => { fetchPdfs(page, search, filters); }, [page]);
+
+  const handleSearchChange = (e) => {
+    const val = e.target.value;
+    setSearch(val);
+    setPage(1);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchPdfs(1, val, filters), 400);
+  };
+
+  const openFilterPanel = () => {
+    setDraftFilters({ ...filters });
+    setFilterOpen(true);
+  };
+
+  const applyFilters = () => {
+    setFilters(draftFilters);
+    setPage(1);
+    setFilterOpen(false);
+    fetchPdfs(1, search, draftFilters);
+  };
+
+  const clearFilters = () => {
+    setFilters(EMPTY_FILTERS);
+    setDraftFilters(EMPTY_FILTERS);
+    setPage(1);
+    setFilterOpen(false);
+    fetchPdfs(1, search, EMPTY_FILTERS);
+  };
+
+  // Active filter summary for button label
+  const activeFilterSummary = () => {
+    const parts = [];
+    if (filters.category) {
+      const cat = categories.find(c => String(c.id) === String(filters.category));
+      if (cat) parts.push(cat.name);
+    }
+    if (filters.language) parts.push(LANG_LABELS[filters.language] || filters.language);
+    if (filters.status) parts.push(STATUS_LABELS[filters.status] || filters.status);
+    if (filters.uploadedBy) {
+      const u = users.find(u => String(u.id) === String(filters.uploadedBy));
+      if (u) parts.push(u.email.split("@")[0]);
+    }
+    return parts.join(" / ");
+  };
+
+  const hasActiveFilters = Object.values(filters).some(Boolean);
+  const summary = activeFilterSummary();
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
-      title: "Kitabı silmək istədiyinizə əminsiniz?",
+      title: "PDF-i silmək istədiyinizdən əminsiniz?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -95,264 +153,410 @@ function AdminLibraryPage() {
       confirmButtonText: "Bəli, sil!",
       cancelButtonText: "Ləğv et",
     });
-
-    if (result.isConfirmed) {
-      const tokenAdmin = localStorage.getItem("tokenAdmin");
-      try {
-        await axios.delete(`${Base_Url_Server}pdfs/${id}`, {
-          headers: { Authorization: `Bearer ${tokenAdmin}` },
-        });
-        
-        // 2. KRİTİK DÜZƏLİŞ: Uğurlu silinmədən sonra datanı yenidən çəkirik.
-        await fetchPdfs();
-
-        Swal.fire({
-          icon: "success",
-          title: "Kitab uğurla silindi!",
-          timer: 1500,
-          showConfirmButton: false,
-        });
-      } catch (err) {
-        // 3. KRİTİK DÜZƏLİŞ: Xəta mesajını API-dən götürüb göstəririk.
-        const errorMessage = err.response?.data?.message || "Silinmə zamanı gözlənilməyən xəta baş verdi!";
-        console.error("PDF silinmə xətası:", err);
-        Swal.fire({
-          icon: "error",
-          title: "Xəta ❌",
-          text: errorMessage,
-          timer: 2500,
-          showConfirmButton: true,
-        });
-      }
+    if (!result.isConfirmed) return;
+    const tokenAdmin = localStorage.getItem("tokenAdmin");
+    try {
+      await axios.delete(`${Base_Url_Server}pdfs/${id}`, {
+        headers: { Authorization: `Bearer ${tokenAdmin}` },
+      });
+      await fetchPdfs(page, search, filters);
+      Swal.fire({ icon: "success", title: "Silindi!", timer: 1500, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire("Xəta!", err.response?.data?.message || "Silinə bilmədi", "error");
     }
   };
 
-  const openEditForm = (book) => {
+  const handleApprove = async (id) => {
+    const tokenAdmin = localStorage.getItem("tokenAdmin");
+    try {
+      await axios.patch(`${Base_Url_Server}pdfs/${id}/approve`, {}, {
+        headers: { Authorization: `Bearer ${tokenAdmin}` },
+      });
+      await fetchPdfs(page, search, filters);
+      Swal.fire({ icon: "success", title: "Qəbul edildi!", timer: 1200, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire("Xəta!", err.response?.data?.message || "Xəta baş verdi", "error");
+    }
+  };
+
+  const handleReject = async (id) => {
+    const result = await Swal.fire({
+      title: "PDF-i rədd edib siləcəksiniz?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Bəli, sil!",
+      cancelButtonText: "Ləğv et",
+    });
+    if (!result.isConfirmed) return;
+    const tokenAdmin = localStorage.getItem("tokenAdmin");
+    try {
+      await axios.delete(`${Base_Url_Server}pdfs/${id}/reject`, {
+        headers: { Authorization: `Bearer ${tokenAdmin}` },
+      });
+      await fetchPdfs(page, search, filters);
+      Swal.fire({ icon: "success", title: "Rədd edildi!", timer: 1200, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire("Xəta!", err.response?.data?.message || "Xəta baş verdi", "error");
+    }
+  };
+
+  const openEdit = (book) => {
     setEditingBook(book);
-    // created_at'den tarihi al (YYYY-MM-DD formatına çevir)
-    const pdfDate = book.created_at ? book.created_at.split("T")[0] : "";
     setEditData({
-      title: book.title,
-      description: book.description,
-      categoryId: book.category.id,
-      price: book.price,
-      language: book.language,
-      pdfDate: pdfDate,
-      image: null,
+      title: book.title || "",
+      description: book.description || "",
+      category_id: book.category_id || "",
+      language: book.language || "az",
+      order_number: book.order_number || "",
+      author: book.author || "",
+      newCoverImage: null,
     });
   };
 
-  const handleEditChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "image" && files && files.length > 0) {
-      setEditData((prev) => ({ ...prev, image: files[0] }));
-    } else {
-      setEditData((prev) => ({ ...prev, [name]: value }));
-    }
-  };
-
-  const submitEdit = async (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
     const tokenAdmin = localStorage.getItem("tokenAdmin");
+    setEditLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("title", editData.title);
-      formData.append("description", editData.description);
-      formData.append("categoryId", editData.categoryId);
-      formData.append("price", editData.price);
-      formData.append("language", editData.language);
-      formData.append("pdfDate", editData.pdfDate);
-      
-      // Sekil varsa elave et
-      if (editData.image) {
-        formData.append("image", editData.image);
-      }
-
-      await axios.put(`${Base_Url_Server}pdfs/${editingBook.id}`, formData, {
-        headers: { 
-          Authorization: `Bearer ${tokenAdmin}`,
-          "Content-Type": "multipart/form-data",
-        },
+      const fd = new FormData();
+      const { newCoverImage, ...textFields } = editData;
+      Object.entries(textFields).forEach(([k, v]) => { if (v !== "" && v !== null) fd.append(k, v); });
+      if (newCoverImage) fd.append("image", newCoverImage);
+      await axios.put(`${Base_Url_Server}pdfs/${editingBook.id}`, fd, {
+        headers: { Authorization: `Bearer ${tokenAdmin}`, "Content-Type": "multipart/form-data" },
       });
-      // Yenilənmədən sonra da datanı yenidən çəkirik
-      await fetchPdfs(); 
+      await fetchPdfs(page, search, filters);
       setEditingBook(null);
-
-      Swal.fire({
-        icon: "success",
-        title: "Kitab uğurla redaktə olundu!",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    } catch {
-      Swal.fire({
-        icon: "error",
-        title: "Redaktə zamanı xəta baş verdi!",
-        timer: 1500,
-        showConfirmButton: false,
-      });
+      Swal.fire({ icon: "success", title: "Yeniləndi!", timer: 1500, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire("Xəta!", err.response?.data?.message || "Yenilənə bilmədi", "error");
+    } finally {
+      setEditLoading(false);
     }
   };
 
   return (
-    <div className={styles.adminBooks}>
+    <div className={styles.page}>
       <div className={styles.header}>
-        <h3>Kitabları idarə et</h3>
-        <div className={styles.searchBox}>
-          <input
-            type="text"
-            placeholder="Axtar"
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <button onClick={() => navigate("/admin/add-book")}>
-          <AddCircleOutlineIcon /> Əlavə et
+        <h2>PDF İdarəetmə</h2>
+        <button className={styles.addBtn} onClick={() => navigate("/admin/add-book")}>
+          <AddIcon /> Yeni PDF
         </button>
       </div>
 
-      {/* Edit Form (Dəyişməyib) */}
-      <div className={styles.editForm} style={editingBook ? {} : { maxHeight: "0", padding: "0" }}>
-        <form onSubmit={submitEdit} style={editingBook ? { opacity: "1" } : {}}>
-          <input type="text" name="title" value={editData.title} onChange={handleEditChange} placeholder="Başlıq" required />
-          <textarea name="description" value={editData.description} onChange={handleEditChange} placeholder="Təsvir" rows={3} />
-          <select name="categoryId" value={editData.categoryId} onChange={handleEditChange}>
-            <option value="">Kateqoriya seç</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
-            ))}
-          </select>
-          <input type="text" name="price" value={editData.price} onChange={handleEditChange} placeholder="Qiymət" />
-          <select name="language" value={editData.language} onChange={handleEditChange}>
-            <option value="">Dil seç</option>
-            <option value="az">Azərbaycan dili</option>
-            <option value="en">English</option>
-            <option value="ru">Русский</option>
-          </select>
-          <input 
-            type="date" 
-            name="pdfDate" 
-            value={editData.pdfDate} 
-            onChange={handleEditChange} 
-            placeholder="PDF Tarixi"
-            required
+      {/* Toolbar: Search + Filter button */}
+      <div className={styles.toolbar}>
+        <div className={styles.searchWrap}>
+          <SearchIcon className={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder="Ada, təsvir, əmr №-ə görə axtar..."
+            value={search}
+            onChange={handleSearchChange}
           />
-          <div className={styles.formGroup}>
-            <label>Qapaq Şəkli (Yeniləmək üçün)</label>
-            <input 
-              type="file" 
-              name="image"
-              accept="image/*" 
-              onChange={handleEditChange}
-            />
-            {editData.image && (
-              <div style={{ marginTop: '10px' }}>
-                <img 
-                  src={URL.createObjectURL(editData.image)} 
-                  alt="preview" 
-                  style={{ width: '100px', height: '70px', objectFit: 'cover', borderRadius: '6px' }}
-                />
-              </div>
+          {loading && <CircularProgress size={16} className={styles.spin} />}
+        </div>
+
+        <div className={styles.filterWrap} ref={filterRef}>
+          <button
+            className={`${styles.filterBtn} ${hasActiveFilters ? styles.filterActive : ""}`}
+            onClick={filterOpen ? () => setFilterOpen(false) : openFilterPanel}
+          >
+            <FilterListIcon fontSize="small" />
+            {summary ? <span className={styles.filterSummary}>{summary}</span> : "Filter"}
+            {hasActiveFilters && (
+              <span
+                className={styles.clearX}
+                onClick={(e) => { e.stopPropagation(); clearFilters(); }}
+                title="Filteri təmizlə"
+              >
+                <CloseIcon style={{ fontSize: 14 }} />
+              </span>
             )}
-          </div>
-          <div className={styles.buttonGroup}>
-            <button type="submit">Yadda saxla</button>
-            <button type="button" onClick={() => setEditingBook(null)}>Ləğv et</button>
-          </div>
-        </form>
+          </button>
+
+          {filterOpen && (
+            <div className={styles.filterPanel}>
+              <div className={styles.filterRow}>
+                <label>Kateqoriya</label>
+                <select
+                  value={draftFilters.category}
+                  onChange={(e) => setDraftFilters(p => ({ ...p, category: e.target.value }))}
+                >
+                  <option value="">Hamısı</option>
+                  {categories.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className={styles.filterRow}>
+                <label>Dil</label>
+                <select
+                  value={draftFilters.language}
+                  onChange={(e) => setDraftFilters(p => ({ ...p, language: e.target.value }))}
+                >
+                  <option value="">Hamısı</option>
+                  <option value="az">Azərbaycan</option>
+                  <option value="ru">Rus</option>
+                  <option value="en">İngilis</option>
+                </select>
+              </div>
+              <div className={styles.filterRow}>
+                <label>Status</label>
+                <select
+                  value={draftFilters.status}
+                  onChange={(e) => setDraftFilters(p => ({ ...p, status: e.target.value }))}
+                >
+                  <option value="">Hamısı</option>
+                  <option value="pending">Gözləyən</option>
+                  <option value="approved">Qəbul edilmiş</option>
+                </select>
+              </div>
+              <div className={styles.filterRow}>
+                <label>İstifadəçi</label>
+                <select
+                  value={draftFilters.uploadedBy}
+                  onChange={(e) => setDraftFilters(p => ({ ...p, uploadedBy: e.target.value }))}
+                >
+                  <option value="">Hamısı</option>
+                  {users.map(u => (
+                    <option key={u.id} value={u.id}>{u.email}</option>
+                  ))}
+                </select>
+              </div>
+              <div className={styles.filterActions}>
+                <button className={styles.clearBtn} onClick={clearFilters}>Təmizlə</button>
+                <button className={styles.applyBtn} onClick={applyFilters}>Tətbiq et</button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Table (Dəyişməyib) */}
-      <div className={styles.bookList}>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Görsel</th>
-              <th>Başlıq</th>
-              <th>Açıqlama</th>
-              <th>Dil</th>
-              <th>Qiymət</th>
-              <th>Kateqoriya</th>
-              <th>Demo</th>
-              <th>Yüklənmə sayı</th>
-              <th>Yaradılma tarixi</th>
-              <th>Əməliyyatlar</th>
-            </tr>
-          </thead>
-          <tbody>
-            {books.map((book, i) => (
-              <tr key={book.id}>
-                <td>{i + 1}</td>
-                <td>
-                  {book.image_path && !imageErrors.has(book.id) ? (
-                    <img 
-                      src={formatServerFilePath(book.image_path)}
-                      alt={book.title}
-                      style={{ width: '70px', height: '50px', objectFit: 'cover', borderRadius: '6px' }}
-                      onError={() => {
-                        setImageErrors(prev => new Set([...prev, book.id]));
-                      }}
-                    />
-                  ) : (
-                    <div style={{ 
-                      width: '70px', 
-                      height: '50px', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center',
-                      backgroundColor: '#f5f5f5',
-                      borderRadius: '6px',
-                      fontSize: '10px',
-                      color: '#666',
-                      textAlign: 'center',
-                      padding: '5px'
-                    }}>
-                      Sekil yoxdur
-                    </div>
-                  )}
-                </td>
-                <td className={styles.title}>{book.title}</td>
-                <td className={styles.title}>{book.description?.length <= 100 ? book.description : book.description?.slice(0, 100) + "..."}</td>
-                <td>{book.language}</td>
-                <td>{book.price}</td>
-                <td>{book.category.name}</td>
-                <td>
-                  <a href={Base_Url_Server + book.file_path?.split("/home/muhasibatjurnal/backend-mmu/")[1]} target="_blank" rel="noreferrer">
-                    Demo
-                  </a>
-                </td>
-                <td>{book.downloads}</td>
-                <td>{book.created_at.split("T")[0]}</td>
-                <td>
-                  <Tooltip title="Redaktə et" placement="top">
-                    <button onClick={() => openEditForm(book)}>
-                      <EditDocumentIcon />
-                    </button>
-                  </Tooltip>
-                  <Tooltip title="Sil" placement="top">
-                    <button onClick={() => handleDelete(book.id)}>
-                      <DeleteIcon />
-                    </button>
-                  </Tooltip>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {pagination && (
+        <p className={styles.stats}>
+          Cəmi <strong>{pagination.total}</strong> PDF · Səhifə {pagination.current_page}/{pagination.total_pages}
+        </p>
+      )}
 
-        {/* Pagination (Dəyişməyib) */}
-        {pageCount > 1 && (
-          <div className={styles.pagination}>
-            <button onClick={() => setPage(page > 1 ? page - 1 : pageCount)}>{"<"}</button>
-            {Array.from({ length: pageCount }, (_, i) => (
-              <button key={i} className={page === i + 1 ? styles.activePage : ""} onClick={() => setPage(i + 1)}>
-                {i + 1}
-              </button>
-            ))}
-            <button onClick={() => setPage(page < pageCount ? page + 1 : 1)}>{">"}</button>
-          </div>
+      {/* Table */}
+      <div className={styles.tableWrap}>
+        {loading && books.length === 0 ? (
+          <div className={styles.center}><CircularProgress /></div>
+        ) : books.length === 0 ? (
+          <div className={styles.center}>Heç bir PDF tapılmadı</div>
+        ) : (
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Şəkil</th>
+                <th>Ad</th>
+                <th>Kateqoriya</th>
+                <th>Dil</th>
+                <th>Status</th>
+                <th>Yükləyən</th>
+                <th>Əmr / Müəllif</th>
+                <th>Tarix</th>
+                <th>Əməliyyat</th>
+              </tr>
+            </thead>
+            <tbody>
+              {books.map((b) => (
+                <tr key={b.id} className={b.status === "pending" ? styles.rowPending : ""}>
+                  <td>{b.id}</td>
+                  <td>
+                    {b.image_path ? (
+                      <img
+                        src={formatServerFilePath(b.image_path)}
+                        alt={b.title}
+                        className={styles.thumb}
+                        onError={(e) => { e.target.style.display = "none"; }}
+                      />
+                    ) : (
+                      <div className={styles.noThumb}>PDF</div>
+                    )}
+                  </td>
+                  <td className={styles.titleCell} title={b.title}>{b.title}</td>
+                  <td>{b.category_name || <span className={styles.none}>—</span>}</td>
+                  <td>
+                    <span className={styles.langBadge}>{LANG_LABELS[b.language] || b.language || "—"}</span>
+                  </td>
+                  <td>
+                    {b.status === "pending"
+                      ? <span className={styles.statusPending}>Gözləyir</span>
+                      : <span className={styles.statusApproved}>Qəbul</span>}
+                  </td>
+                  <td className={styles.small}>
+                    {b.uploader_email
+                      ? <span className={styles.uploaderEmail} title={b.uploader_email}>{b.uploader_email.split("@")[0]}</span>
+                      : <span className={styles.none}>—</span>}
+                  </td>
+                  <td className={styles.small}>
+                    {b.order_number || b.author || <span className={styles.none}>—</span>}
+                  </td>
+                  <td className={styles.small}>{b.created_at?.split("T")[0]}</td>
+                  <td>
+                    <div className={styles.actions}>
+                      {b.status === "pending" && (
+                        <>
+                          <button className={styles.approveBtn} onClick={() => handleApprove(b.id)} title="Qəbul et">
+                            <CheckCircleOutlineIcon fontSize="small" />
+                          </button>
+                          <button className={styles.rejectBtn} onClick={() => handleReject(b.id)} title="Rədd et">
+                            <CancelOutlinedIcon fontSize="small" />
+                          </button>
+                        </>
+                      )}
+                      <button className={styles.editBtn} onClick={() => openEdit(b)} title="Redaktə et">
+                        <EditIcon fontSize="small" />
+                      </button>
+                      <button className={styles.delBtn} onClick={() => handleDelete(b.id)} title="Sil">
+                        <DeleteIcon fontSize="small" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
+
+      {/* Pagination */}
+      {pagination && pagination.total_pages > 1 && (
+        <div className={styles.pagination}>
+          <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>← Əvvəlki</button>
+          <span>{page} / {pagination.total_pages}</span>
+          <button disabled={page === pagination.total_pages} onClick={() => setPage(p => p + 1)}>Növbəti →</button>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {editingBook && (
+        <div className={styles.modalOverlay} onClick={() => setEditingBook(null)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>PDF Redaktə</h3>
+              <button className={styles.closeModal} onClick={() => setEditingBook(null)}>✕</button>
+            </div>
+            <form onSubmit={handleEditSubmit} className={styles.modalForm}>
+              <label>Ad <span>*</span></label>
+              <input
+                type="text" value={editData.title} required
+                onChange={(e) => setEditData(p => ({ ...p, title: e.target.value }))}
+              />
+
+              <label>Kateqoriya</label>
+              <select
+                value={editData.category_id}
+                onChange={(e) => setEditData(p => ({ ...p, category_id: e.target.value, order_number: "", author: "" }))}
+              >
+                <option value="">— Kateqoriyasız —</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+
+              <label>Dil</label>
+              <select
+                value={editData.language}
+                onChange={(e) => setEditData(p => ({ ...p, language: e.target.value }))}
+              >
+                <option value="az">Azərbaycan dili</option>
+                <option value="ru">Rus dili</option>
+                <option value="en">İngilis dili</option>
+              </select>
+
+              {(() => {
+                const cat = categories.find(c => String(c.id) === String(editData.category_id));
+                const pdfType = cat?.pdf_type;
+                if (pdfType === "kitab") return (
+                  <>
+                    <label>Müəllif</label>
+                    <input type="text" value={editData.author} placeholder="Müəllifin adı"
+                      onChange={(e) => setEditData(p => ({ ...p, author: e.target.value }))} />
+                  </>
+                );
+                if (pdfType === "serecam") return (
+                  <>
+                    <label>Şərəcam №</label>
+                    <input type="text" value={editData.order_number} placeholder="Məs: 15-Ş/2025"
+                      onChange={(e) => setEditData(p => ({ ...p, order_number: e.target.value }))} />
+                  </>
+                );
+                return (
+                  <>
+                    <label>Əmr №</label>
+                    <input type="text" value={editData.order_number} placeholder="Məs: 45/2025"
+                      onChange={(e) => setEditData(p => ({ ...p, order_number: e.target.value }))} />
+                  </>
+                );
+              })()}
+
+              <label>Təsvir</label>
+              <textarea rows={3} value={editData.description}
+                onChange={(e) => setEditData(p => ({ ...p, description: e.target.value }))} />
+
+              <label>Üz qabığı şəkli</label>
+              <div className={styles.coverEditWrap}>
+                {editData.newCoverImage ? (
+                  <img
+                    src={URL.createObjectURL(editData.newCoverImage)}
+                    alt="Yeni şəkil"
+                    className={styles.coverPreview}
+                  />
+                ) : editingBook.image_path ? (
+                  <img
+                    src={formatServerFilePath(editingBook.image_path)}
+                    alt="Mövcud şəkil"
+                    className={styles.coverPreview}
+                    onError={(e) => { e.target.style.display = "none"; }}
+                  />
+                ) : (
+                  <div className={styles.coverPlaceholder}>Şəkil yoxdur</div>
+                )}
+                <div className={styles.coverActions}>
+                  <label className={styles.coverUploadBtn}>
+                    Şəkil seç
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        const f = e.target.files[0];
+                        if (f) setEditData(p => ({ ...p, newCoverImage: f }));
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
+                  {editData.newCoverImage && (
+                    <button
+                      type="button"
+                      className={styles.coverClearBtn}
+                      onClick={() => setEditData(p => ({ ...p, newCoverImage: null }))}
+                    >
+                      Ləğv et
+                    </button>
+                  )}
+                </div>
+                {editData.newCoverImage && (
+                  <span className={styles.coverFileName}>{editData.newCoverImage.name}</span>
+                )}
+              </div>
+
+              <div className={styles.modalActions}>
+                <button type="button" className={styles.cancelBtn} onClick={() => setEditingBook(null)}>Ləğv et</button>
+                <button type="submit" className={styles.saveBtn} disabled={editLoading}>
+                  {editLoading ? <CircularProgress size={16} style={{ color: "#fff" }} /> : "Yadda saxla"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

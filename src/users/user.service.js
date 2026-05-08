@@ -1,17 +1,19 @@
 import { executeQuery, getOne, insert, update, transaction } from '../config/database.js';
 import bcrypt from 'bcrypt';
+import activityLog from '../activity-logs/activity-log.service.js';
 
 const saltRounds = 10;
 
 class UserService {
   async getAllUsers() {
     const sql = `
-      SELECT 
+      SELECT
         u.id,
         u.email,
         u.role,
         u.is_verified as isVerified,
         u.edu_email as eduEmail,
+        u.upload_permission as uploadPermission,
         u.created_at as createdAt,
         u.updated_at as updatedAt,
         p.id as profile_id,
@@ -144,18 +146,27 @@ class UserService {
       delete user.profile_company;
       delete user.profile_position;
 
+      await activityLog.log({
+        eventType: 'user_registered',
+        actorEmail: email,
+        targetType: 'user',
+        targetId: userResult.insertId,
+        details: { email },
+      });
+
       return user;
     });
   }
 
   async findUserById(id) {
     const sql = `
-      SELECT 
+      SELECT
         u.id,
         u.email,
         u.role,
         u.is_verified as isVerified,
         u.edu_email as eduEmail,
+        u.upload_permission as uploadPermission,
         u.created_at as createdAt,
         u.updated_at as updatedAt,
         p.id as profile_id,
@@ -341,23 +352,26 @@ class UserService {
     });
   }
 
-  async deleteUserById(id) {
-    // İstifadəçinin mövcudluğunu yoxlayırıq
-    const existingUser = await getOne('SELECT id, profile_id FROM users WHERE id = ?', [id]);
+  async deleteUserById(id, deletedByEmail = null) {
+    const existingUser = await getOne('SELECT id, email, profile_id FROM users WHERE id = ?', [id]);
 
     if (!existingUser) {
       throw new Error('User not found');
     }
 
+    await activityLog.log({
+      eventType: 'user_deleted',
+      actorEmail: deletedByEmail,
+      targetType: 'user',
+      targetId: id,
+      details: { email: existingUser.email },
+    });
+
     return await transaction(async (connection) => {
-      // Delete profile if exists
       if (existingUser.profile_id) {
         await connection.execute('DELETE FROM user_profiles WHERE id = ?', [existingUser.profile_id]);
       }
-
-      // Delete user (CASCADE will handle subscriptions, payments, etc.)
       await connection.execute('DELETE FROM users WHERE id = ?', [id]);
-
       return { message: 'User successfully deleted' };
     });
   }

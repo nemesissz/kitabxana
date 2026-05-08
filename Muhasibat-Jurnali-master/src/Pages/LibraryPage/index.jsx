@@ -3,6 +3,7 @@ import styles from "./index.module.scss";
 import Footer from "../../Layouts/Footer";
 import bg from "./../../Assets/heroImage.jpg";
 import BookIcon from "@mui/icons-material/Book";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import dataContext from "../../Contexts/GlobalState";
 import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
@@ -70,6 +71,33 @@ function LibraryPage() {
             <div></div>
             <BookIcon className={styles.icon} />
             <div></div>
+          </div>
+
+          {/* Düymələr */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => navigate('/library/all')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                padding: '10px 24px', background: '#fff', color: '#2c3e50',
+                border: '2px solid #2c3e50', borderRadius: '8px', fontSize: '14px',
+                fontWeight: '600', cursor: 'pointer'
+              }}
+            >
+              Bütün PDF-lər
+            </button>
+            <button
+              onClick={() => navigate('/library/submit')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                padding: '10px 24px', background: '#2c3e50', color: '#fff',
+                border: 'none', borderRadius: '8px', fontSize: '14px',
+                fontWeight: '600', cursor: 'pointer'
+              }}
+            >
+              <UploadFileIcon style={{ fontSize: 20 }} />
+              PDF Yüklə
+            </button>
           </div>
 
           {/* Kategoriler Listesi */}

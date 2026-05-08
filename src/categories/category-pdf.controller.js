@@ -91,12 +91,21 @@ class CategoryPdfController {
     try {
       const { id } = req.params;
       const result = await categoryPdfService.deleteCategory(id);
-      
+
       res.status(200).json({
         status: 'success',
         message: result.message
       });
     } catch (error) {
+      if (error.message === 'PDF Category not found') {
+        return res.status(404).json({ status: 'error', message: 'Kateqoriya tapılmadı' });
+      }
+      if (error.message === 'Cannot delete PDF category that is in use by PDFs') {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Bu kateqoriyaya bağlı PDF-lər var. Əvvəlcə həmin PDF-ləri silin və ya başqa kateqoriyaya köçürün.'
+        });
+      }
       next(error);
     }
   }

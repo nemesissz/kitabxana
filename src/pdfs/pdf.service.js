@@ -1,17 +1,20 @@
 import { executeQuery, getOne, insert, update, deleteRecord } from '../config/database.js';
+import activityLog from '../activity-logs/activity-log.service.js';
 
 class PdfService {
   async getAllPdfs(filters = {}) {
-    const { 
-      page = 1, 
-      limit = 24, 
-      language = null, 
+    const {
+      page = 1,
+      limit = 24,
+      language = null,
       categoryId = null,
       search = null,
       minPrice = null,
       maxPrice = null,
       startDate = null,
-      endDate = null
+      endDate = null,
+      status = null,
+      uploadedBy = null
     } = filters;
 
     // Ensure page and limit are integers
@@ -58,12 +61,21 @@ class PdfService {
       queryParams.push(startDate);
     }
     
-    // Bitiş tarihi filtresi
     if (endDate) {
       conditions.push('DATE(p.created_at) <= ?');
       queryParams.push(endDate);
     }
-    
+
+    if (status && ['pending', 'approved'].includes(status)) {
+      conditions.push('p.status = ?');
+      queryParams.push(status);
+    }
+
+    if (uploadedBy) {
+      conditions.push('p.uploaded_by = ?');
+      queryParams.push(uploadedBy);
+    }
+
     const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
     
     // Get total count for pagination
@@ -77,21 +89,17 @@ class PdfService {
     
     // Get paginated PDFs with category details
     const query = `
-      SELECT 
-        p.id,
-        p.title,
-        p.description,
-        p.language,
-        p.file_path,
-        p.cover_image_path AS image_path,
-        p.price,
-        p.downloads,
-        p.category_id,
-        p.created_at,
-        p.updated_at,
-        c.name as category_name
+      SELECT
+        p.id, p.title, p.description, p.language,
+        p.file_path, p.cover_image_path AS image_path,
+        p.price, p.downloads, p.category_id,
+        p.order_number, p.author, p.status,
+        p.uploaded_by, p.created_at, p.updated_at,
+        c.name as category_name,
+        u.email as uploader_email
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
+      LEFT JOIN users u ON p.uploaded_by = u.id
       ${whereClause}
       ORDER BY p.created_at DESC
       LIMIT ${validLimit} OFFSET ${offset}
@@ -177,7 +185,7 @@ class PdfService {
     
     // Validate language if provided
     if (language !== undefined && language !== '') {
-      const allowedLanguages = ['az', 'ru', 'az-ru'];
+      const allowedLanguages = ['az', 'ru', 'en'];
       if (!allowedLanguages.includes(language)) {
         throw new Error(`Invalid language. Allowed values: ${allowedLanguages.join(', ')}`);
       }
@@ -264,7 +272,7 @@ class PdfService {
     
     // Validate language if being updated
     if (data.language !== undefined && data.language !== '') {
-      const allowedLanguages = ['az', 'ru', 'az-ru'];
+      const allowedLanguages = ['az', 'ru', 'en'];
       if (!allowedLanguages.includes(data.language)) {
         throw new Error(`Invalid language. Allowed values: ${allowedLanguages.join(', ')}`);
       }
@@ -274,12 +282,26 @@ class PdfService {
     return await this.getPdfById(id);
   }
 
-  async deletePdf(id) {
+  async deletePdf(id, adminEmail = null) {
     const existing = await this.getPdfById(id);
     if (!existing) {
       throw new Error('PDF not found');
     }
-    
+
+    await activityLog.log({
+      eventType: 'pdf_deleted',
+      actorEmail: adminEmail,
+      targetType: 'pdf',
+      targetId: id,
+      details: {
+        title: existing.title,
+        category_name: existing.category_name || null,
+        language: existing.language || null,
+        order_number: existing.order_number || null,
+        author: existing.author || null,
+      },
+    });
+
     await deleteRecord('pdfs', id);
     return { message: 'PDF deleted successfully' };
   }
@@ -458,6 +480,124 @@ class PdfService {
       fileName: pdf.title,
       accessType: accessCheck.accessType,
       pdf: pdf
+    };
+  }
+
+  async submitPdf(data, file, coverImage = null) {
+    const { title, description, order_number, author, language, category_id, uploaded_by } = data;
+
+    if (!title || !title.trim()) throw new Error('PDF adı tələb olunur');
+    if (!file || !file.path) throw new Error('PDF faylı tələb olunur');
+
+    // İstifadəçinin upload icazəsini yoxla
+    if (uploaded_by) {
+      const user = await getOne('SELECT upload_permission FROM users WHERE id = ?', [uploaded_by]);
+      if (!user || user.upload_permission === 'none') {
+        throw new Error('PDF yükləmə icazəniz yoxdur');
+      }
+      var userPermission = user.upload_permission;
+    }
+
+    const pdfData = {
+      title: title.trim(),
+      file_path: file.path,
+      price: 0,
+      downloads: 0,
+      language: language && ['az', 'ru', 'en'].includes(language) ? language : 'az',
+      status: userPermission === 'free' ? 'approved' : 'pending'
+    };
+
+    if (description && description.trim()) pdfData.description = description.trim();
+    if (order_number && order_number.trim()) pdfData.order_number = order_number.trim();
+    if (author && author.trim()) pdfData.author = author.trim();
+    if (category_id) pdfData.category_id = category_id;
+    if (uploaded_by) pdfData.uploaded_by = uploaded_by;
+    if (coverImage && coverImage.path) pdfData.cover_image_path = coverImage.path;
+
+    const pdfId = await insert('pdfs', pdfData);
+    const created = await this.getPdfById(pdfId);
+
+    // PDF yükləmə hadisəsini qeyd et
+    if (uploaded_by) {
+      const uploader = await getOne('SELECT email FROM users WHERE id = ?', [uploaded_by]);
+      await activityLog.log({
+        eventType: 'pdf_uploaded',
+        actorEmail: uploader?.email || null,
+        targetType: 'pdf',
+        targetId: pdfId,
+        details: { title: created.title, status: pdfData.status },
+      });
+    }
+
+    return created;
+  }
+
+  async approvePdf(id, adminEmail = null) {
+    const existing = await this.getPdfById(id);
+    if (!existing) throw new Error('PDF not found');
+    await update('pdfs', id, { status: 'approved' });
+    await activityLog.log({
+      eventType: 'pdf_approved',
+      actorEmail: adminEmail,
+      targetType: 'pdf',
+      targetId: id,
+      details: { title: existing.title },
+    });
+    return await this.getPdfById(id);
+  }
+
+  async rejectPdf(id, adminEmail = null) {
+    const existing = await this.getPdfById(id);
+    if (!existing) throw new Error('PDF not found');
+    await activityLog.log({
+      eventType: 'pdf_rejected',
+      actorEmail: adminEmail,
+      targetType: 'pdf',
+      targetId: id,
+      details: { title: existing.title },
+    });
+    await deleteRecord('pdfs', id);
+    return { message: 'PDF rejected and deleted' };
+  }
+
+  // FULLTEXT axtarış (30,000+ PDF üçün)
+  async searchPdfs(searchTerm, page = 1, limit = 24) {
+    const validPage = parseInt(page) || 1;
+    const validLimit = Math.min(Math.max(parseInt(limit) || 24, 1), 100);
+    const offset = (validPage - 1) * validLimit;
+
+    if (!searchTerm || searchTerm.trim().length < 2) {
+      return this.getAllPdfs({ page, limit });
+    }
+
+    const term = searchTerm.trim();
+
+    const countResult = await getOne(`
+      SELECT COUNT(*) as total FROM pdfs p
+      WHERE MATCH(p.title, p.description, p.order_number) AGAINST (? IN BOOLEAN MODE)
+    `, [`${term}*`]);
+
+    const pdfs = await executeQuery(`
+      SELECT p.id, p.title, p.description, p.order_number, p.language,
+             p.file_path, p.cover_image_path AS image_path, p.price,
+             p.downloads, p.category_id, p.uploaded_by, p.created_at, p.updated_at,
+             c.name as category_name,
+             MATCH(p.title, p.description, p.order_number) AGAINST (? IN BOOLEAN MODE) AS relevance
+      FROM pdfs p
+      LEFT JOIN category_pdfs c ON p.category_id = c.id
+      WHERE MATCH(p.title, p.description, p.order_number) AGAINST (? IN BOOLEAN MODE)
+      ORDER BY relevance DESC
+      LIMIT ${validLimit} OFFSET ${offset}
+    `, [`${term}*`, `${term}*`]);
+
+    return {
+      pdfs,
+      pagination: {
+        current_page: validPage,
+        per_page: validLimit,
+        total: countResult.total,
+        total_pages: Math.ceil(countResult.total / validLimit)
+      }
     };
   }
 

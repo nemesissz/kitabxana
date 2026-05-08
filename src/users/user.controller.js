@@ -119,7 +119,7 @@ export const deleteUser = async (req, res, next) => {
       });
     }
 
-    await userService.deleteUserById(Number(id));
+    await userService.deleteUserById(Number(id), req.user?.email);
 
     res.status(200).json({
       status: 'success',

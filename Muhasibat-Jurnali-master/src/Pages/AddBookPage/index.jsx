@@ -222,9 +222,9 @@ function AddBookPage() {
               value={formData.language}
               onChange={handleChange}
             >
-              <option value="az">az</option>
-              <option value="ru">ru</option>
-              <option value="az-ru">az-ru</option>
+              <option value="az">Azərbaycan dili</option>
+              <option value="ru">Rus dili</option>
+              <option value="en">İngilis dili</option>
 
             </select>
           </div>

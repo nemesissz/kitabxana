@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import CategoryIcon from "@mui/icons-material/Category";
 import CloseIcon from "@mui/icons-material/Close";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import HistoryIcon from "@mui/icons-material/History";
 import CampaignIcon from "@mui/icons-material/Campaign";
 
 function AdminSidebar() {
@@ -121,18 +122,18 @@ function AdminSidebar() {
 
               <li
                 onClick={() => {
-                  navigate("/admin/subscriptions");
+                  navigate("/admin/history");
                   store.adminSideBar.setData(false);
                   setShowCategoryMenu(true);
                 }}
                 style={
-                  window.location.pathname === "/admin/subscriptions"
+                  window.location.pathname === "/admin/history"
                     ? { color: "#2c3e50", backgroundColor: "white" }
                     : {}
                 }
               >
-                <CardGiftcardIcon className={styles.icon} />
-                {store.adminSideBar.data && <span>Abunəliklər</span>}
+                <HistoryIcon className={styles.icon} />
+                {store.adminSideBar.data && <span>Tarixçə</span>}
               </li>
 
               <li

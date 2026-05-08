@@ -1,0 +1,234 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f4f6f8 0%, #e9eef3 100%);
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.header {
+  background: #2c3e50;
+  color: #fff;
+  padding: 32px 40px 28px;
+  text-align: center;
+
+  .headerIcon {
+    font-size: 48px !important;
+    opacity: 0.85;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+
+  p {
+    font-size: 14px;
+    opacity: 0.75;
+    margin: 0;
+  }
+}
+
+.form {
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  input[type="text"],
+  textarea {
+    padding: 10px 14px;
+    border: 1.5px solid #dde3ea;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #fafafa;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    resize: vertical;
+
+    &:focus {
+      border-color: #2c3e50;
+      background: #fff;
+    }
+  }
+}
+
+.select {
+  padding: 10px 14px;
+  border: 1.5px solid #dde3ea;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background: #fafafa;
+  transition: border-color 0.2s;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: auto;
+
+  &:focus {
+    border-color: #2c3e50;
+    background: #fff;
+  }
+}
+
+.categoryHint {
+  font-size: 12px;
+  color: #5a7a8a;
+  background: #eef4f8;
+  border-radius: 6px;
+  padding: 4px 10px;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.required {
+  color: #e74c3c;
+}
+
+.dropZone {
+  border: 2px dashed #c5cdd6;
+  border-radius: 10px;
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #2c3e50;
+    background: #f0f4f8;
+  }
+
+  &.dragActive {
+    border-color: #2c3e50;
+    background: #e8eef5;
+    transform: scale(1.01);
+  }
+
+  &.hasFile {
+    border-color: #27ae60;
+    background: #f0fdf4;
+    border-style: solid;
+  }
+}
+
+.dropZoneContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #7f8c9a;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+
+    strong {
+      color: #2c3e50;
+    }
+  }
+
+  small {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+}
+
+.dropIcon {
+  font-size: 40px !important;
+  opacity: 0.5;
+}
+
+.fileSelected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #27ae60;
+
+  svg {
+    font-size: 32px !important;
+  }
+
+  span {
+    font-size: 14px;
+    font-weight: 600;
+    word-break: break-all;
+  }
+
+  small {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+}
+
+.error {
+  font-size: 12px;
+  color: #e74c3c;
+  margin-top: 2px;
+}
+
+.fileInput {
+  padding: 8px 0;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.fileName {
+  font-size: 12px;
+  color: #27ae60;
+  margin-top: 2px;
+}
+
+.submitBtn {
+  margin-top: 8px;
+  padding: 13px 24px;
+  background: #2c3e50;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.2s, transform 0.1s;
+
+  &:hover:not(:disabled) {
+    background: #1a252f;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+}

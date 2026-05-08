@@ -1603,3 +1603,1404 @@
   "ip": "::1",
   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
 }
+[2026-05-07T07:08:57.984Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:57.989Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "37ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:57.991Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:57.997Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "41ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.003Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.007Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "39ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.014Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at CategoryPdfService.getAllCategories (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.service.js:5:18)\n    at getAllCategories (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.controller.js:6:51)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/categories/pdfs",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.017Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/categories/pdfs",
+  "statusCode": 500,
+  "duration": "49ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.022Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.026Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "statusCode": 500,
+  "duration": "54ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.032Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/home-news-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.036Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-news-bottom",
+  "statusCode": 500,
+  "duration": "64ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.060Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.061Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "statusCode": 500,
+  "duration": "40ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.068Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.071Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "49ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.077Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.080Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "38ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.090Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at NewsService.getNewsPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.service.js:222:18)\n    at getNewsPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.controller.js:158:36)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/news/preview",
+  "query": {
+    "limit": "4"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.092Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/news/preview",
+  "statusCode": 500,
+  "duration": "43ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.104Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at ServiceService.getServicesPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/services/service.service.js:147:18)\n    at getServicesPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/services/service.controller.js:125:43)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/services/preview",
+  "query": {
+    "limit": "3"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.106Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/services/preview",
+  "statusCode": 500,
+  "duration": "55ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:08:58.116Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:75:31)\n    at getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:191:37)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at optionalAuthMiddleware (file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/optionalAuth.middleware.js:40:5)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "3"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:08:58.120Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "61ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.102Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.108Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "27ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.116Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at CategoryPdfService.getAllCategories (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.service.js:5:18)\n    at getAllCategories (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.controller.js:6:51)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/categories/pdfs",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.122Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/categories/pdfs",
+  "statusCode": 500,
+  "duration": "38ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.131Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.138Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "53ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.143Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.148Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "statusCode": 500,
+  "duration": "63ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.154Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.161Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "76ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.175Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/home-news-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.180Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-news-bottom",
+  "statusCode": 500,
+  "duration": "86ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.217Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.223Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "statusCode": 500,
+  "duration": "81ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.235Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.240Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "76ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.245Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.250Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "78ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.254Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at NewsService.getNewsPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.service.js:222:18)\n    at getNewsPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.controller.js:158:36)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/news/preview",
+  "query": {
+    "limit": "4"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.260Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/news/preview",
+  "statusCode": 500,
+  "duration": "86ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.279Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at ServiceService.getServicesPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/services/service.service.js:147:18)\n    at getServicesPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/services/service.controller.js:125:43)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/services/preview",
+  "query": {
+    "limit": "3"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.284Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/services/preview",
+  "statusCode": 500,
+  "duration": "91ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:11:32.289Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:75:31)\n    at getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:191:37)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at optionalAuthMiddleware (file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/optionalAuth.middleware.js:40:5)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "3"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:11:32.294Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "100ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:12:32.806Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at NewsService.getNewsPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.service.js:222:18)\n    at getNewsPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.controller.js:158:36)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/news/preview",
+  "query": {
+    "limit": "4"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; ru-RU) WindowsPowerShell/5.1.22621.6133"
+}
+[2026-05-07T07:12:32.808Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/news/preview",
+  "statusCode": 500,
+  "duration": "6ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; ru-RU) WindowsPowerShell/5.1.22621.6133",
+  "user": null
+}
+[2026-05-07T07:13:31.683Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.688Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.704Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.708Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "34ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.725Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.728Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "51ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.737Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at CategoryPdfService.getAllCategories (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.service.js:5:18)\n    at getAllCategories (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.controller.js:6:51)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/categories/pdfs",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.745Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/categories/pdfs",
+  "statusCode": 500,
+  "duration": "63ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.753Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.758Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "statusCode": 500,
+  "duration": "63ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.765Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/home-news-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.771Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-news-bottom",
+  "statusCode": 500,
+  "duration": "73ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.779Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.784Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "statusCode": 500,
+  "duration": "82ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.797Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.802Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "84ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.827Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.831Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "68ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.836Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at NewsService.getNewsPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.service.js:222:18)\n    at getNewsPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.controller.js:158:36)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/news/preview",
+  "query": {
+    "limit": "4"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.840Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/news/preview",
+  "statusCode": 500,
+  "duration": "62ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.845Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at ServiceService.getServicesPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/services/service.service.js:147:18)\n    at getServicesPreview (file:///C:/Users/AO/Desktop/e-kitabxana/src/services/service.controller.js:125:43)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/services/preview",
+  "query": {
+    "limit": "3"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.850Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/services/preview",
+  "statusCode": 500,
+  "duration": "55ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-07T07:13:31.857Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown database 'vergi_db'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:75:31)\n    at getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:191:37)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at optionalAuthMiddleware (file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/optionalAuth.middleware.js:40:5)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Unknown database 'vergi_db'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "3"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-07T07:13:31.860Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "45ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-08T06:27:07.279Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'order_number' in 'field list'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at insert (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:132:37)\n    at PdfService.submitPdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:483:25)\n    at submitPdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:586:34)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at done (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\multer\\lib\\make-middleware.js:59:7)\n    at indicateDone (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\multer\\lib\\make-middleware.js:63:68)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\multer\\lib\\make-middleware.js:176:11\n    at WriteStream.<anonymous> (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\multer\\storage\\disk.js:43:9)",
+  "error": "Unknown column 'order_number' in 'field list'",
+  "method": "POST",
+  "path": "/pdfs/submit",
+  "body": {
+    "title": "komputer sebekeleri",
+    "description": "OSI modelleri",
+    "order_number": "123/05"
+  },
+  "query": {},
+  "user": {
+    "id": 22,
+    "email": "vusal.seyidli2019@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T06:27:07.297Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/pdfs/submit",
+  "statusCode": 500,
+  "duration": "69ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22,
+    "email": "vusal.seyidli2019@gmail.com"
+  }
+}
+[2026-05-08T06:27:12.643Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'order_number' in 'field list'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at insert (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:132:37)\n    at PdfService.submitPdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:483:25)\n    at submitPdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:586:34)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at done (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\multer\\lib\\make-middleware.js:59:7)\n    at indicateDone (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\multer\\lib\\make-middleware.js:63:68)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\multer\\lib\\make-middleware.js:176:11\n    at WriteStream.<anonymous> (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\multer\\storage\\disk.js:43:9)",
+  "error": "Unknown column 'order_number' in 'field list'",
+  "method": "POST",
+  "path": "/pdfs/submit",
+  "body": {
+    "title": "komputer sebekeleri",
+    "description": "OSI modelleri",
+    "order_number": "123/05"
+  },
+  "query": {},
+  "user": {
+    "id": 22,
+    "email": "vusal.seyidli2019@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T06:27:12.654Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/pdfs/submit",
+  "statusCode": 500,
+  "duration": "41ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22,
+    "email": "vusal.seyidli2019@gmail.com"
+  }
+}
+[2026-05-08T08:12:59.266Z] [ERROR] Request error occurred
+{
+  "stack": "Error: PDF price not set\n    at PaymentService.createPayment (file:///C:/Users/AO/Desktop/e-kitabxana/src/payments/payment.service.js:60:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async createPayment (file:///C:/Users/AO/Desktop/e-kitabxana/src/payments/payment.controller.js:29:21)",
+  "error": "PDF price not set",
+  "method": "POST",
+  "path": "/payments/checkout",
+  "body": {
+    "type": "single-pdf",
+    "pdfId": "214",
+    "amount": "0.00"
+  },
+  "query": {},
+  "user": {
+    "id": 22,
+    "email": "vusal.seyidli2019@gmail.com"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T08:12:59.270Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/payments/checkout",
+  "statusCode": 500,
+  "duration": "29ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22,
+    "email": "vusal.seyidli2019@gmail.com"
+  }
+}
+[2026-05-08T10:56:38.884Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Cannot delete PDF category that is in use by PDFs\n    at CategoryPdfService.deleteCategory (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.service.js:77:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async deleteCategory (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.controller.js:93:22)",
+  "error": "Cannot delete PDF category that is in use by PDFs",
+  "method": "DELETE",
+  "path": "/categories/pdfs/2",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T10:56:38.886Z] [ERROR] Server error
+{
+  "method": "DELETE",
+  "path": "/categories/pdfs/2",
+  "statusCode": 500,
+  "duration": "7ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T10:57:34.144Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Cannot delete PDF category that is in use by PDFs\n    at CategoryPdfService.deleteCategory (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.service.js:77:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async deleteCategory (file:///C:/Users/AO/Desktop/e-kitabxana/src/categories/category-pdf.controller.js:93:22)",
+  "error": "Cannot delete PDF category that is in use by PDFs",
+  "method": "DELETE",
+  "path": "/categories/pdfs/2",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T10:57:34.147Z] [ERROR] Server error
+{
+  "method": "DELETE",
+  "path": "/categories/pdfs/2",
+  "statusCode": 500,
+  "duration": "10ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T11:31:48.186Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid language. Allowed values: az, ru, az-ru\n    at PdfService.updatePdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:269:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async updatePdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:448:17)",
+  "error": "Invalid language. Allowed values: az, ru, az-ru",
+  "method": "PUT",
+  "path": "/pdfs/168",
+  "body": {
+    "title": "Oktyabr 2025",
+    "description": "Oktyabr 2025 ayi ucun vergi ve muhasibatliq jurnali",
+    "category_id": "10",
+    "price": "0.00",
+    "language": "en"
+  },
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T11:31:48.188Z] [ERROR] Server error
+{
+  "method": "PUT",
+  "path": "/pdfs/168",
+  "statusCode": 500,
+  "duration": "7ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T11:31:54.293Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Invalid language. Allowed values: az, ru, az-ru\n    at PdfService.updatePdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:269:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async updatePdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:448:17)",
+  "error": "Invalid language. Allowed values: az, ru, az-ru",
+  "method": "PUT",
+  "path": "/pdfs/168",
+  "body": {
+    "title": "Oktyabr 2025",
+    "description": "Oktyabr 2025 ayi ucun vergi ve muhasibatliq jurnali",
+    "category_id": "10",
+    "price": "0.00",
+    "language": "en"
+  },
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T11:31:54.296Z] [ERROR] Server error
+{
+  "method": "PUT",
+  "path": "/pdfs/168",
+  "statusCode": 500,
+  "duration": "9ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T11:55:33.439Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'u.upload_permission' in 'field list'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at UserService.getAllUsers (file:///C:/Users/AO/Desktop/e-kitabxana/src/users/user.service.js:28:25)\n    at getUsers (file:///C:/Users/AO/Desktop/e-kitabxana/src/users/user.controller.js:5:37)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/auth.middleware.js:36:5)",
+  "error": "Unknown column 'u.upload_permission' in 'field list'",
+  "method": "GET",
+  "path": "/users",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T11:55:33.445Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/users",
+  "statusCode": 500,
+  "duration": "57ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T11:56:27.371Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'u.upload_permission' in 'field list'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at UserService.getAllUsers (file:///C:/Users/AO/Desktop/e-kitabxana/src/users/user.service.js:28:25)\n    at getUsers (file:///C:/Users/AO/Desktop/e-kitabxana/src/users/user.controller.js:5:37)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/auth.middleware.js:36:5)",
+  "error": "Unknown column 'u.upload_permission' in 'field list'",
+  "method": "GET",
+  "path": "/users",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T11:56:27.376Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/users",
+  "statusCode": 500,
+  "duration": "11ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T11:56:47.885Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'u.upload_permission' in 'field list'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at UserService.getAllUsers (file:///C:/Users/AO/Desktop/e-kitabxana/src/users/user.service.js:28:25)\n    at getUsers (file:///C:/Users/AO/Desktop/e-kitabxana/src/users/user.controller.js:5:37)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/auth.middleware.js:36:5)",
+  "error": "Unknown column 'u.upload_permission' in 'field list'",
+  "method": "GET",
+  "path": "/users",
+  "query": {},
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T11:56:47.888Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/users",
+  "statusCode": 500,
+  "duration": "6ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:19.468Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:19.472Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "12ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:21.265Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30",
+    "eventType": "users"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:21.267Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "5ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:22.093Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30",
+    "eventType": "pdfs"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:22.097Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "9ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:22.965Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:22.968Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "11ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:45.128Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:45.133Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "14ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:47.262Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30",
+    "eventType": "users"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:47.265Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "9ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:48.727Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30",
+    "eventType": "pdfs"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:48.728Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "5ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:49.896Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:49.899Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "7ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:51.599Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:51.603Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "13ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}
+[2026-05-08T13:15:54.905Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.activity_logs' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at ActivityLogService.getLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.service.js:41:26)\n    at getActivityLogs (file:///C:/Users/AO/Desktop/e-kitabxana/src/activity-logs/activity-log.controller.js:6:45)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///C:/Users/AO/Desktop/e-kitabxana/src/middlewares/roleCheck.middleware.js:28:14\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)",
+  "error": "Table 'kitabxana.activity_logs' doesn't exist",
+  "method": "GET",
+  "path": "/activity-logs",
+  "query": {
+    "page": "1",
+    "limit": "30",
+    "eventType": "users"
+  },
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+}
+[2026-05-08T13:15:54.907Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/activity-logs",
+  "statusCode": 500,
+  "duration": "5ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "user": {
+    "id": 1,
+    "email": "admin@vergi.az"
+  }
+}

@@ -6,20 +6,27 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const pdfUploadsDir = join(dirname(dirname(__dirname)), 'uploads', 'pdfs');
-const imageUploadsDir = join(dirname(dirname(__dirname)), 'uploads', 'images');
+const baseUploadsDir = join(dirname(dirname(__dirname)), 'uploads');
+const imageUploadsDir = join(baseUploadsDir, 'images');
 
-if (!fs.existsSync(pdfUploadsDir)) {
-  fs.mkdirSync(pdfUploadsDir, { recursive: true });
-}
 if (!fs.existsSync(imageUploadsDir)) {
   fs.mkdirSync(imageUploadsDir, { recursive: true });
 }
 
+// il/ay qovluğunu dinamik yarat — 30,000+ fayl üçün
+const getPdfUploadDir = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const dir = join(baseUploadsDir, 'pdfs', String(year), month);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  return dir;
+};
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     if (file.mimetype === 'application/pdf') {
-      cb(null, pdfUploadsDir);
+      cb(null, getPdfUploadDir());
     } else if (file.mimetype && file.mimetype.startsWith('image/')) {
       cb(null, imageUploadsDir);
     } else {

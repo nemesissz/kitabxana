@@ -2,9 +2,10 @@ import bcrypt from 'bcryptjs';
 import { generateToken, verifyToken } from '../utils/jwt.js';
 import emailService from '../utils/email.js';
 import userService from '../users/user.service.js';
+import activityLog from '../activity-logs/activity-log.service.js';
 
 class AuthService {
-  async register(email, password) {
+  async register(email, password, fullName = null) {
     // İstifadəçinin mövcudluğunu yoxlayırıq
     const existingUser = await userService.findUserByEmail(email);
     if (existingUser) {
@@ -14,12 +15,13 @@ class AuthService {
     // .edu və .edu.az email yoxlaması
     const emailLower = email.toLowerCase();
     const isEduEmail = emailLower.endsWith('.edu') || emailLower.endsWith('.edu.az');
-    
+
     // İstifadəçini yaradırıq (default role = 1)
     const user = await userService.createUser({
       email,
       password,
-      role: 1, // Default User rolu (1)
+      fullName: fullName || null,
+      role: 1,
       isVerified: false,
       eduEmail: isEduEmail
     });
@@ -68,6 +70,16 @@ class AuthService {
     user.hasActiveSubscription = hasActiveSubscription;
 
     const token = generateToken(user);
+
+    // Giriş hadisəsini qeyd et
+    await activityLog.log({
+      eventType: user.role >= 2 ? 'admin_login' : 'user_login',
+      actorEmail: user.email,
+      targetType: 'user',
+      targetId: user.id,
+      details: { email: user.email, role: user.role },
+    });
+
     return { user, token };
   }
 

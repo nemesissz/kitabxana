@@ -13,35 +13,33 @@ class CategoryPdfService {
   }
 
   async createCategory(data) {
-    const { name, display_type = 'tax-journal' } = data;
-    
-    // Check if category exists
+    const { name, display_type = 'tax-journal', pdf_type = 'emr' } = data;
+
     const existing = await getOne('SELECT id FROM category_pdfs WHERE name = ?', [name]);
     if (existing) {
       throw new Error('PDF Category already exists');
     }
 
-    // Validate display_type
-    if (display_type && !['tax-journal', 'other-books'].includes(display_type)) {
+    if (!['tax-journal', 'other-books'].includes(display_type)) {
       throw new Error('Invalid display_type. Must be either "tax-journal" or "other-books"');
     }
 
-    const categoryData = { name, display_type };
+    if (!['kitab', 'emr', 'serecam'].includes(pdf_type)) {
+      throw new Error('Invalid pdf_type. Must be kitab, emr or serecam');
+    }
 
-    const categoryId = await insert('category_pdfs', categoryData);
+    const categoryId = await insert('category_pdfs', { name, display_type, pdf_type });
     return await this.getCategoryById(categoryId);
   }
 
   async updateCategory(id, data) {
-    const { name, display_type } = data;
-    
-    // Check if category exists
+    const { name, display_type, pdf_type } = data;
+
     const existing = await this.getCategoryById(id);
     if (!existing) {
       throw new Error('PDF Category not found');
     }
 
-    // Check for duplicate name
     if (name) {
       const duplicate = await getOne('SELECT id FROM category_pdfs WHERE name = ? AND id != ?', [name, id]);
       if (duplicate) {
@@ -49,14 +47,18 @@ class CategoryPdfService {
       }
     }
 
-    // Validate display_type if provided
     if (display_type && !['tax-journal', 'other-books'].includes(display_type)) {
       throw new Error('Invalid display_type. Must be either "tax-journal" or "other-books"');
+    }
+
+    if (pdf_type && !['kitab', 'emr', 'serecam'].includes(pdf_type)) {
+      throw new Error('Invalid pdf_type. Must be kitab, emr or serecam');
     }
 
     const updateData = {};
     if (name) updateData.name = name;
     if (display_type) updateData.display_type = display_type;
+    if (pdf_type) updateData.pdf_type = pdf_type;
 
     await update('category_pdfs', id, updateData);
     return await this.getCategoryById(id);

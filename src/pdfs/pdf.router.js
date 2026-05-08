@@ -8,7 +8,11 @@ import {
   downloadPdf,
   getPdfsPreview,
   getMyAccessiblePdfs,
-  checkPdfAccess
+  checkPdfAccess,
+  submitPdf,
+  searchPdfs,
+  approvePdf,
+  rejectPdf
 } from './pdf.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { optionalAuthMiddleware } from '../middlewares/optionalAuth.middleware.js';
@@ -40,6 +44,19 @@ const router = express.Router();
  * description: PDF-lər uğurla əldə edildi
  */
 router.get('/', optionalAuthMiddleware, getAllPdfs);
+
+// İstifadəçi PDF yükləməsi (giriş etmiş istifadəçi, hər rol)
+router.post('/submit',
+  authMiddleware,
+  mixedUpload.fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'coverImage', maxCount: 1 }
+  ]),
+  submitPdf
+);
+
+// FULLTEXT axtarış
+router.get('/search', optionalAuthMiddleware, searchPdfs);
 
 /**
  * @swagger
@@ -265,6 +282,9 @@ router.put('/:id',
   ]),
   updatePdf
 );
+
+router.patch('/:id/approve', authMiddleware, roleCheck(2), approvePdf);
+router.delete('/:id/reject', authMiddleware, roleCheck(2), rejectPdf);
 
 /**
  * @swagger

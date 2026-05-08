@@ -23,6 +23,7 @@ import newsRoutes from './news/news.router.js';
 import serviceRoutes from './services/service.router.js';
 import cvRoutes from './cvs/cv.router.js';
 import adRoutes from './ads/ad.router.js';
+import activityLogRoutes from './activity-logs/activity-log.router.js';
 
 config(); // Load .env variables
 
@@ -190,6 +191,7 @@ app.use('/news', newsRoutes);
 app.use('/services', serviceRoutes);
 app.use('/cvs', cvRoutes);
 app.use('/ads', adRoutes);
+app.use('/activity-logs', activityLogRoutes);
 
 // Error logging middleware
 app.use(errorLogger);

@@ -5,9 +5,10 @@ import Base_Url_Server from "../../Constants/baseUrl";
 import dataContext from "../../Contexts/GlobalState";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import CircularProgress from "@mui/material/CircularProgress";
-import Swal from "sweetalert2"; // SweetAlert importu
+import Swal from "sweetalert2";
 
 function AdminCategoryPagePdfs() {
   const store = useContext(dataContext);
@@ -15,8 +16,12 @@ function AdminCategoryPagePdfs() {
   const [loader, setLoader] = useState(false);
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
-  const [displayType, setDisplayType] = useState("tax-journal");
-  const [message, setMessage] = useState("");
+  const [pdfType, setPdfType] = useState("emr");
+
+  const [editingCat, setEditingCat] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [editPdfType, setEditPdfType] = useState("emr");
+  const [editLoading, setEditLoading] = useState(false);
 
   useEffect(() => {
     const tokenAdmin = localStorage.getItem("tokenAdmin");
@@ -38,7 +43,14 @@ function AdminCategoryPagePdfs() {
         });
     }
   }, []);
-  console.log(categories);
+
+  const loadCategories = () => {
+    axios
+      .get(Base_Url_Server + "categories/pdfs")
+      .then((res) => setCategories(res.data.data.categories))
+      .catch((err) => console.log("Kateqoriya çəkilmədi:", err));
+  };
+
   useEffect(() => {
     store.loader.setData(true);
     axios
@@ -47,36 +59,24 @@ function AdminCategoryPagePdfs() {
       .catch((err) => console.log("Kateqoriya çəkilmədi:", err))
       .finally(() => store.loader.setData(false));
   }, []);
-console.log(Base_Url_Server + "categories/pdfs")
-
-
 
   const handleAddCategory = async (e) => {
-    console.log(Base_Url_Server + "categories/pdfs")
     e.preventDefault();
-
-
     try {
       setLoader(true);
       const tokenAdmin = localStorage.getItem("tokenAdmin");
       await axios.post(
         Base_Url_Server + "categories/pdfs",
-        { name: newCategory, display_type: displayType },
+        { name: newCategory, display_type: "tax-journal", pdf_type: pdfType },
         { headers: { Authorization: `Bearer ${tokenAdmin}` } }
       );
-
-      // Backend-dən yenilənmiş kateqoriyaları çəkmək
-      const res = await axios.get(Base_Url_Server + "categories/pdfs");
-      setCategories(res.data.data.categories);
+      loadCategories();
       setNewCategory("");
-      setDisplayType("tax-journal");
+      setPdfType("emr");
       setLoader(false);
-
-      // SweetAlert ilə uğurlu mesaj
       Swal.fire({
         icon: "success",
-        title: "Uğurla əlavə edildi ✅",
-        text: "Yeni kateqoriya uğurla əlavə olundu!",
+        title: "Uğurla əlavə edildi",
         timer: 2000,
         showConfirmButton: false,
       });
@@ -84,14 +84,48 @@ console.log(Base_Url_Server + "categories/pdfs")
       setLoader(false);
       Swal.fire({
         icon: "error",
-        title: "Xəta ❌",
+        title: "Xəta",
         text: err.response?.data?.message || "Kateqoriya əlavə edilə bilmədi!",
       });
-      console.log(err.response?.data?.message);
     }
   };
 
-  // Kateqoriya sil
+  const openEdit = (cat) => {
+    setEditingCat(cat);
+    setEditName(cat.name);
+    setEditPdfType(cat.pdf_type || "emr");
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    if (!editName.trim()) return;
+    setEditLoading(true);
+    try {
+      const tokenAdmin = localStorage.getItem("tokenAdmin");
+      await axios.put(
+        Base_Url_Server + "categories/pdfs/" + editingCat.id,
+        { name: editName, display_type: "tax-journal", pdf_type: editPdfType },
+        { headers: { Authorization: `Bearer ${tokenAdmin}` } }
+      );
+      loadCategories();
+      setEditingCat(null);
+      Swal.fire({
+        icon: "success",
+        title: "Yeniləndi",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Xəta",
+        text: err.response?.data?.message || "Kateqoriya yenilənə bilmədi!",
+      });
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Silmək istədiyinizdən əminsiniz?",
@@ -103,18 +137,15 @@ console.log(Base_Url_Server + "categories/pdfs")
       confirmButtonText: "Bəli, sil!",
       cancelButtonText: "Ləğv et",
     });
-
     if (result.isConfirmed) {
       try {
         const tokenAdmin = localStorage.getItem("tokenAdmin");
-        console.log(Base_Url_Server + "categories/pdfs" + id)
         await axios.delete(Base_Url_Server + "categories/pdfs/" + id, {
           headers: { Authorization: `Bearer ${tokenAdmin}` },
         });
         setCategories(categories.filter((cat) => cat.id !== id));
       } catch (err) {
-        Swal.fire("Xəta!", "Kateqoriya silinə bilmədi.", "error");
-        console.log("Silinmədi:", err);
+        Swal.fire("Xəta!", err.response?.data?.message || "Kateqoriya silinə bilmədi.", "error");
       }
     }
   };
@@ -133,36 +164,28 @@ console.log(Base_Url_Server + "categories/pdfs")
               onChange={(e) => setNewCategory(e.target.value)}
               placeholder="Məs: Texnologiya"
               className={styles.input}
+              required
             />
           </div>
           <div className={styles.inputGroup}>
-            <label>PDF-lərin Səhifədə Düzülüşü</label>
+            <label>PDF növü (yükləmə formasında sahələri idarə edir)</label>
             <select
-              value={displayType}
-              onChange={(e) => setDisplayType(e.target.value)}
+              value={pdfType}
+              onChange={(e) => setPdfType(e.target.value)}
               className={styles.input}
             >
-              <option value="tax-journal">Vergi-jurnali tərzində (Aylara görə)</option>
-              <option value="other-books">Sair kitablar tərzində (Tarixə görə, ən yenisi ən öncə)</option>
+              <option value="emr">Əmr (Əmr № sahəsi göstərilir)</option>
+              <option value="serecam">Şərəcam (Əmr № sahəsi göstərilir)</option>
+              <option value="kitab">Kitab (Müəllif sahəsi göstərilir)</option>
             </select>
           </div>
           <div className={styles.buttonsWrapper}>
-            <button
-              type="submit"
-              className={styles.button}
-              style={{ background: "#0077ff" }}
-            >
+            <button type="submit" className={styles.button} style={{ background: "#0077ff" }}>
               <AddIcon />
-              {loader ? (
-                <CircularProgress size={20} style={{ color: "#fff" }} />
-              ) : (
-                "Əlavə et"
-              )}
+              {loader ? <CircularProgress size={20} style={{ color: "#fff" }} /> : "Əlavə et"}
             </button>
           </div>
         </form>
-
-        {message && <div className={styles.message}>{message}</div>}
 
         <div style={{ marginTop: "25px" }}>
           <table className={styles.table}>
@@ -170,31 +193,42 @@ console.log(Base_Url_Server + "categories/pdfs")
               <tr>
                 <th>№</th>
                 <th>Ad</th>
-                <th>Düzülüş Tipi</th>
+                <th>PDF Növü</th>
                 <th>Əməliyyat</th>
               </tr>
             </thead>
             <tbody>
               {categories
-                ? categories.map((cat, i) => (
+                ? categories.map((cat) => (
                     <tr key={cat.id}>
                       <td>{cat.id}</td>
                       <td>{cat.name}</td>
                       <td>
-                        {cat.display_type === 'tax-journal' 
-                          ? 'Vergi-jurnali tərzində' 
-                          : cat.display_type === 'other-books'
-                          ? 'Sair kitablar tərzində'
-                          : 'Vergi-jurnali tərzində'}
+                        {cat.pdf_type === "kitab"
+                          ? "📚 Kitab"
+                          : cat.pdf_type === "serecam"
+                          ? "📋 Şərəcam"
+                          : "📄 Əmr"}
                       </td>
                       <td>
-                        <button
-                          className={styles.button}
-                          style={{ background: "#d64545" }}
-                          onClick={() => handleDelete(cat.id)}
-                        >
-                          <DeleteIcon />
-                        </button>
+                        <div style={{ display: "flex", gap: "8px" }}>
+                          <button
+                            className={styles.button}
+                            style={{ background: "#2c3e50", width: "auto", padding: "8px 12px" }}
+                            onClick={() => openEdit(cat)}
+                            title="Redaktə et"
+                          >
+                            <EditIcon fontSize="small" />
+                          </button>
+                          <button
+                            className={styles.button}
+                            style={{ background: "#d64545", width: "auto", padding: "8px 12px" }}
+                            onClick={() => handleDelete(cat.id)}
+                            title="Sil"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -203,6 +237,44 @@ console.log(Base_Url_Server + "categories/pdfs")
           </table>
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {editingCat && (
+        <div className={styles.modalOverlay} onClick={() => setEditingCat(null)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>Kateqoriya Redaktə</h3>
+              <button className={styles.closeModal} onClick={() => setEditingCat(null)}>✕</button>
+            </div>
+            <form onSubmit={handleEditSubmit} className={styles.modalForm}>
+              <label>Ad <span style={{ color: "#e74c3c" }}>*</span></label>
+              <input
+                type="text"
+                value={editName}
+                required
+                onChange={(e) => setEditName(e.target.value)}
+                placeholder="Kateqoriya adı"
+              />
+
+              <label>PDF Növü</label>
+              <select value={editPdfType} onChange={(e) => setEditPdfType(e.target.value)}>
+                <option value="emr">Əmr (Əmr № sahəsi göstərilir)</option>
+                <option value="serecam">Şərəcam (Əmr № sahəsi göstərilir)</option>
+                <option value="kitab">Kitab (Müəllif sahəsi göstərilir)</option>
+              </select>
+
+              <div className={styles.modalActions}>
+                <button type="button" className={styles.cancelBtn} onClick={() => setEditingCat(null)}>
+                  Ləğv et
+                </button>
+                <button type="submit" className={styles.saveBtn} disabled={editLoading}>
+                  {editLoading ? <CircularProgress size={16} style={{ color: "#fff" }} /> : "Yadda saxla"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

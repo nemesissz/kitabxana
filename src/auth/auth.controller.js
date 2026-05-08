@@ -2,7 +2,7 @@ import authService from './auth.service.js';
 
 export const register = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, fullName } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
@@ -11,7 +11,7 @@ export const register = async (req, res, next) => {
       });
     }
 
-    const result = await authService.register(email, password);
+    const result = await authService.register(email, password, fullName);
 
     res.status(201).json({
       status: 'success',

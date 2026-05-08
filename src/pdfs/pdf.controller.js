@@ -176,28 +176,20 @@ export const createPdf = async (req, res, next) => {
 
 export const getAllPdfs = async (req, res, next) => {
   try {
-    const { 
-      page,
-      limit,
-      categoryId, 
-      language, 
-      search, 
-      minPrice, 
-      maxPrice,
-      startDate,
-      endDate
+    const {
+      page, limit, categoryId, language, search,
+      minPrice, maxPrice, startDate, endDate,
+      status, uploadedBy
     } = req.query;
 
+    // Admin olmayan istifadəçilərə yalnız qəbul edilmiş PDFlər göstərilir
+    const isAdmin = req.user && req.user.role >= 2;
+    const effectiveStatus = status || (!isAdmin ? 'approved' : null);
+
     const result = await pdfService.getAllPdfs({
-      page,
-      limit,
-      categoryId,
-      language,
-      search,
-      minPrice,
-      maxPrice,
-      startDate,
-      endDate
+      page, limit, categoryId, language, search,
+      minPrice, maxPrice, startDate, endDate,
+      status: effectiveStatus, uploadedBy
     });
 
     // Check access for each PDF if user is authenticated
@@ -241,6 +233,12 @@ export const getAllPdfs = async (req, res, next) => {
           price: pdf.price,
           priceInfo: priceInfo,
           downloads: pdf.downloads,
+          status: pdf.status,
+          order_number: pdf.order_number,
+          author: pdf.author,
+          category_id: pdf.category_id,
+          uploaded_by: pdf.uploaded_by,
+          uploader_email: pdf.uploader_email,
           created_at: pdf.created_at,
           updated_at: pdf.updated_at,
           category: pdf.category_id ? {
@@ -249,7 +247,6 @@ export const getAllPdfs = async (req, res, next) => {
           } : null,
           hasAccess: true,
           accessType: 'subscription',
-          // PDF URL-ni gizlədək - proxy endpoint istifadə edək
           downloadUrl: `/pdfs/${pdf.id}/download`
         };
       });
@@ -304,6 +301,12 @@ export const getAllPdfs = async (req, res, next) => {
         price: pdf.price,
         priceInfo: priceInfo,
         downloads: pdf.downloads,
+        status: pdf.status,
+        order_number: pdf.order_number,
+        author: pdf.author,
+        category_id: pdf.category_id,
+        uploaded_by: pdf.uploaded_by,
+        uploader_email: pdf.uploader_email,
         created_at: pdf.created_at,
         updated_at: pdf.updated_at,
         category: pdf.category_id ? {
@@ -312,7 +315,6 @@ export const getAllPdfs = async (req, res, next) => {
         } : null,
         hasAccess: hasAccess,
         accessType: accessType,
-        // PDF URL-ni gizlədək - proxy endpoint istifadə edək
         downloadUrl: hasAccess ? `/pdfs/${pdf.id}/download` : null
       };
     }));
@@ -455,10 +457,36 @@ export const updatePdf = async (req, res, next) => {
     });
   } catch (error) {
     if (error.message === 'PDF not found') {
-      return res.status(404).json({
-        status: 'error',
-        message: error.message
-      });
+      return res.status(404).json({ status: 'error', message: 'PDF tapılmadı' });
+    }
+    if (error.message?.startsWith('Invalid language') || error.message?.startsWith('Category with ID')) {
+      return res.status(400).json({ status: 'error', message: error.message });
+    }
+    next(error);
+  }
+};
+
+export const approvePdf = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const pdf = await pdfService.approvePdf(Number(id), req.user?.email);
+    res.status(200).json({ status: 'success', data: { pdf } });
+  } catch (error) {
+    if (error.message === 'PDF not found') {
+      return res.status(404).json({ status: 'error', message: 'PDF tapılmadı' });
+    }
+    next(error);
+  }
+};
+
+export const rejectPdf = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    await pdfService.rejectPdf(Number(id), req.user?.email);
+    res.status(200).json({ status: 'success', message: 'PDF rejected and deleted' });
+  } catch (error) {
+    if (error.message === 'PDF not found') {
+      return res.status(404).json({ status: 'error', message: 'PDF tapılmadı' });
     }
     next(error);
   }
@@ -467,7 +495,7 @@ export const updatePdf = async (req, res, next) => {
 export const deletePdf = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await pdfService.deletePdf(Number(id));
+    await pdfService.deletePdf(Number(id), req.user?.email);
 
     res.status(200).json({
       status: 'success',
@@ -561,6 +589,90 @@ export const checkPdfAccess = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: accessCheck
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// İstifadəçi PDF yükləmə (role=1)
+export const submitPdf = async (req, res, next) => {
+  try {
+    const file = req.files?.file?.[0];
+    const coverImage = req.files?.coverImage?.[0] || null;
+
+    if (!file) {
+      return res.status(400).json({ status: 'error', message: 'PDF faylı tələb olunur' });
+    }
+
+    const { title, description, order_number, author, language, category_id } = req.body;
+
+    if (!title || !title.trim()) {
+      return res.status(400).json({ status: 'error', message: 'PDF adı tələb olunur' });
+    }
+
+    const pdf = await pdfService.submitPdf(
+      { title, description, order_number, author, language, category_id, uploaded_by: req.user.id },
+      file,
+      coverImage
+    );
+
+    const transformedPdf = {
+      id: pdf.id,
+      title: pdf.title,
+      description: pdf.description,
+      order_number: pdf.order_number,
+      file_path: toWebPath(pdf.file_path),
+      image_path: toWebPath(pdf.cover_image_path || pdf.image_path),
+      price: 0,
+      downloads: 0,
+      status: pdf.status,
+      created_at: pdf.created_at,
+      uploaded_by: pdf.uploaded_by
+    };
+
+    res.status(201).json({ status: 'success', data: { pdf: transformedPdf } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// FULLTEXT axtarış
+export const searchPdfs = async (req, res, next) => {
+  try {
+    const { q, page, limit } = req.query;
+    const result = await pdfService.searchPdfs(q, page, limit);
+
+    const userId = req.user?.id;
+    let userEmail = null;
+    if (userId) {
+      const user = await getOne('SELECT email FROM users WHERE id = ?', [userId]);
+      if (user) userEmail = user.email;
+    }
+
+    const transformedPdfs = result.pdfs.map(pdf => {
+      const priceInfo = calculatePriceWithDiscount(pdf.price, userEmail);
+      return {
+        id: pdf.id,
+        title: pdf.title,
+        description: pdf.description,
+        order_number: pdf.order_number,
+        language: pdf.language,
+        image_path: toWebPath(pdf.image_path),
+        price: pdf.price,
+        priceInfo,
+        downloads: pdf.downloads,
+        created_at: pdf.created_at,
+        category: pdf.category_id ? { id: pdf.category_id, name: pdf.category_name } : null,
+        hasAccess: pdf.price === 0 || pdf.price === '0.00',
+        accessType: pdf.price === 0 ? 'free' : null,
+        downloadUrl: `/pdfs/${pdf.id}/download`
+      };
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: { pdfs: transformedPdfs, pagination: result.pagination }
     });
   } catch (error) {
     next(error);

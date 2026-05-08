@@ -4,16 +4,19 @@ import bg from "./../../Assets/heroImage.jpg";
 import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
 import dataContext from "../../Contexts/GlobalState";
+import { useNavigate } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { useNavigate } from "react-router-dom"; // 🔹 Navigate üçün əlavə edildi
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loader, setLoader] = useState(false);
+  const [showPass, setShowPass] = useState(false);
   const store = useContext(dataContext);
-  const navigate = useNavigate(); // 🔹 Router istifadə olunur
-  const [pass, setPass] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userID = localStorage.getItem("user");
@@ -22,9 +25,7 @@ const LoginPage = () => {
     } else {
       axios
         .get(Base_Url_Server + "users/" + userID, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           store.user.setData(response.data.data.user);
@@ -43,11 +44,6 @@ const LoginPage = () => {
     setError("");
   };
 
-  const formReset = () => {
-    setForm({ email: "", password: "" });
-    setError("");
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoader(true);
@@ -56,16 +52,11 @@ const LoginPage = () => {
       .then((response) => {
         setLoader(false);
         if (response.data.data.user.role !== 1) {
-          formReset();
-          alert("Account not found");
+          setError("Bu hesab tapılmadı.");
         } else {
           localStorage.setItem("token", response.data.data.token);
-          localStorage.setItem(
-            "user",
-            JSON.stringify(response.data.data.user.id)
-          );
+          localStorage.setItem("user", JSON.stringify(response.data.data.user.id));
           store.user.setData(response.data.data.user);
-          formReset();
           window.location.href = "/";
         }
       })
@@ -74,7 +65,7 @@ const LoginPage = () => {
         if (error.response?.data?.message) {
           setError(error.response.data.message);
         } else {
-          setError("An error occurred. Please try again.");
+          setError("Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.");
         }
       });
   };
@@ -83,41 +74,54 @@ const LoginPage = () => {
     <div className={styles.container}>
       <img src={bg} alt="" />
       <form onSubmit={handleSubmit} className={styles.form}>
-        <h2>Daxil ol</h2>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className={styles.input}
-          required
-        />
-        <div className={styles.inputGroup}>
-          <input
-            type={pass ? "text" : "password"}
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            className={styles.input}
-            required
-          />
-          <RemoveRedEyeIcon
-            className={styles.eyeIcon}
-            style={pass ? { color: "#032062" } : {}}
-            onClick={() => {
-              setPass(!pass);
-            }}
-          />
+        <div className={styles.formHeader}>
+          <h2>Xoş gəldiniz</h2>
+          <p>Hesabınıza daxil olmaq üçün məlumatlarınızı daxil edin</p>
         </div>
+
+        {/* Email */}
+        <div className={styles.fieldGroup}>
+          <div className={`${styles.inputGroup} ${error ? styles.hasError : ""}`}>
+            <EmailOutlinedIcon className={styles.fieldIcon} />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              className={styles.input}
+              required
+            />
+          </div>
+        </div>
+
+        {/* Şifrə */}
+        <div className={styles.fieldGroup}>
+          <div className={`${styles.inputGroup} ${error ? styles.hasError : ""}`}>
+            <LockOutlinedIcon className={styles.fieldIcon} />
+            <input
+              type={showPass ? "text" : "password"}
+              name="password"
+              placeholder="Şifrə"
+              value={form.password}
+              onChange={handleChange}
+              className={styles.input}
+              required
+            />
+            <RemoveRedEyeIcon
+              className={styles.eyeIcon}
+              style={showPass ? { color: "#032062" } : {}}
+              onClick={() => setShowPass(!showPass)}
+            />
+          </div>
+        </div>
+
         {error && <div className={styles.error}>{error}</div>}
 
-        <button type="submit" className={styles.button}>
+        <button type="submit" className={styles.button} disabled={loader}>
           {loader ? "Yüklənir..." : "Daxil ol"}
         </button>
 
-        {/* 🔹 Yeni hissə: Register səhifəsinə keçid düyməsi */}
         <p className={styles.registerText}>
           Hesabınız yoxdur?{" "}
           <button

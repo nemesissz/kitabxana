@@ -34,8 +34,11 @@ import NewsDetailPage from "../Pages/NewsDetailPage";
 import ServiceDetailPage from "../Pages/ServiceDetailPage";
 import SubscriptionsPage from "../Pages/SubscriptionsPage";
 import AdminSubscriptionsPage from "../Pages/AdminSubscriptionsPage";
+import AdminHistoryPage from "../Pages/AdminHistoryPage";
 import AdminAdsPage from "../Pages/AdminAdsPage";
 import CVsPage from "../Pages/CVsPage";
+import UserSubmitPdfPage from "../Pages/UserSubmitPdfPage";
+import AllPdfsPage from "../Pages/AllPdfsPage";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +60,14 @@ const router = createBrowserRouter([
       {
         path: "library/category/:categoryId",
         element: <CategoryLibraryPage />,
+      },
+      {
+        path: "library/submit",
+        element: <UserSubmitPdfPage />,
+      },
+      {
+        path: "library/all",
+        element: <AllPdfsPage />,
       },
       {
         path: "cv-templates",
@@ -187,6 +198,10 @@ const router = createBrowserRouter([
       {
         path: "subscriptions",
         element: <AdminSubscriptionsPage />,
+      },
+      {
+        path: "history",
+        element: <AdminHistoryPage />,
       },
       {
         path: "ads",

@@ -1,25 +1,30 @@
 import React, { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, Navigate, useNavigate } from "react-router-dom";
 import AdminSidebar from "../Layouts/AdminSideBar";
 import AdminHeader from "../Layouts/AdminHeader";
 import AdminLoader from "../Components/AdminLoader";
 
 function AdminMainRoute() {
   const navigate = useNavigate();
-  function handleCtrlL(event) {
-    if (event.ctrlKey && event.key === "e") {
-      event.preventDefault();
-      console.log("first");
-      navigate("/");
-    }
-  }
 
   useEffect(() => {
-    window.addEventListener("keydown", handleCtrlL);
-    return () => {
-      window.removeEventListener("keydown", handleCtrlL);
+    const handleCtrlL = (event) => {
+      if (event.ctrlKey && event.key === "e") {
+        event.preventDefault();
+        navigate("/");
+      }
     };
-  }, []);
+    window.addEventListener("keydown", handleCtrlL);
+    return () => window.removeEventListener("keydown", handleCtrlL);
+  }, [navigate]);
+
+  // Sinxron yoxlama — render-dən əvvəl işləyir, flash olmur
+  const tokenAdmin = localStorage.getItem("tokenAdmin");
+  const adminID = localStorage.getItem("admin");
+  if (!tokenAdmin || !adminID) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
   return (
     <div style={{ display: "flex" }}>
       <AdminSidebar />
@@ -35,7 +40,7 @@ function AdminMainRoute() {
         <div
           style={{
             overflowY: "scroll",
-            height: "calc(100vh - 60px)", // Adjust height based on header height
+            height: "calc(100vh - 60px)",
           }}
           className="custom-scrollbar"
         >
