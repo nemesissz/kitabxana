@@ -54,6 +54,21 @@
   }
 }
 
+.statGreen {
+  border-top: 3px solid #1a7a3a;
+  p { color: #1a7a3a !important; }
+}
+
+.statYellow {
+  border-top: 3px solid #b07d00;
+  p { color: #b07d00 !important; }
+}
+
+.statRed {
+  border-top: 3px solid #d32f2f;
+  p { color: #d32f2f !important; }
+}
+
 .subtitle {
   font-size: 1.2rem;
   color: #0f1724;
@@ -163,6 +178,42 @@
   }
 }
 
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 24px;
+  background: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 4px;
+}
+
+.filterLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.filterSelect {
+  padding: 7px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #1e293b;
+  background: #f8fafc;
+  cursor: pointer;
+  outline: none;
+  min-width: 200px;
+
+  &:focus {
+    border-color: #5a67d8;
+    background: #fff;
+  }
+}
+
 .categoryStats {
   width: 100%;
   border-radius: 10px;
@@ -179,6 +230,52 @@
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   background-color: #fff;
   margin-bottom: 30px;
+}
+
+.topPdfsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+
+  h3 {
+    padding: 10px 0;
+    text-align: left !important;
+    margin: 0;
+  }
+}
+
+.sortToggle {
+  display: flex;
+  gap: 6px;
+}
+
+.sortBtn {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid #d1d5db;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+
+  &:hover {
+    border-color: #5a67d8;
+    color: #5a67d8;
+  }
+}
+
+.sortActive {
+  background: #334155;
+  color: #fff;
+  border-color: #334155;
+
+  &:hover {
+    color: #fff;
+    border-color: #334155;
+  }
 }
 
 .recentPaymentsSection {

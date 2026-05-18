@@ -1,5 +1,6 @@
 import { executeQuery, getOne, insert, update, deleteRecord } from '../config/database.js';
 import activityLog from '../activity-logs/activity-log.service.js';
+import settingsService from '../settings/settings.service.js';
 
 class PdfService {
   async getAllPdfs(filters = {}) {
@@ -14,7 +15,8 @@ class PdfService {
       startDate = null,
       endDate = null,
       status = null,
-      uploadedBy = null
+      uploadedBy = null,
+      uploaderInstitutionId = null
     } = filters;
 
     // Ensure page and limit are integers
@@ -27,7 +29,7 @@ class PdfService {
     const queryParams = [];
     
     if (language) {
-      conditions.push('p.language = ?');
+      conditions.push('l.code = ?');
       queryParams.push(language);
     }
     
@@ -36,11 +38,10 @@ class PdfService {
       queryParams.push(categoryId);
     }
     
-    // Arama filtresi - başlık ve açıklama alanlarında arama yapar
     if (search && search.trim() !== '') {
-      conditions.push('(p.title LIKE ? OR p.description LIKE ?)');
+      conditions.push('(p.title LIKE ? OR p.description LIKE ? OR p.table_of_contents LIKE ?)');
       const searchPattern = `%${search.trim()}%`;
-      queryParams.push(searchPattern, searchPattern);
+      queryParams.push(searchPattern, searchPattern, searchPattern);
     }
     
     // Minimum fiyat filtresi
@@ -76,29 +77,44 @@ class PdfService {
       queryParams.push(uploadedBy);
     }
 
+    if (uploaderInstitutionId) {
+      conditions.push('p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)');
+      queryParams.push(uploaderInstitutionId);
+    }
+
     const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
     
     // Get total count for pagination
     const countQuery = `
       SELECT COUNT(*) as total
       FROM pdfs p
+      LEFT JOIN languages l ON p.language_id = l.id
       ${whereClause}
     `;
     const countResult = await getOne(countQuery, queryParams);
     const total = countResult.total;
-    
+
+    const downloadsResult = await getOne(
+      `SELECT COALESCE(SUM(downloads), 0) AS totalDownloads FROM pdfs p ${whereClause}`,
+      queryParams
+    );
+
     // Get paginated PDFs with category details
     const query = `
       SELECT
-        p.id, p.title, p.description, p.language,
+        p.id, p.title, p.description,
+        l.code AS language, l.name AS language_name, l.flag AS language_flag,
         p.file_path, p.cover_image_path AS image_path,
         p.price, p.downloads, p.category_id,
-        p.order_number, p.author, p.status,
+        p.order_number, p.author, p.isbn, p.status,
+        p.publication_year, p.publisher_location, p.allow_download,
         p.uploaded_by, p.created_at, p.updated_at,
+        p.institution_id,
         c.name as category_name,
         u.email as uploader_email
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
+      LEFT JOIN languages l ON p.language_id = l.id
       LEFT JOIN users u ON p.uploaded_by = u.id
       ${whereClause}
       ORDER BY p.created_at DESC
@@ -113,7 +129,8 @@ class PdfService {
         current_page: validPage,
         per_page: validLimit,
         total: total,
-        total_pages: Math.ceil(total / validLimit)
+        total_pages: Math.ceil(total / validLimit),
+        totalDownloads: Number(downloadsResult.totalDownloads) || 0
       },
       filters: {
         language,
@@ -127,13 +144,22 @@ class PdfService {
     };
   }
 
+  async getLanguageId(code) {
+    if (!code) return null;
+    const lang = await getOne('SELECT id FROM languages WHERE code = ?', [code]);
+    return lang?.id || null;
+  }
+
   async getPdfById(id) {
     const query = `
-      SELECT 
+      SELECT
         p.id,
         p.title,
         p.description,
-        p.language,
+        p.table_of_contents,
+        l.code AS language,
+        l.name AS language_name,
+        l.flag AS language_flag,
         p.file_path,
         p.cover_image_path AS image_path,
         p.cover_image_path,
@@ -141,11 +167,24 @@ class PdfService {
         p.price,
         p.downloads,
         p.category_id,
+        p.author,
+        p.isbn,
+        p.order_number,
+        p.publication_year,
+        p.publisher_location,
+        p.allow_download,
+        p.foreword,
+        p.uploaded_by,
+        p.status,
         p.created_at,
         p.updated_at,
-        c.name as category_name
+        p.institution_id,
+        c.name as category_name,
+        inst.name as institution_name
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
+      LEFT JOIN languages l ON p.language_id = l.id
+      LEFT JOIN institutions inst ON p.institution_id = inst.id
       WHERE p.id = ?
     `;
     const pdf = await getOne(query, [id]);
@@ -167,11 +206,7 @@ class PdfService {
     if (!title) {
       throw new Error('Title is required');
     }
-    
-    if (!file || !file.path) {
-      throw new Error('PDF file is required');
-    }
-    
+
     // Validate category exists if provided
     if (categoryId !== undefined && categoryId !== '' && categoryId !== '0') {
       const categoryExists = await getOne(
@@ -185,15 +220,15 @@ class PdfService {
     
     // Validate language if provided
     if (language !== undefined && language !== '') {
-      const allowedLanguages = ['az', 'ru', 'en'];
-      if (!allowedLanguages.includes(language)) {
-        throw new Error(`Invalid language. Allowed values: ${allowedLanguages.join(', ')}`);
+      const langRow = await getOne('SELECT id FROM languages WHERE code = ?', [language]);
+      if (!langRow) {
+        throw new Error(`Invalid language code: ${language}`);
       }
     }
     
     const pdfData = {
       title,
-      file_path: file.path,
+      file_path: file?.path || null,
       price: price || 0,
       downloads: 0
     };
@@ -240,15 +275,27 @@ class PdfService {
     if (description !== undefined && description !== '') {
       pdfData.description = description;
     }
-    
+
     if (language !== undefined && language !== '') {
-      pdfData.language = language;
+      pdfData.language_id = await this.getLanguageId(language);
     }
-    
+
     if (categoryId !== undefined && categoryId !== '' && categoryId !== '0') {
       pdfData.category_id = categoryId;
     }
-    
+
+    // Book-specific and other optional text fields
+    const optionalFields = [
+      'author', 'isbn', 'publication_year', 'publisher_location',
+      'table_of_contents', 'order_number', 'allow_download',
+      'uploaded_by', 'foreword', 'institution_id',
+    ];
+    for (const field of optionalFields) {
+      if (data[field] !== undefined && data[field] !== '') {
+        pdfData[field] = data[field];
+      }
+    }
+
     const pdfId = await insert('pdfs', pdfData);
     return await this.getPdfById(pdfId);
   }
@@ -270,14 +317,14 @@ class PdfService {
       }
     }
     
-    // Validate language if being updated
+    // language code → language_id dönüşümü
     if (data.language !== undefined && data.language !== '') {
-      const allowedLanguages = ['az', 'ru', 'en'];
-      if (!allowedLanguages.includes(data.language)) {
-        throw new Error(`Invalid language. Allowed values: ${allowedLanguages.join(', ')}`);
-      }
+      const langRow = await getOne('SELECT id FROM languages WHERE code = ?', [data.language]);
+      if (!langRow) throw new Error(`Invalid language code: ${data.language}`);
+      data.language_id = langRow.id;
+      delete data.language;
     }
-    
+
     await update('pdfs', id, data);
     return await this.getPdfById(id);
   }
@@ -286,6 +333,12 @@ class PdfService {
     const existing = await this.getPdfById(id);
     if (!existing) {
       throw new Error('PDF not found');
+    }
+
+    let delUploaderInstId = null;
+    if (existing.uploaded_by) {
+      const uploader = await getOne('SELECT institution_id FROM users WHERE id = ?', [existing.uploaded_by]);
+      delUploaderInstId = uploader?.institution_id || null;
     }
 
     await activityLog.log({
@@ -299,6 +352,8 @@ class PdfService {
         language: existing.language || null,
         order_number: existing.order_number || null,
         author: existing.author || null,
+        uploaded_by: existing.uploaded_by || null,
+        uploader_institution_id: delUploaderInstId,
       },
     });
 
@@ -389,11 +444,11 @@ class PdfService {
       if (subscription) {
         // Bütün PDF-lər
         const allPdfs = await executeQuery(`
-          SELECT 
+          SELECT
             p.id,
             p.title,
             p.description,
-            p.language,
+            l.code AS language, l.name AS language_name, l.flag AS language_flag,
             p.cover_image_path AS image_path,
             p.price,
             p.downloads,
@@ -403,6 +458,7 @@ class PdfService {
             'subscription' as access_type
           FROM pdfs p
           LEFT JOIN category_pdfs c ON p.category_id = c.id
+          LEFT JOIN languages l ON p.language_id = l.id
           ORDER BY p.created_at DESC
         `);
 
@@ -415,11 +471,11 @@ class PdfService {
 
       // Subscription yoxdursa, yalnız alınmış PDF-lər
       const purchasedPdfs = await executeQuery(`
-        SELECT 
+        SELECT
           p.id,
           p.title,
           p.description,
-          p.language,
+          l.code AS language, l.name AS language_name, l.flag AS language_flag,
           p.cover_image_path AS image_path,
           p.price,
           p.downloads,
@@ -431,6 +487,7 @@ class PdfService {
         FROM payments pay
         JOIN pdfs p ON pay.pdf_id = p.id
         LEFT JOIN category_pdfs c ON p.category_id = c.id
+        LEFT JOIN languages l ON p.language_id = l.id
         WHERE pay.user_id = ?
         AND pay.type = 'single-pdf'
         AND pay.status = 'success'
@@ -450,23 +507,10 @@ class PdfService {
   }
 
   async downloadPdf(pdfId, userId) {
-    // Get PDF details
     const pdf = await this.getPdfById(pdfId);
     if (!pdf) {
       throw new Error('PDF not found');
     }
-
-    // Check if user has access
-    const accessCheck = await this.checkPdfAccess(userId, pdfId);
-    if (!accessCheck.hasAccess) {
-      const error = new Error(accessCheck.message || 'PDF-ə giriş rədd edildi');
-      error.code = 'ACCESS_DENIED';
-      error.requiresPayment = true;
-      error.pdfPrice = pdf.price;
-      throw error;
-    }
-
-    console.log(`✅ User ${userId} downloading PDF ${pdfId} via ${accessCheck.accessType}`);
 
     // Increment download count
     await executeQuery(
@@ -474,44 +518,79 @@ class PdfService {
       [pdfId]
     );
 
-    // Return file path for download
     return {
       filePath: pdf.file_path,
       fileName: pdf.title,
-      accessType: accessCheck.accessType,
       pdf: pdf
     };
   }
 
   async submitPdf(data, file, coverImage = null) {
-    const { title, description, order_number, author, language, category_id, uploaded_by } = data;
+    const { title, description, table_of_contents, order_number, author, isbn, language, category_id,
+            publication_year, publisher_location, price, allow_download, uploaded_by, foreword, institution_id } = data;
 
     if (!title || !title.trim()) throw new Error('PDF adı tələb olunur');
-    if (!file || !file.path) throw new Error('PDF faylı tələb olunur');
 
-    // İstifadəçinin upload icazəsini yoxla
+    let userPermission = 'pending';
+
     if (uploaded_by) {
-      const user = await getOne('SELECT upload_permission FROM users WHERE id = ?', [uploaded_by]);
+      const user = await getOne(
+        `SELECT upload_permission, institution_id, role FROM users WHERE id = ?`,
+        [uploaded_by]
+      );
       if (!user || user.upload_permission === 'none') {
         throw new Error('PDF yükləmə icazəniz yoxdur');
       }
-      var userPermission = user.upload_permission;
+      userPermission = user.upload_permission;
+
+      if (file) {
+        const limitMb = await settingsService.getEffectiveLimitForUser(uploaded_by);
+        const fileSizeMb = file.size / (1024 * 1024);
+        if (fileSizeMb > limitMb) {
+          const err = new Error(`Fayl ölçüsü limitdən böyükdür. Sizin limitiniz: ${limitMb} MB`);
+          err.statusCode = 413;
+          throw err;
+        }
+      }
+
+      // Müəssisəsiz töhfəçilər (role=1) üçün günlük say limiti yoxla
+      if (!user.institution_id && user.role === 1) {
+        const dailyLimit = await settingsService.getDailyCountLimit();
+        if (dailyLimit > 0) {
+          const todayCount = await getOne(
+            `SELECT COUNT(*) AS count FROM pdfs WHERE uploaded_by = ? AND DATE(created_at) = CURDATE()`,
+            [uploaded_by]
+          );
+          if (todayCount.count >= dailyLimit) {
+            const err = new Error(`Günlük yükləmə limitinizə çatdınız (${dailyLimit} PDF/gün). Sabah yenidən cəhd edin.`);
+            err.statusCode = 429;
+            throw err;
+          }
+        }
+      }
     }
 
     const pdfData = {
       title: title.trim(),
-      file_path: file.path,
-      price: 0,
+      file_path: file?.path || null,
+      price: price !== undefined && price !== '' ? parseFloat(price) || 0 : 0,
       downloads: 0,
-      language: language && ['az', 'ru', 'en'].includes(language) ? language : 'az',
+      allow_download: allow_download === '0' || allow_download === 0 ? 0 : 1,
+      language_id: await this.getLanguageId(language) || await this.getLanguageId('az'),
       status: userPermission === 'free' ? 'approved' : 'pending'
     };
 
     if (description && description.trim()) pdfData.description = description.trim();
+    if (table_of_contents && table_of_contents.trim()) pdfData.table_of_contents = table_of_contents.trim();
     if (order_number && order_number.trim()) pdfData.order_number = order_number.trim();
     if (author && author.trim()) pdfData.author = author.trim();
+    if (isbn && isbn.trim()) pdfData.isbn = isbn.trim();
+    if (publication_year) pdfData.publication_year = parseInt(publication_year) || null;
+    if (publisher_location && publisher_location.trim()) pdfData.publisher_location = publisher_location.trim();
+    if (foreword && foreword.trim()) pdfData.foreword = foreword.trim();
     if (category_id) pdfData.category_id = category_id;
     if (uploaded_by) pdfData.uploaded_by = uploaded_by;
+    if (institution_id) pdfData.institution_id = institution_id;
     if (coverImage && coverImage.path) pdfData.cover_image_path = coverImage.path;
 
     const pdfId = await insert('pdfs', pdfData);
@@ -535,13 +614,18 @@ class PdfService {
   async approvePdf(id, adminEmail = null) {
     const existing = await this.getPdfById(id);
     if (!existing) throw new Error('PDF not found');
+    let approveUploaderInstId = null;
+    if (existing.uploaded_by) {
+      const uploader = await getOne('SELECT institution_id FROM users WHERE id = ?', [existing.uploaded_by]);
+      approveUploaderInstId = uploader?.institution_id || null;
+    }
     await update('pdfs', id, { status: 'approved' });
     await activityLog.log({
       eventType: 'pdf_approved',
       actorEmail: adminEmail,
       targetType: 'pdf',
       targetId: id,
-      details: { title: existing.title },
+      details: { title: existing.title, uploaded_by: existing.uploaded_by, uploader_institution_id: approveUploaderInstId },
     });
     return await this.getPdfById(id);
   }
@@ -549,12 +633,19 @@ class PdfService {
   async rejectPdf(id, adminEmail = null) {
     const existing = await this.getPdfById(id);
     if (!existing) throw new Error('PDF not found');
+
+    let uploaderInstitutionId = null;
+    if (existing.uploaded_by) {
+      const uploader = await getOne('SELECT institution_id FROM users WHERE id = ?', [existing.uploaded_by]);
+      uploaderInstitutionId = uploader?.institution_id || null;
+    }
+
     await activityLog.log({
       eventType: 'pdf_rejected',
       actorEmail: adminEmail,
       targetType: 'pdf',
       targetId: id,
-      details: { title: existing.title },
+      details: { title: existing.title, uploaded_by: existing.uploaded_by, uploader_institution_id: uploaderInstitutionId },
     });
     await deleteRecord('pdfs', id);
     return { message: 'PDF rejected and deleted' };
@@ -574,18 +665,20 @@ class PdfService {
 
     const countResult = await getOne(`
       SELECT COUNT(*) as total FROM pdfs p
-      WHERE MATCH(p.title, p.description, p.order_number) AGAINST (? IN BOOLEAN MODE)
+      WHERE MATCH(p.title, p.description, p.order_number, p.table_of_contents) AGAINST (? IN BOOLEAN MODE)
     `, [`${term}*`]);
 
     const pdfs = await executeQuery(`
-      SELECT p.id, p.title, p.description, p.order_number, p.language,
+      SELECT p.id, p.title, p.description, p.order_number,
+             l.code AS language, l.name AS language_name, l.flag AS language_flag,
              p.file_path, p.cover_image_path AS image_path, p.price,
              p.downloads, p.category_id, p.uploaded_by, p.created_at, p.updated_at,
              c.name as category_name,
-             MATCH(p.title, p.description, p.order_number) AGAINST (? IN BOOLEAN MODE) AS relevance
+             MATCH(p.title, p.description, p.order_number, p.table_of_contents) AGAINST (? IN BOOLEAN MODE) AS relevance
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
-      WHERE MATCH(p.title, p.description, p.order_number) AGAINST (? IN BOOLEAN MODE)
+      LEFT JOIN languages l ON p.language_id = l.id
+      WHERE MATCH(p.title, p.description, p.order_number, p.table_of_contents) AGAINST (? IN BOOLEAN MODE)
       ORDER BY relevance DESC
       LIMIT ${validLimit} OFFSET ${offset}
     `, [`${term}*`, `${term}*`]);
@@ -617,11 +710,11 @@ class PdfService {
     }
     
     const query = `
-      SELECT 
+      SELECT
         p.id,
         p.title,
         p.description,
-        p.language,
+        l.code AS language, l.name AS language_name, l.flag AS language_flag,
         p.file_path,
         p.cover_image_path AS image_path,
         p.price,
@@ -631,6 +724,7 @@ class PdfService {
         c.name as category_name
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
+      LEFT JOIN languages l ON p.language_id = l.id
       ${whereClause}
       ORDER BY p.created_at DESC
       LIMIT ${limit}

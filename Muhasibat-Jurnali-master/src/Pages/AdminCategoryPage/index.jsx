@@ -29,11 +29,13 @@ function AdminCategoryPage() {
           headers: { Authorization: `Bearer ${tokenAdmin}` },
         })
         .then((res) => store.admin.setData(res.data.data.user))
-        .catch(() => {
-          store.admin.setData(null);
-          localStorage.removeItem("tokenAdmin");
-          localStorage.removeItem("admin");
-          navigate("/admin/login");
+        .catch((error) => {
+          if (error.response?.status === 401) {
+            store.admin.setData(null);
+            localStorage.removeItem("tokenAdmin");
+            localStorage.removeItem("admin");
+            navigate("/admin/login");
+          }
         });
     }
   }, []);

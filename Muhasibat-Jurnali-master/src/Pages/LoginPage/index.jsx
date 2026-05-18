@@ -6,11 +6,11 @@ import Base_Url_Server from "../../Constants/baseUrl";
 import dataContext from "../../Contexts/GlobalState";
 import { useNavigate } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const LoginPage = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ login: "", password: "" });
   const [error, setError] = useState("");
   const [loader, setLoader] = useState(false);
   const [showPass, setShowPass] = useState(false);
@@ -31,10 +31,12 @@ const LoginPage = () => {
           store.user.setData(response.data.data.user);
           navigate("/profile");
         })
-        .catch(() => {
-          store.user.setData(null);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+        .catch((error) => {
+          if (error.response?.status === 401) {
+            store.user.setData(null);
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+          }
         });
     }
   }, []);
@@ -51,7 +53,7 @@ const LoginPage = () => {
       .post(Base_Url_Server + "auth/login", form)
       .then((response) => {
         setLoader(false);
-        if (response.data.data.user.role !== 1) {
+        if (response.data.data.user.role < 1) {
           setError("Bu hesab tapılmadı.");
         } else {
           localStorage.setItem("token", response.data.data.token);
@@ -79,15 +81,15 @@ const LoginPage = () => {
           <p>Hesabınıza daxil olmaq üçün məlumatlarınızı daxil edin</p>
         </div>
 
-        {/* Email */}
+        {/* İstifadəçi adı */}
         <div className={styles.fieldGroup}>
           <div className={`${styles.inputGroup} ${error ? styles.hasError : ""}`}>
-            <EmailOutlinedIcon className={styles.fieldIcon} />
+            <PersonOutlineIcon className={styles.fieldIcon} />
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={form.email}
+              type="text"
+              name="login"
+              placeholder="İstifadəçi adı"
+              value={form.login}
               onChange={handleChange}
               className={styles.input}
               required

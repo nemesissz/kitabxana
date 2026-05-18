@@ -20,7 +20,7 @@ function AllPdfsPage() {
   const debounceRef = useRef(null);
 
   useEffect(() => {
-    document.title = "Bütün PDF-lər | Mühasibat Jurnalı";
+    document.title = "Bütün PDF-lər | MMU Kitabxana";
     const token = localStorage.getItem("token");
     const userID = localStorage.getItem("user");
     if (token && userID) {
@@ -29,10 +29,12 @@ function AllPdfsPage() {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => store.user.setData(res.data.data.user))
-        .catch(() => {
-          store.user.setData(null);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+        .catch((error) => {
+          if (error.response?.status === 401) {
+            store.user.setData(null);
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+          }
         });
     }
   }, []);

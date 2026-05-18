@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUsers, createUser, getUserById, updateUser, deleteUser } from './user.controller.js';
+import { getUsers, createUser, getUserById, updateUser, updatePermissions, deleteUser } from './user.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import roleCheck from '../middlewares/roleCheck.middleware.js';
 
@@ -13,6 +13,9 @@ router.post('/', authMiddleware, roleCheck(2), createUser);
 
 // GET istifadəçi ID-yə görə (Yalnız autentifikasiya)
 router.get('/:id', authMiddleware, getUserById);
+
+// PATCH icazələr (yalnız superadmin)
+router.patch('/:id/permissions', authMiddleware, roleCheck(4), updatePermissions);
 
 // PATCH istifadəçi ID-yə görə (Controller daxilində self-update istisnası yoxlanılacaq)
 router.patch('/:id', authMiddleware, updateUser);

@@ -9,16 +9,14 @@ function AdminHeader() {
   useEffect(() => {
     document.title = "Admin Panel";
   }, []);
-  console.log();
   return (
     <header className={styles.header}>
-      {/* <h3>Mühasibat Jurnalı</h3> */}
       <div
         className={styles.profile}
         onClick={() => navigate("/admin/profile")}
       >
         <PersonIcon className={styles.icon} />
-        <span>{store.admin.data?.email}</span>
+        <span>{store.admin.data?.login}</span>
       </div>
     </header>
   );

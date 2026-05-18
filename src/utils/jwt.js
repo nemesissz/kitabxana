@@ -8,7 +8,7 @@ export const generateToken = (user, expiresIn = JWT_EXPIRES_IN) => {
     { 
       id: user.id, // Changed from userId to id for consistency
       userId: user.id, 
-      email: user.email,
+      login: user.login,
       role: user.role, // Rəqəmsal rol (1: User, 2: Admin, 3: Supadmin)
       hasActiveSubscription: user.hasActiveSubscription || false // Aktiv abunəlik var?
     },

@@ -1,8 +1,11 @@
 import adminService from './admin.service.js';
+import { resolveAdminScope } from '../middlewares/resolveScope.js';
 
 export const getStats = async (req, res, next) => {
   try {
-    const stats = await adminService.getStats();
+    const scope = await resolveAdminScope(req.user);
+    const institutionId = scope.type === 'institution' ? scope.institutionId : null;
+    const stats = await adminService.getStats(institutionId);
 
     res.status(200).json({
       status: 'success',
@@ -64,7 +67,13 @@ export const updateUserRole = async (req, res, next) => {
 
 export const getDashboardData = async (req, res, next) => {
   try {
-    const dashboardData = await adminService.getDashboardData();
+    const scope = await resolveAdminScope(req.user);
+    let institutionId = scope.type === 'institution' ? scope.institutionId : null;
+    // Global-scope adminlər isteğe bağlı müəssisə filteri tətbiq edə bilər
+    if (scope.type !== 'institution' && req.query.institutionId) {
+      institutionId = Number(req.query.institutionId) || null;
+    }
+    const dashboardData = await adminService.getDashboardData(institutionId);
 
     res.status(200).json({
       status: 'success',

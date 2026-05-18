@@ -16,7 +16,7 @@ class ActivityLogService {
     }
   }
 
-  async getLogs({ page = 1, limit = 30, eventType = null } = {}) {
+  async getLogs({ page = 1, limit = 30, eventType = null, institutionId = null } = {}) {
     const validPage = Math.max(parseInt(page) || 1, 1);
     const validLimit = Math.min(parseInt(limit) || 30, 100);
     const offset = (validPage - 1) * validLimit;
@@ -34,6 +34,17 @@ class ActivityLogService {
         conditions.push(`event_type IN (${types.map(() => '?').join(',')})`);
         params.push(...types);
       }
+    }
+
+    if (institutionId) {
+      conditions.push(`(
+        JSON_EXTRACT(details, '$.uploader_institution_id') = ?
+        OR (target_type = 'user'
+            AND target_id IN (SELECT id FROM users WHERE institution_id = ?))
+        OR (target_type = 'pdf'
+            AND target_id IN (SELECT id FROM pdfs WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)))
+      )`);
+      params.push(institutionId, institutionId, institutionId);
     }
 
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';

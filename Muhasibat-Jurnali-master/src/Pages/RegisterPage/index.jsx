@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styles from "./index.module.scss";
 import bg from "./../../Assets/heroImage.jpg";
 import axios from "axios";
@@ -7,16 +7,18 @@ import dataContext from "../../Contexts/GlobalState";
 import { useNavigate } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import BusinessIcon from "@mui/icons-material/Business";
 
 const RegisterPage = () => {
   const [form, setForm] = useState({
     fullName: "",
-    email: "",
+    login: "",
     password: "",
     confirmPassword: "",
   });
+  const [selectedInstitution, setSelectedInstitution] = useState("");
+  const [institutions, setInstitutions] = useState([]);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const store = useContext(dataContext);
@@ -24,6 +26,12 @@ const RegisterPage = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get(Base_Url_Server + "institutions/public")
+      .then((r) => setInstitutions(r.data.data.institutions || []))
+      .catch(() => {});
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,48 +42,51 @@ const RegisterPage = () => {
   const validate = () => {
     const errors = {};
     if (!form.fullName.trim()) errors.fullName = "Ad Soyad tələb olunur";
-    if (!form.email.trim()) errors.email = "Email tələb olunur";
+    if (!form.login.trim()) errors.login = "İstifadəçi adı tələb olunur";
+    if (form.login.trim().length < 3) errors.login = "İstifadəçi adı minimum 3 simvol olmalıdır";
     if (form.password.length < 6) errors.password = "Şifrə minimum 6 simvol olmalıdır";
     if (form.password !== form.confirmPassword)
       errors.confirmPassword = "Şifrələr uyğun gəlmir";
     return errors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validate();
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      return;
-    }
+    if (Object.keys(errors).length > 0) { setFieldErrors(errors); return; }
 
     setLoader(true);
-    axios
-      .post(Base_Url_Server + "auth/register", {
+    try {
+      const response = await axios.post(Base_Url_Server + "auth/register", {
         fullName: form.fullName.trim(),
-        email: form.email.trim(),
+        login: form.login.trim(),
         password: form.password,
-      })
-      .then((response) => {
-        setLoader(false);
-        const { user, token } = response.data.data;
-        if (!user || !token) {
-          setError("Qeydiyyat uğursuz oldu. Zəhmət olmasa yenidən cəhd edin.");
-          return;
-        }
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user.id));
-        store.user.setData(user);
-        navigate("/");
-      })
-      .catch((error) => {
-        setLoader(false);
-        if (error.response?.data?.message) {
-          setError(error.response.data.message);
-        } else {
-          setError("Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.");
-        }
       });
+
+      const { user, token } = response.data.data;
+      if (!user || !token) { setError("Qeydiyyat uğursuz oldu."); setLoader(false); return; }
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user.id));
+      store.user.setData(user);
+
+      if (selectedInstitution) {
+        try {
+          await axios.post(
+            `${Base_Url_Server}institutions/${selectedInstitution}/join-request`,
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+        } catch {
+          // sorğu göndərilməsə də qeydiyyat uğurludur
+        }
+      }
+
+      navigate("/");
+    } catch (err) {
+      setLoader(false);
+      setError(err.response?.data?.message || "Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.");
+    }
   };
 
   return (
@@ -103,20 +114,20 @@ const RegisterPage = () => {
           {fieldErrors.fullName && <span className={styles.fieldError}>{fieldErrors.fullName}</span>}
         </div>
 
-        {/* Email */}
+        {/* İstifadəçi adı */}
         <div className={styles.fieldGroup}>
-          <div className={`${styles.inputGroup} ${fieldErrors.email ? styles.hasError : ""}`}>
-            <EmailOutlinedIcon className={styles.fieldIcon} />
+          <div className={`${styles.inputGroup} ${fieldErrors.login ? styles.hasError : ""}`}>
+            <PersonOutlineIcon className={styles.fieldIcon} />
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={form.email}
+              type="text"
+              name="login"
+              placeholder="İstifadəçi adı"
+              value={form.login}
               onChange={handleChange}
               className={styles.input}
             />
           </div>
-          {fieldErrors.email && <span className={styles.fieldError}>{fieldErrors.email}</span>}
+          {fieldErrors.login && <span className={styles.fieldError}>{fieldErrors.login}</span>}
         </div>
 
         {/* Şifrə */}
@@ -162,6 +173,34 @@ const RegisterPage = () => {
             <span className={styles.fieldError}>{fieldErrors.confirmPassword}</span>
           )}
         </div>
+
+        {/* Müəssisə üzvlüyü — optional */}
+        {institutions.length > 0 && (
+          <div className={styles.institutionSection}>
+            <div className={styles.institutionLabel}>
+              <BusinessIcon style={{ fontSize: 16, marginRight: 6, color: "#6a1b9a" }} />
+              Müəssisə üzvlüyü üçün sorğu göndər
+              <span className={styles.optionalTag}>optional</span>
+            </div>
+            <div className={styles.inputGroup}>
+              <select
+                className={styles.institutionSelect}
+                value={selectedInstitution}
+                onChange={(e) => setSelectedInstitution(e.target.value)}
+              >
+                <option value="">— Seçin (istəyə bağlı) —</option>
+                {institutions.map((inst) => (
+                  <option key={inst.id} value={inst.id}>{inst.name}</option>
+                ))}
+              </select>
+            </div>
+            {selectedInstitution && (
+              <p className={styles.institutionHint}>
+                Qeydiyyatdan sonra seçdiyiniz müəssisənin admininə üzvlük sorğusu göndəriləcək.
+              </p>
+            )}
+          </div>
+        )}
 
         {error && <div className={styles.error}>{error}</div>}
 

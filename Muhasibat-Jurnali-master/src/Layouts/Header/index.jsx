@@ -1,230 +1,180 @@
 import styles from "./index.module.scss";
-import logo from "../../Assets/logo.png";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import dataContext from "../../Contexts/GlobalState";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import HomeIcon from "@mui/icons-material/Home";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import CampaignIcon from "@mui/icons-material/Campaign";
 import PersonIcon from "@mui/icons-material/Person";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
 import AdSpace from "../../Components/AdSpace";
+import Swal from "sweetalert2";
 
 function Header() {
   const navigator = useNavigate();
+  const location = useLocation();
   const store = useContext(dataContext);
   const [categories, setCategories] = useState([]);
   const [showLibraryDropdown, setShowLibraryDropdown] = useState(false);
-  console.log(store.user.data);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
 
-  // Kategorileri yükle
   useEffect(() => {
     axios
       .get(Base_Url_Server + "categories/pdfs")
       .then((res) => setCategories(res.data.data.categories || []))
-      .catch((err) => console.log("Kateqoriyalar yüklənmədi:", err));
+      .catch(() => {});
   }, []);
 
-  // Hüquqi səhifələr üçün yol yoxlaması
-  const isLegalPage = () => {
-    const path = window.location.pathname;
-    return (
-      path === "/terms-of-use" ||
-      path === "/privacy-policy" ||
-      path === "/copyright"
-    );
-  };
+  const isActive = (path) =>
+    path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 
-  // Kitabxana sayfası kontrolü
-  const isLibraryPage = () => {
-    const path = window.location.pathname;
-    return path === "/library" || path.startsWith("/library/");
-  };
+  const userLabel = store.user.data
+    ? store.user.data.fullName?.split(" ")[0] || store.user.data.login
+    : "Daxil ol";
 
   return (
     <>
       <AdSpace position="header-top" />
-      <div className={styles.header}>
+      <header className={styles.header}>
         <div className={styles.container}>
-        <div
-          onClick={() => {
-            navigator("/");
-          }}
-          className={styles.left}
-        >
-          <img src={logo} className={styles.logo} alt="accountant" />
-          <h3 className={styles.title}>Mühasibat Jurnalı</h3>
-        </div>
-        <div className={styles.right}>
-          <ul>
-            {/* Ana səhifə */}
-            <li
-              onClick={() => navigator("/")}
-              style={
-                window.location.pathname === "/"
-                  ? { color: "#032062", backgroundColor: "white" }
-                  : {}
-              }
-            >
-              Ana səhifə
-            </li>
 
-            {/* Kitabxana Dropdown */}
-            <li
-              className={styles.dropdown}
+          {/* ── Logo ── */}
+          <div className={styles.logo} onClick={() => navigator("/")}>
+            <LocalLibraryIcon className={styles.logoIcon} />
+            <div className={styles.logoText}>
+              <span className={styles.logoTitle}>MMU Kitabxana</span>
+              <span className={styles.logoSub}>Ağıllı Kitabxana Sistemi</span>
+            </div>
+          </div>
+
+          {/* ── Nav ── */}
+          <nav className={styles.nav}>
+            {/* Ana səhifə */}
+            <div
+              className={`${styles.navItem} ${isActive("/") ? styles.active : ""}`}
+              onClick={() => navigator("/")}
+            >
+              <HomeIcon className={styles.navIcon} />
+              <span>Ana səhifə</span>
+            </div>
+
+            {/* Kitabxana dropdown */}
+            <div
+              className={`${styles.navItem} ${styles.hasDropdown} ${isActive("/library") ? styles.active : ""}`}
               onMouseEnter={() => setShowLibraryDropdown(true)}
               onMouseLeave={() => setShowLibraryDropdown(false)}
-              style={
-                isLibraryPage()
-                  ? { color: "#032062", backgroundColor: "white" }
-                  : {}
-              }
             >
-              <span className={styles.dropdownLabel}>
-                Kitabxana
-                <ArrowDropDownIcon className={styles.dropdownIcon} />
-              </span>
+              <MenuBookIcon className={styles.navIcon} />
+              <span>Kitabxana</span>
+              <ArrowDropDownIcon className={`${styles.chevron} ${showLibraryDropdown ? styles.chevronOpen : ""}`} />
+
               {showLibraryDropdown && (
-                <div className={styles.dropdownMenu}>
-                  {categories.length > 0 ? (
-                    categories.map((cat) => (
-                      <div
-                        key={cat.id}
-                        className={styles.dropdownItem}
-                        onClick={() => {
-                          navigator(`/library/category/${cat.id}`);
+                <div className={styles.dropdown}>
+                  {store.user.data && (
+                    <div
+                      className={styles.dropdownLink}
+                      onClick={() => {
+                        if (!store.user.data.uploadPermission || store.user.data.uploadPermission === "none") {
+                          Swal.fire({ icon: "warning", title: "İcazə yoxdur", text: "Bu funksiya üçün rolunuz uyğun deyil.", confirmButtonColor: "#2c3e50" });
                           setShowLibraryDropdown(false);
-                        }}
-                      >
-                        {cat.name}
-                      </div>
-                    ))
-                  ) : (
-                    <div className={styles.dropdownItem}>Yüklənir...</div>
+                          return;
+                        }
+                        navigator("/library/submit");
+                        setShowLibraryDropdown(false);
+                      }}
+                    >
+                      PDF Yüklə
+                    </div>
                   )}
+                  {categories.map((cat) => (
+                    <div
+                      key={cat.id}
+                      className={styles.dropdownLink}
+                      onClick={() => { navigator(`/library/category/${cat.id}`); setShowLibraryDropdown(false); }}
+                    >
+                      {cat.name}
+                    </div>
+                  ))}
                 </div>
               )}
-            </li>
-            {/* CV Nümunələri */}
-            <li
-              onClick={() => navigator("/cv-templates")}
-              style={
-                window.location.pathname === "/cv-templates"
-                  ? { color: "#032062", backgroundColor: "white" }
-                  : {}
-              }
-            >
-              CV Nümunələri
-            </li>
-            {/* Aboneliklər */}
-            <li
-              onClick={() => navigator("/subscriptions")}
-              style={
-                window.location.pathname === "/subscriptions"
-                  ? { color: "#032062", backgroundColor: "white" }
-                  : {}
-              }
-            >
-              Abunəliklər
-            </li>
+            </div>
 
-            {/* Servislər */}
-            <li
-              onClick={() => navigator("/services")}
-              style={
-                window.location.pathname.startsWith("/services")
-                  ? { color: "#032062", backgroundColor: "white" }
-                  : {}
-              }
-            >
-              Servislər
-            </li>
-
-            {/* Xəbərlər */}
-            <li
+            {/* Elan */}
+            <div
+              className={`${styles.navItem} ${isActive("/news") ? styles.active : ""}`}
               onClick={() => navigator("/news")}
-              style={
-                window.location.pathname === "/news"
-                  ? { color: "#032062", backgroundColor: "white" }
-                  : {}
-              }
             >
-              Xəbərlər
-            </li>
+              <CampaignIcon className={styles.navIcon} />
+              <span>Elan</span>
+            </div>
 
-            {/* Kalkulyator */}
-            <li
-              onClick={() => navigator("/calculator")}
-              style={
-                window.location.pathname === "/calculator"
-                  ? { color: "#032062", backgroundColor: "white" }
-                  : {}
-              }
-            >
-              Kalkulyator
-            </li>
-
-            {/* Hüquqi Məlumatlar Dropdown */}
-            <li
-              className={styles.dropdown}
-              style={
-                isLegalPage()
-                  ? { color: "#032062", backgroundColor: "white" }
-                  : {}
-              }
-            >
-              <span className={styles.dropdownLabel}>
-                Hüquqi Məlumatlar
-                {/* <ArrowDropDownIcon className={styles.dropdownIcon} /> */}
-              </span>
-              <div className={styles.dropdownMenu}>
-                <div
-                  className={styles.dropdownItem}
-                  onClick={() => navigator("/terms-of-use")}
-                >
-                  İstifadə Şərtləri
-                </div>
-                <div
-                  className={styles.dropdownItem}
-                  onClick={() => navigator("/privacy-policy")}
-                >
-                  Məxfilik Siyasəti
-                </div>
-                <div
-                  className={styles.dropdownItem}
-                  onClick={() => navigator("/copyright")}
-                >
-                  Müəllif Hüquqları
-                </div>
+            {/* Admin panel — yalnız role>=2 üçün */}
+            {store.user.data?.role >= 2 && (
+              <div
+                className={styles.navItem}
+                style={{ color: "#6a1b9a" }}
+                onClick={() => navigator("/admin")}
+              >
+                <AdminPanelSettingsIcon className={styles.navIcon} />
+                <span>Admin panel</span>
               </div>
-            </li>
-            <li
-              className={styles.person}
-              onClick={() => {
-                if (store.user.data) {
-                  navigator("/profile");
-                } else {
-                  navigator("/login");
-                }
-              }}
-              style={
-                window.location.pathname == "/calculator"
-                  ? { color: "#032062", backgroundColor: "white" }
-                  : {}
-              }
-            >
-              <PersonIcon />
-            </li>
-          </ul>
+            )}
+          </nav>
+
+          {/* ── Sağ: user ── */}
+          <div
+            className={styles.userArea}
+            onMouseEnter={() => setShowUserDropdown(true)}
+            onMouseLeave={() => setShowUserDropdown(false)}
+          >
+            <div className={styles.userAvatar}>
+              <PersonIcon className={styles.avatarIcon} />
+            </div>
+            <span className={styles.userName}>{userLabel}</span>
+            <ArrowDropDownIcon className={`${styles.chevron} ${showUserDropdown ? styles.chevronOpen : ""}`} />
+
+            {showUserDropdown && (
+              <div className={`${styles.dropdown} ${styles.userDropdown}`}>
+                {store.user.data ? (
+                  <>
+                    <div className={styles.dropdownLink} onClick={() => navigator("/profile")}>
+                      Profilim
+                    </div>
+                    <div
+                      className={styles.dropdownLink}
+                      onClick={() => {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        store.user.setData(null);
+                        navigator("/");
+                        setShowUserDropdown(false);
+                      }}
+                    >
+                      Çıxış
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.dropdownLink} onClick={() => navigator("/login")}>Daxil ol</div>
+                    <div className={styles.dropdownLink} onClick={() => navigator("/register")}>Qeydiyyat</div>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Mobil */}
+          <MenuIcon
+            className={styles.menuIcon}
+            onClick={() => store.sidebar.setData(!store.sidebar.data)}
+          />
         </div>
-        <MenuIcon
-          onClick={() => {
-            store.sidebar.setData(!store.sidebar.data);
-          }}
-          className={styles.icons}
-        />
-      </div>
-      </div>
+      </header>
       <AdSpace position="header-bottom" />
     </>
   );

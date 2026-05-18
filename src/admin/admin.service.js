@@ -1,216 +1,141 @@
 import { executeQuery, getOne, insert, update, transaction } from '../config/database.js';
+import sessionService from '../sessions/session.service.js';
 
 class AdminService {
-  async getStats() {
-    const sql = `
-      SELECT 
-        (SELECT COUNT(*) FROM users) as totalUsers,
-        (SELECT COUNT(*) FROM pdfs) as totalPdfs,
-        (SELECT COUNT(*) FROM news) as totalNews,
-        (SELECT COUNT(*) FROM subscriptions WHERE status = 'active') as activeSubscriptions,
-        (SELECT COUNT(*) FROM subscriptions) as totalSubscriptions,
-        (SELECT COALESCE(SUM(downloads), 0) FROM pdfs) as totalDownloads
-    `;
-    
-    const stats = await getOne(sql);
+  async getStats(institutionId = null) {
+    let sql;
+    let params;
+
+    if (institutionId) {
+      sql = `
+        SELECT
+          (SELECT COUNT(*) FROM users WHERE institution_id = ?) as totalUsers,
+          (SELECT COUNT(*) FROM pdfs WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)) as totalPdfs,
+          (SELECT COUNT(*) FROM pdfs WHERE status = 'approved' AND uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)) as approvedPdfs,
+          (SELECT COUNT(*) FROM pdfs WHERE status = 'pending' AND uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)) as pendingPdfs,
+          (SELECT COUNT(*) FROM activity_logs WHERE event_type = 'pdf_rejected' AND JSON_EXTRACT(details, '$.uploader_institution_id') = ?) as rejectedPdfs,
+          (SELECT COUNT(*) FROM news) as totalNews,
+          (SELECT COALESCE(SUM(downloads), 0) FROM pdfs WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)) as totalDownloads
+      `;
+      params = [institutionId, institutionId, institutionId, institutionId, institutionId, institutionId];
+    } else {
+      sql = `
+        SELECT
+          (SELECT COUNT(*) FROM users) as totalUsers,
+          (SELECT COUNT(*) FROM pdfs) as totalPdfs,
+          (SELECT COUNT(*) FROM pdfs WHERE status = 'approved') as approvedPdfs,
+          (SELECT COUNT(*) FROM pdfs WHERE status = 'pending') as pendingPdfs,
+          (SELECT COUNT(*) FROM activity_logs WHERE event_type = 'pdf_rejected') as rejectedPdfs,
+          (SELECT COUNT(*) FROM news) as totalNews,
+          (SELECT COALESCE(SUM(downloads), 0) FROM pdfs) as totalDownloads
+      `;
+      params = [];
+    }
+
+    const stats = await getOne(sql, params);
     return stats;
   }
 
-  async getDashboardData() {
-    const stats = await this.getStats();
-    
-    // Real monthly revenue from payments
-    let monthlyRevenue = [];
-    try {
-      monthlyRevenue = await executeQuery(`
-        SELECT 
-          DATE_FORMAT(created_at, '%b') as month,
-          DATE_FORMAT(created_at, '%m') as monthNum,
-          COALESCE(SUM(amount), 0) as amount
-        FROM payments
-        WHERE status = 'completed' OR status = 'success'
-        AND created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
-        GROUP BY DATE_FORMAT(created_at, '%b'), DATE_FORMAT(created_at, '%m')
-        ORDER BY DATE_FORMAT(created_at, '%m')
+  async getDashboardData(institutionId = null) {
+    const stats = await this.getStats(institutionId);
+
+    let categoryStats;
+    if (institutionId) {
+      categoryStats = await executeQuery(`
+        SELECT
+          c.name,
+          COUNT(p.id) as pdfCount,
+          COALESCE(SUM(p.downloads), 0) as totalDownloads,
+          COALESCE(SUM(p.\`reads\`), 0) as totalReads
+        FROM category_pdfs c
+        LEFT JOIN pdfs p ON c.id = p.category_id
+          AND p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)
+        GROUP BY c.id, c.name
+        ORDER BY pdfCount DESC
+      `, [institutionId]);
+    } else {
+      categoryStats = await executeQuery(`
+        SELECT
+          c.name,
+          COUNT(p.id) as pdfCount,
+          COALESCE(SUM(p.downloads), 0) as totalDownloads,
+          COALESCE(SUM(p.\`reads\`), 0) as totalReads
+        FROM category_pdfs c
+        LEFT JOIN pdfs p ON c.id = p.category_id
+        GROUP BY c.id, c.name
+        ORDER BY pdfCount DESC
       `);
-    } catch (error) {
-      console.error('Monthly revenue error:', error);
-      monthlyRevenue = [];
     }
 
-    // Fill missing months with 0
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const last12Months = [];
-    
-    // Son 12 ayı oluştur
-    for (let i = 11; i >= 0; i--) {
-      const date = new Date();
-      date.setMonth(date.getMonth() - i);
-      const month = monthNames[date.getMonth()];
-      
-      const existingData = monthlyRevenue.find(m => m.month === month);
-      last12Months.push({
-        month,
-        amount: existingData ? parseFloat(existingData.amount) : 0
-      });
-    }
-
-    // Category stats
-    const categoryStats = await executeQuery(`
-      SELECT 
-        c.name,
-        COUNT(p.id) as pdfCount,
-        COALESCE(SUM(p.downloads), 0) as totalDownloads
-      FROM category_pdfs c
-      LEFT JOIN pdfs p ON c.id = p.category_id
-      GROUP BY c.id, c.name
-      ORDER BY pdfCount DESC
-    `);
-
-    // Yeni ətraflı statistikalar
-    const detailedStats = await this.getDetailedStats();
+    const detailedStats = await this.getDetailedStats(institutionId);
 
     return {
       ...stats,
-      monthlyRevenue: last12Months,
       categoryStats,
       ...detailedStats
     };
   }
 
-  async getDetailedStats() {
-    // Son 30 gündə yeni istifadəçilər
-    const newUsersLast30Days = await getOne(`
-      SELECT COUNT(*) as count FROM users 
-      WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-    `);
+  async getDetailedStats(institutionId = null) {
+    const instFilter = institutionId ? 'AND institution_id = ?' : '';
+    const pdfInstFilter = institutionId
+      ? 'AND uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)'
+      : '';
+    const p = institutionId ? [institutionId] : [];
 
-    // Son 30 gündə yeni PDF-lər
-    const newPdfsLast30Days = await getOne(`
-      SELECT COUNT(*) as count FROM pdfs 
-      WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-    `);
+    const newUsersLast30Days = await getOne(
+      `SELECT COUNT(*) as count FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${instFilter}`,
+      p
+    );
 
-    // Son 30 gündə yeni xəbərlər
+    const newPdfsLast30Days = await getOne(
+      `SELECT COUNT(*) as count FROM pdfs WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${pdfInstFilter}`,
+      p
+    );
+
     const newNewsLast30Days = await getOne(`
-      SELECT COUNT(*) as count FROM news 
+      SELECT COUNT(*) as count FROM news
       WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
     `);
 
-    // Aktiv xəbərlərin sayı
-    const activeNewsCount = await getOne(`
-      SELECT COUNT(*) as count FROM news
-    `);
+    const activeNewsCount = await getOne(`SELECT COUNT(*) as count FROM news`);
 
-    // Toplam ödənişlər (success status)
-    const totalPayments = await getOne(`
-      SELECT COUNT(*) as count FROM payments 
-      WHERE status = 'success' OR status = 'completed'
-    `);
+    const topPdfs = await executeQuery(
+      `SELECT id, title, downloads FROM pdfs ${institutionId ? 'WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)' : ''} ORDER BY downloads DESC LIMIT 5`,
+      p
+    );
 
-    // Ümumi gəlir (bütün vaxtlar)
-    const totalRevenue = await getOne(`
-      SELECT COALESCE(SUM(amount), 0) as total FROM payments 
-      WHERE status = 'success' OR status = 'completed'
-    `);
+    const topUploaders = await executeQuery(
+      `SELECT u.login, COUNT(p.id) as pdfCount
+       FROM users u
+       JOIN pdfs p ON u.id = p.uploaded_by
+       ${institutionId ? 'WHERE u.institution_id = ?' : ''}
+       GROUP BY u.id, u.login
+       ORDER BY pdfCount DESC
+       LIMIT 10`,
+      p
+    );
 
-    // Bu ayın gəliri
-    const thisMonthRevenue = await getOne(`
-      SELECT COALESCE(SUM(amount), 0) as total FROM payments 
-      WHERE (status = 'success' OR status = 'completed')
-      AND MONTH(created_at) = MONTH(NOW())
-      AND YEAR(created_at) = YEAR(NOW())
-    `);
+    const topByReads = await executeQuery(
+      `SELECT id, title, \`reads\` FROM pdfs ${institutionId ? 'WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)' : ''} ORDER BY \`reads\` DESC LIMIT 5`,
+      p
+    );
 
-    // Keçən ayın gəliri
-    const lastMonthRevenue = await getOne(`
-      SELECT COALESCE(SUM(amount), 0) as total FROM payments 
-      WHERE (status = 'success' OR status = 'completed')
-      AND MONTH(created_at) = MONTH(NOW()) - 1
-      AND YEAR(created_at) = YEAR(NOW())
-    `);
-
-    // Son 7 gündə gəlir
-    const revenueLast7Days = await getOne(`
-      SELECT COALESCE(SUM(amount), 0) as total FROM payments 
-      WHERE (status = 'success' OR status = 'completed')
-      AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-    `);
-
-    // Ən çox yüklənən top 5 PDF
-    const topPdfs = await executeQuery(`
-      SELECT id, title, downloads 
-      FROM pdfs 
-      ORDER BY downloads DESC 
-      LIMIT 5
-    `);
-
-    // Aktiv xidmətlərin sayı
-    const activeServicesCount = await getOne(`
-      SELECT COUNT(*) as count FROM services
-    `);
-
-    // Abunə planları bölgüsü (plan əsasında aktiv abunə sayı)
-    const subscriptionPlanDistribution = await executeQuery(`
-      SELECT 
-        s.plan,
-        COUNT(*) as count,
-        SUM(s.price) as totalRevenue
-      FROM subscriptions s
-      WHERE s.status = 'active' AND s.plan != 'none'
-      GROUP BY s.plan
-    `);
-
-    // Son ödənişlər (son 10)
-    const recentPayments = await executeQuery(`
-      SELECT 
-        p.id,
-        p.amount,
-        p.status,
-        p.type,
-        p.created_at,
-        u.email as user_email,
-        pdf.title as pdf_title
-      FROM payments p
-      LEFT JOIN users u ON p.user_id = u.id
-      LEFT JOIN pdfs pdf ON p.pdf_id = pdf.id
-      ORDER BY p.created_at DESC
-      LIMIT 10
-    `);
-
-    // .edu domaini ilə qeydiyyatdan keçən istifadəçilər
-    const eduDomainUsers = await getOne(`
-      SELECT COUNT(*) as count FROM users 
-      WHERE edu_email LIKE '%.edu%' OR email LIKE '%.edu%'
-    `);
-
-    // Son 30 gündə .edu domaini ilə qeydiyyat
-    const newEduUsersLast30Days = await getOne(`
-      SELECT COUNT(*) as count FROM users 
-      WHERE (edu_email LIKE '%.edu%' OR email LIKE '%.edu%')
-      AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-    `);
+    const timeStats = await sessionService.getTimeStats();
 
     return {
       newUsersLast30Days: newUsersLast30Days.count,
       newPdfsLast30Days: newPdfsLast30Days.count,
       newNewsLast30Days: newNewsLast30Days.count,
       activeNewsCount: activeNewsCount.count,
-      totalPayments: totalPayments.count,
-      totalRevenue: totalRevenue.total,
-      thisMonthRevenue: thisMonthRevenue.total,
-      lastMonthRevenue: lastMonthRevenue.total,
-      revenueLast7Days: revenueLast7Days.total,
       topPdfs,
-      activeServicesCount: activeServicesCount.count,
-      subscriptionPlanDistribution,
-      recentPayments,
-      eduDomainUsers: eduDomainUsers.count,
-      newEduUsersLast30Days: newEduUsersLast30Days.count,
-      // Gəlir artım faizi (bu ay vs keçən ay)
-      revenueGrowthPercent: lastMonthRevenue.total > 0 
-        ? ((thisMonthRevenue.total - lastMonthRevenue.total) / lastMonthRevenue.total * 100).toFixed(1)
-        : 0
+      topByReads,
+      topUploaders,
+      totalSeconds:   Number(timeStats.totalSeconds)  || 0,
+      totalSessions:  Number(timeStats.totalSessions) || 0,
+      anonSessions:   Number(timeStats.anonSessions)  || 0,
+      uniqueUsers:    Number(timeStats.uniqueUsers)   || 0,
+      topByTime:      timeStats.topByTime             || [],
     };
   }
 
@@ -496,11 +421,11 @@ class AdminService {
 
     // Return updated PDF
     return await getOne(`
-      SELECT 
+      SELECT
         p.id,
         p.title,
         p.description,
-        p.language,
+        l.code AS language, l.name AS language_name, l.flag AS language_flag,
         p.price,
         p.downloads,
         p.category_id,
@@ -509,6 +434,7 @@ class AdminService {
         p.updated_at
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
+      LEFT JOIN languages l ON p.language_id = l.id
       WHERE p.id = ?
     `, [pdfId]);
   }

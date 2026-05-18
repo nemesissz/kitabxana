@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, adminLogin, verifyEmail, resendVerificationEmail, forgotPassword, resetPassword } from './auth.controller.js';
+import { register, login, adminLogin } from './auth.controller.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -119,7 +119,7 @@ router.post('/login/admin', adminLogin);
  *               token:
  *                 type: string
  */
-router.post('/verify-email', verifyEmail);
+router.post('/verify-email', (req, res) => res.status(410).json({ status: 'error', message: 'Not available' }));
 
 // GET route for email verification page (when users click email links)
 router.get('/verify-email', async (req, res) => {
@@ -207,7 +207,7 @@ router.get('/verify-email', async (req, res) => {
  *       '404':
  *         description: İstifadəçi tapılmadı
  */
-router.post('/resend-verification', resendVerificationEmail);
+router.post('/resend-verification', (req, res) => res.status(410).json({ status: 'error', message: 'Not available' }));
 
 /**
  * @swagger
@@ -229,7 +229,7 @@ router.post('/resend-verification', resendVerificationEmail);
  *                 type: string
  *                 format: email
  */
-router.post('/forgot-password', forgotPassword);
+router.post('/forgot-password', (req, res) => res.status(410).json({ status: 'error', message: 'Not available' }));
 
 /**
  * @swagger
@@ -254,7 +254,7 @@ router.post('/forgot-password', forgotPassword);
  *                 type: string
  *                 minLength: 6
  */
-router.post('/reset-password', resetPassword);
+router.post('/reset-password', (req, res) => res.status(410).json({ status: 'error', message: 'Not available' }));
 
 // Test endpoint to generate verification token (development only)
 if (process.env.NODE_ENV === 'development') {

@@ -33,18 +33,20 @@ function AddUserPage() {
         .then((response) => {
           store.admin.setData(response.data.data.user);
         })
-        .catch(() => {
-          store.admin.setData(null);
-          localStorage.removeItem("tokenAdmin");
-          localStorage.removeItem("admin");
-          Swal.fire({
-            title: "Giriş xətası",
-            text: "Token etibarsızdır, yenidən daxil olun!",
-            icon: "error",
-            confirmButtonText: "OK",
-          }).then(() => {
-            navigate("/admin/login");
-          });
+        .catch((error) => {
+          if (error.response?.status === 401) {
+            store.admin.setData(null);
+            localStorage.removeItem("tokenAdmin");
+            localStorage.removeItem("admin");
+            Swal.fire({
+              title: "Giriş xətası",
+              text: "Token etibarsızdır, yenidən daxil olun!",
+              icon: "error",
+              confirmButtonText: "OK",
+            }).then(() => {
+              navigate("/admin/login");
+            });
+          }
         });
     }
   }, []);

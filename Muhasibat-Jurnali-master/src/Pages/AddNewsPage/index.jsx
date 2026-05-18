@@ -44,11 +44,13 @@ function AddNewsPage() {
         .then((response) => {
           store.admin.setData(response.data.data.user);
         })
-        .catch(() => {
-          store.admin.setData(null);
-          localStorage.removeItem("tokenAdmin");
-          localStorage.removeItem("admin");
-          navigate("/admin/login");
+        .catch((error) => {
+          if (error.response?.status === 401) {
+            store.admin.setData(null);
+            localStorage.removeItem("tokenAdmin");
+            localStorage.removeItem("admin");
+            navigate("/admin/login");
+          }
         });
     }
   }, []);

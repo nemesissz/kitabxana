@@ -571,14 +571,45 @@
     background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
     color: white;
     box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-    
+
     &:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
       background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
     }
   }
-  
+
+  .rentButton {
+    width: 100%;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+      background: linear-gradient(135deg, #047857 0%, #059669 100%);
+    }
+  }
+
+  .rentButtonGuest {
+    opacity: 0.45;
+    filter: grayscale(40%);
+    cursor: not-allowed;
+    &:hover {
+      transform: none !important;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3) !important;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    }
+  }
+
   .backButton {
     width: 100%;
     background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
@@ -703,4 +734,210 @@
       box-shadow: 0 6px 20px rgba(3, 32, 98, 0.4);
     }
   }
+}
+
+/* ── Kirayə modal ── */
+.rentalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.rentalModal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #0f172a;
+  }
+}
+
+.rentalBook {
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+}
+
+.rentalInst {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 0 0 20px 0;
+}
+
+.rentalLabel {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #475569;
+  margin: 0 0 10px 0;
+}
+
+.durationBtns {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.durationBtn {
+  flex: 1;
+  padding: 10px 0;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+
+  &:hover {
+    border-color: #059669;
+    color: #059669;
+  }
+}
+
+.durationActive {
+  background: #059669;
+  border-color: #059669;
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.rentalActions {
+  display: flex;
+  gap: 10px;
+}
+
+.rentalCancel {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #fff;
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover { background: #f1f5f9; }
+}
+
+.rentalConfirm {
+  flex: 2;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+  &:hover:not(:disabled) { opacity: 0.9; }
+}
+
+/* PDF Preview Section */
+.previewSection {
+  margin-top: 32px;
+
+  .previewTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 16px;
+  }
+}
+
+.previewWrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: #525659;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-height: 900px;
+  overflow-y: hidden;
+}
+
+.previewPage {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  canvas {
+    max-width: 100%;
+    height: auto !important;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+}
+
+.previewFade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 24px;
+}
+
+.previewReadBtn {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #032062 0%, #1e40af 100%);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(3, 32, 98, 0.4);
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.88; }
+}
+
+.previewLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.previewError {
+  color: #94a3b8;
+  padding: 24px;
+  font-size: 0.9rem;
+  text-align: center;
 }

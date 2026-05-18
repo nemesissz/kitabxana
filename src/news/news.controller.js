@@ -14,14 +14,14 @@ export const getAllNews = async (req, res, next) => {
       endDate
     });
 
-    res.status(200).json({
-      status: 'success',
-      data: result
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+        res.status(200).json({
+          status: 'success',
+          data: result
+        });
+      } catch (error) {
+        next(error);
+      }
+    };
 
 export const getNewsById = async (req, res, next) => {
   try {

@@ -1,0 +1,189 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px);
+  background: #f7f7f7;
+  padding: 30px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f1724;
+  margin-bottom: 24px;
+}
+
+/* Filter bar */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    border-color: #334155;
+    color: #0f172a;
+  }
+}
+
+.filterActive {
+  background: #334155;
+  color: #fff;
+  border-color: #334155;
+  &:hover { color: #fff; }
+}
+
+.filterCount {
+  background: rgba(255,255,255,0.25);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 0.78rem;
+}
+
+.filterActive .filterCount {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Table */
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: rgba(0,0,0,0.1) 0 2px 8px;
+  background: #fff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  thead {
+    background: #334155;
+  }
+
+  th {
+    padding: 12px 14px;
+    text-align: left;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+}
+
+.userCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.userLogin {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.88rem;
+}
+
+.userEmail {
+  color: #94a3b8;
+  font-size: 0.78rem;
+}
+
+.bookTitle {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.dates {
+  font-size: 0.82rem;
+  color: #475569;
+  white-space: nowrap;
+}
+
+/* Status chips */
+.chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.pending  { background: #fef3c7; color: #92400e; }
+.approved { background: #dcfce7; color: #166534; }
+.rejected { background: #fee2e2; color: #dc2626; }
+.returned { background: #f1f5f9; color: #64748b; }
+
+/* Action group */
+.actionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 150px;
+}
+
+.dateInput {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #1e293b;
+  background: #f8fafc;
+  outline: none;
+
+  &:focus { border-color: #334155; }
+}
+
+button.btnApprove,
+button.btnReject,
+button.btnReturn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  &:hover { opacity: 0.85; }
+}
+
+.btnApprove { background: #16a34a; color: #fff; }
+.btnReject  { background: #dc2626; color: #fff; }
+.btnReturn  { background: #64748b; color: #fff; }
+
+.emptyMsg {
+  text-align: center;
+  color: #94a3b8;
+  padding: 60px 0;
+  font-size: 1rem;
+}

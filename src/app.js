@@ -24,6 +24,12 @@ import serviceRoutes from './services/service.router.js';
 import cvRoutes from './cvs/cv.router.js';
 import adRoutes from './ads/ad.router.js';
 import activityLogRoutes from './activity-logs/activity-log.router.js';
+import announcementRoutes from './announcements/announcement.router.js';
+import institutionRoutes from './institutions/institution.router.js';
+import settingsRoutes from './settings/settings.router.js';
+import languageRoutes from './languages/language.router.js';
+import sessionRoutes from './sessions/session.router.js';
+import rentalRoutes from './rentals/rental.router.js';
 
 config(); // Load .env variables
 
@@ -192,6 +198,12 @@ app.use('/services', serviceRoutes);
 app.use('/cvs', cvRoutes);
 app.use('/ads', adRoutes);
 app.use('/activity-logs', activityLogRoutes);
+app.use('/announcements', announcementRoutes);
+app.use('/institutions', institutionRoutes);
+app.use('/settings', settingsRoutes);
+app.use('/languages', languageRoutes);
+app.use('/sessions', sessionRoutes);
+app.use('/rentals', rentalRoutes);
 
 // Error logging middleware
 app.use(errorLogger);

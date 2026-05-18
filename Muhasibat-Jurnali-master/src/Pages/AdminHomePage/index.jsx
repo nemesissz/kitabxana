@@ -4,31 +4,32 @@ import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
 import dataContext from "../../Contexts/GlobalState";
 import { useNavigate } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+
+const fmtTime = (s) => {
+  if (!s) return "0 dəq";
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  if (h > 0) return `${h} s ${m} dəq`;
+  return `${m} dəq`;
+};
 
 function AdminHomePage() {
   const store = useContext(dataContext);
   const navigate = useNavigate();
   const [dashboard, setDashboard] = useState(null);
+  const [institutions, setInstitutions] = useState([]);
+  const [selectedInstitution, setSelectedInstitution] = useState("");
+  const [topPdfSort, setTopPdfSort] = useState("downloads");
 
   const tokenAdmin = localStorage.getItem("tokenAdmin");
   const adminID = localStorage.getItem("admin");
-  const calcMonthlyRevenue = () => {
-    let total = 0;
-    dashboard?.monthlyRevenue?.forEach((e) => {
-      total = total + e.amount;
-    });
-    return total;
-  };
+
+  const adminRole = store.admin.data?.role ?? 0;
+  const adminInstitutionId = store.admin.data?.institutionId ?? null;
+  const adminIsMain = institutions.find(i => i.id === adminInstitutionId)?.is_main;
+  const isGlobalScope = institutions.length > 0
+    ? (adminRole >= 4 || (adminInstitutionId && adminIsMain))
+    : adminRole >= 4;
 
   useEffect(() => {
     if (!tokenAdmin || !adminID) {
@@ -42,72 +43,93 @@ function AdminHomePage() {
         headers: { Authorization: `Bearer ${tokenAdmin}` },
       })
       .then((res) => store.admin.setData(res.data.data.user))
-      .catch(() => {
-        store.admin.setData(null);
-        localStorage.removeItem("tokenAdmin");
-        localStorage.removeItem("admin");
-        navigate("/admin/login");
+      .catch((error) => {
+        if (error.response?.status === 401) {
+          store.admin.setData(null);
+          localStorage.removeItem("tokenAdmin");
+          localStorage.removeItem("admin");
+          navigate("/admin/login");
+        }
       });
   }, [tokenAdmin, adminID]);
 
   useEffect(() => {
-    store.loader.setData(true);
-    const fetchData = async () => {
-      try {
-        const [dashboardRes] = await Promise.all([
-          axios.get(Base_Url_Server + "admin/dashboard", {
-            headers: { Authorization: `Bearer ${tokenAdmin}` },
-          }),
-        ]);
-        setDashboard(dashboardRes.data.data);
-      } catch (err) {
-        console.log("Dashboard yüklənmədi:", err);
-      } finally {
-        store.loader.setData(false);
-      }
-    };
-    fetchData();
+    axios
+      .get(Base_Url_Server + "institutions", {
+        headers: { Authorization: `Bearer ${tokenAdmin}` },
+      })
+      .then((r) => setInstitutions(r.data.data.institutions || []))
+      .catch(() => {});
   }, [tokenAdmin]);
-  const chartSetting = {
-    xAxis: [
-      {
-        label: "rainfall (mm)",
-      },
-    ],
-    height: 400,
-    margin: { left: 0 },
-  };
+
+  useEffect(() => {
+    store.loader.setData(true);
+    const params = isGlobalScope && selectedInstitution
+      ? { institutionId: selectedInstitution }
+      : {};
+    axios
+      .get(Base_Url_Server + "admin/dashboard", {
+        headers: { Authorization: `Bearer ${tokenAdmin}` },
+        params,
+      })
+      .then((res) => setDashboard(res.data.data))
+      .catch((err) => console.log("Dashboard yüklənmədi:", err))
+      .finally(() => store.loader.setData(false));
+  }, [tokenAdmin, selectedInstitution]);
 
   return (
     <div className={styles.container}>
+
+      {/* Müəssisə filteri — yalnız global-scope adminlər üçün */}
+      {isGlobalScope && institutions.length > 0 && (
+        <div className={styles.filterBar}>
+          <label className={styles.filterLabel}>Müəssisə:</label>
+          <select
+            className={styles.filterSelect}
+            value={selectedInstitution}
+            onChange={(e) => setSelectedInstitution(e.target.value)}
+          >
+            <option value="">Hamısı</option>
+            {institutions.map((inst) => (
+              <option key={inst.id} value={inst.id}>{inst.name}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {/* Əsas statistikalar */}
       <div className={styles.statsGrid}>
         <div className={styles.statBox}>
           <h3>Ümumi İstifadəçi</h3>
           <p>{dashboard?.totalUsers || 0}</p>
         </div>
         <div className={styles.statBox}>
-          <h3>Aktiv Abunələr</h3>
-          <p>{dashboard?.activeSubscriptions || 0}</p>
-        </div>
-        <div className={styles.statBox}>
-          <h3>Ümumi Abunəlik</h3>
-          <p>{dashboard?.totalSubscriptions || 0}</p>
-        </div>
-        <div className={styles.statBox}>
           <h3>Toplam PDF sayı</h3>
           <p>{dashboard?.totalPdfs || 0}</p>
+        </div>
+        <div className={`${styles.statBox} ${styles.statGreen}`}>
+          <h3>Təsdiqlənmiş PDF</h3>
+          <p>{dashboard?.approvedPdfs || 0}</p>
+        </div>
+        <div className={`${styles.statBox} ${styles.statYellow}`}>
+          <h3>Gözləyən PDF</h3>
+          <p>{dashboard?.pendingPdfs || 0}</p>
+        </div>
+        <div className={`${styles.statBox} ${styles.statRed}`}>
+          <h3>Rədd edilmiş PDF</h3>
+          <p>{dashboard?.rejectedPdfs || 0}</p>
         </div>
         <div className={styles.statBox}>
           <h3>Toplam Yüklənmə</h3>
           <p>{dashboard?.totalDownloads || 0}</p>
         </div>
         <div className={styles.statBox}>
-          <h3>Ümumi Gəlir</h3>
-          <p>{dashboard?.totalRevenue || 0} AZN</p>
+          <h3>Aktiv xəbər sayı</h3>
+          <p>{dashboard?.activeNewsCount || 0}</p>
         </div>
       </div>
 
-      {/* Yeni statistikalar */}
+      {/* Son 30 gün */}
       <div className={styles.statsGrid}>
         <div className={styles.statBox}>
           <h3>Son 30 gündə yeni istifadəçilər</h3>
@@ -121,74 +143,9 @@ function AdminHomePage() {
           <h3>Son 30 gündə yeni xəbərlər</h3>
           <p>{dashboard?.newNewsLast30Days || 0}</p>
         </div>
-        <div className={styles.statBox}>
-          <h3>Aktiv xəbər sayı</h3>
-          <p>{dashboard?.activeNewsCount || 0}</p>
-        </div>
-        <div className={styles.statBox}>
-          <h3>Toplam ödənişlərin sayı</h3>
-          <p>{dashboard?.totalPayments || 0}</p>
-        </div>
-        <div className={styles.statBox}>
-          <h3>Aktiv xidmətlər</h3>
-          <p>{dashboard?.activeServicesCount || 0}</p>
-        </div>
       </div>
 
-      {/* .edu domain statistikaları */}
-      <div className={styles.statsGrid}>
-        <div className={`${styles.statBox} ${styles.eduBox}`}>
-          <h3>🎓 .edu domain istifadəçiləri</h3>
-          <p>{dashboard?.eduDomainUsers || 0}</p>
-        </div>
-        <div className={`${styles.statBox} ${styles.eduBox}`}>
-          <h3>Son 30 gündə .edu qeydiyyat</h3>
-          <p>{dashboard?.newEduUsersLast30Days || 0}</p>
-        </div>
-      </div>
-
-      {/* Gəlir statistikalari */}
-      <div className={styles.revenueSection}>
-        <h2>📊 Gəlir Statistikalari</h2>
-        <div className={styles.revenueGrid}>
-          <div className={styles.revenueBox}>
-            <h3>Bu ayın gəliri</h3>
-            <p className={styles.revenueAmount}>{dashboard?.thisMonthRevenue || 0} AZN</p>
-            {dashboard?.revenueGrowthPercent && (
-              <span className={parseFloat(dashboard.revenueGrowthPercent) >= 0 ? styles.positive : styles.negative}>
-                {dashboard.revenueGrowthPercent > 0 ? '↑' : '↓'} {Math.abs(dashboard.revenueGrowthPercent)}%
-              </span>
-            )}
-          </div>
-          <div className={styles.revenueBox}>
-            <h3>Keçən ayın gəliri</h3>
-            <p className={styles.revenueAmount}>{dashboard?.lastMonthRevenue || 0} AZN</p>
-          </div>
-          <div className={styles.revenueBox}>
-            <h3>Son 7 günün gəliri</h3>
-            <p className={styles.revenueAmount}>{dashboard?.revenueLast7Days || 0} AZN</p>
-          </div>
-        </div>
-      </div>
-      <div className={styles.monthlyStats}>
-        <div className={styles.monthBox}>
-          <h3>Aylıq gəlirlər</h3>
-          <div className={styles.chartWrapper}>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart
-                data={dashboard?.monthlyRevenue}
-                margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip formatter={(v) => [`${v} AZN`, "Məbləğ"]} />
-                <Bar dataKey="amount" fill="#334155" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
+      {/* Kateqoriya statistikaları */}
       <div className={styles.categoryStats}>
         <h3>📚 PDF statistikaları</h3>
         <table className={styles.table}>
@@ -198,6 +155,7 @@ function AdminHomePage() {
               <th>Kateqoriya</th>
               <th>PDF Sayı</th>
               <th>Yüklənmələr</th>
+              <th>Oxunmalar</th>
             </tr>
           </thead>
           <tbody>
@@ -207,30 +165,101 @@ function AdminHomePage() {
                 <td>{cat.name}</td>
                 <td>{cat.pdfCount}</td>
                 <td>{cat.totalDownloads}</td>
+                <td>{cat.totalReads || 0}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Ən çox yüklənən PDF-lər */}
-      {dashboard?.topPdfs && dashboard.topPdfs.length > 0 && (
+      {/* Ən çox yüklənən/oxunan PDF-lər */}
+      {(dashboard?.topPdfs?.length > 0 || dashboard?.topByReads?.length > 0) && (
         <div className={styles.topPdfsSection}>
-          <h3>🔥 Ən çox yüklənən PDF-lər</h3>
+          <div className={styles.topPdfsHeader}>
+            <h3>
+              {topPdfSort === "downloads" ? "🔥 Ən çox yüklənən PDF-lər" : "👁️ Ən çox oxunan PDF-lər"}
+            </h3>
+            <div className={styles.sortToggle}>
+              <button
+                className={`${styles.sortBtn} ${topPdfSort === "downloads" ? styles.sortActive : ""}`}
+                onClick={() => setTopPdfSort("downloads")}
+              >Yüklənmə</button>
+              <button
+                className={`${styles.sortBtn} ${topPdfSort === "reads" ? styles.sortActive : ""}`}
+                onClick={() => setTopPdfSort("reads")}
+              >Oxunma</button>
+            </div>
+          </div>
           <table className={styles.table}>
             <thead>
               <tr>
                 <th>№</th>
                 <th>PDF Başlığı</th>
-                <th>Yüklənmə sayı</th>
+                <th>{topPdfSort === "downloads" ? "Yüklənmə sayı" : "Oxunma sayı"}</th>
               </tr>
             </thead>
             <tbody>
-              {dashboard.topPdfs.map((pdf, i) => (
-                <tr key={pdf.id}>
+              {topPdfSort === "downloads"
+                ? dashboard.topPdfs?.map((pdf, i) => (
+                    <tr key={pdf.id}>
+                      <td>{i + 1}</td>
+                      <td>{pdf.title}</td>
+                      <td>{pdf.downloads}</td>
+                    </tr>
+                  ))
+                : dashboard.topByReads?.map((pdf, i) => (
+                    <tr key={pdf.id}>
+                      <td>{i + 1}</td>
+                      <td>{pdf.title}</td>
+                      <td>{pdf.reads}</td>
+                    </tr>
+                  ))
+              }
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Zaman sərfiyatı statistikası */}
+      <div className={styles.statsGrid}>
+        <div className={styles.statBox}>
+          <h3>🕐 Ümumi Zaman</h3>
+          <p>{fmtTime(dashboard?.totalSeconds)}</p>
+        </div>
+        <div className={styles.statBox}>
+          <h3>🖥️ Unikal Sessiya</h3>
+          <p>{dashboard?.totalSessions || 0}</p>
+        </div>
+        <div className={styles.statBox}>
+          <h3>👤 Anonim Ziyarətçi</h3>
+          <p>{dashboard?.anonSessions || 0}</p>
+        </div>
+        <div className={styles.statBox}>
+          <h3>👥 Login Etmiş</h3>
+          <p>{dashboard?.uniqueUsers || 0}</p>
+        </div>
+      </div>
+
+      {/* Ən çox vaxt keçirən istifadəçilər */}
+      {dashboard?.topByTime && dashboard.topByTime.length > 0 && (
+        <div className={styles.topPdfsSection}>
+          <h3>⏱️ Ən Çox Vaxt Keçirən İstifadəçilər</h3>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>İstifadəçi adı</th>
+                <th>E-poçt</th>
+                <th>Keçirilən vaxt</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dashboard.topByTime.map((u, i) => (
+                <tr key={u.login}>
                   <td>{i + 1}</td>
-                  <td>{pdf.title}</td>
-                  <td>{pdf.downloads}</td>
+                  <td>{u.login}</td>
+                  <td>{u.email}</td>
+                  <td>{fmtTime(u.totalSeconds)}</td>
                 </tr>
               ))}
             </tbody>
@@ -238,30 +267,24 @@ function AdminHomePage() {
         </div>
       )}
 
-      {/* Son ödənişlər */}
-      {dashboard?.recentPayments && dashboard.recentPayments.length > 0 && (
-        <div className={styles.recentPaymentsSection}>
-          <h3>💳 Son Ödənişlər</h3>
+      {/* Ən çox PDF yükləyən istifadəçilər */}
+      {dashboard?.topUploaders && dashboard.topUploaders.length > 0 && (
+        <div className={styles.topPdfsSection}>
+          <h3>📤 Ən çox PDF yükləyən istifadəçilər</h3>
           <table className={styles.table}>
             <thead>
               <tr>
                 <th>№</th>
-                <th>İstifadəçi</th>
-                <th>Məbləğ</th>
-                <th>Tip</th>
-                <th>Tarix</th>
-                <th>Status</th>
+                <th>İstifadəçi adı</th>
+                <th>PDF sayı</th>
               </tr>
             </thead>
             <tbody>
-              {dashboard.recentPayments.map((payment, i) => (
-                <tr key={payment.id}>
+              {dashboard.topUploaders.map((u, i) => (
+                <tr key={u.login}>
                   <td>{i + 1}</td>
-                  <td>{payment.user_email}</td>
-                  <td>{payment.amount} AZN</td>
-                  <td>{payment.type || payment.pdf_title || 'N/A'}</td>
-                  <td>{new Date(payment.created_at).toLocaleDateString('az-AZ')}</td>
-                  <td><span className={payment.status === 'success' ? styles.success : styles.pending}>{payment.status}</span></td>
+                  <td>{u.login}</td>
+                  <td>{u.pdfCount}</td>
                 </tr>
               ))}
             </tbody>
@@ -269,32 +292,6 @@ function AdminHomePage() {
         </div>
       )}
 
-      {/* Abunə planları bölgüsü */}
-      {dashboard?.subscriptionPlanDistribution && dashboard.subscriptionPlanDistribution.length > 0 && (
-        <div className={styles.subscriptionDistribution}>
-          <h3>📊 Abunə Planları Bölgüsü</h3>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>№</th>
-                <th>Plan</th>
-                <th>İstifadəçi sayı</th>
-                <th>Ümumi gəlir</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dashboard.subscriptionPlanDistribution.map((plan, i) => (
-                <tr key={plan.plan}>
-                  <td>{i + 1}</td>
-                  <td>{plan.plan}</td>
-                  <td>{plan.count}</td>
-                  <td>{plan.totalRevenue} AZN</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   );
 }

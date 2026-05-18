@@ -1,24 +1,26 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import styles from "./index.module.scss";
 import HomeIcon from "@mui/icons-material/Home";
-import NewspaperIcon from "@mui/icons-material/Newspaper";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
-import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices";
+import TuneIcon from "@mui/icons-material/Tune";
 import PeopleIcon from "@mui/icons-material/People";
 import dataContext from "../../Contexts/GlobalState";
 import BackpackIcon from "@mui/icons-material/Backpack";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import CategoryIcon from "@mui/icons-material/Category";
-import CloseIcon from "@mui/icons-material/Close";
-import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import HistoryIcon from "@mui/icons-material/History";
 import CampaignIcon from "@mui/icons-material/Campaign";
+import BusinessIcon from "@mui/icons-material/Business";
+import TranslateIcon from "@mui/icons-material/Translate";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 function AdminSidebar() {
   const store = useContext(dataContext);
   const navigate = useNavigate();
-  const [showCategoryMenu, setShowCategoryMenu] = useState(true);
+  const isSuperAdmin = (store.admin.data?.role || 0) >= 4;
+  const isWorker = (store.admin.data?.role || 0) === 2;
+
 
   return (
     <div
@@ -31,7 +33,6 @@ function AdminSidebar() {
             className={styles.title}
             onClick={() => {
               store.adminSideBar.setData(!store.adminSideBar.data);
-              setShowCategoryMenu(true);
             }}
           >
             <BackpackIcon className={styles.icon} />
@@ -44,7 +45,7 @@ function AdminSidebar() {
                 onClick={() => {
                   navigate("/admin");
                   store.adminSideBar.setData(false);
-                  setShowCategoryMenu(true);
+
                 }}
                 style={
                   window.location.pathname === "/admin"
@@ -58,23 +59,7 @@ function AdminSidebar() {
 
               <li
                 onClick={() => {
-                  navigate("/admin/news");
-                  store.adminSideBar.setData(false);
-                  setShowCategoryMenu(true);
-                }}
-                style={
-                  window.location.pathname === "/admin/news"
-                    ? { color: "#2c3e50", backgroundColor: "white" }
-                    : {}
-                }
-              >
-                <NewspaperIcon className={styles.icon} />
-                {store.adminSideBar.data && <span>Xəbərlər</span>}
-              </li>
 
-              <li
-                onClick={() => {
-                  setShowCategoryMenu(true);
                   store.adminSideBar.setData(false);
                   navigate("/admin/library");
                 }}
@@ -88,27 +73,28 @@ function AdminSidebar() {
                 {store.adminSideBar.data && <span>Kitablar</span>}
               </li>
 
-              <li
-                onClick={() => {
-                  navigate("/admin/services");
-                  store.adminSideBar.setData(false);
-                  setShowCategoryMenu(true);
-                }}
-                style={
-                  window.location.pathname === "/admin/services"
-                    ? { color: "#2c3e50", backgroundColor: "white" }
-                    : {}
-                }
-              >
-                <MiscellaneousServicesIcon className={styles.icon} />
-                {store.adminSideBar.data && <span>Servislər</span>}
-              </li>
+              {isSuperAdmin && (
+                <li
+                  onClick={() => {
+                    navigate("/admin/services");
+                    store.adminSideBar.setData(false);
+                  }}
+                  style={
+                    window.location.pathname === "/admin/services"
+                      ? { color: "#2c3e50", backgroundColor: "white" }
+                      : {}
+                  }
+                >
+                  <TuneIcon className={styles.icon} />
+                  {store.adminSideBar.data && <span>Parametrlər</span>}
+                </li>
+              )}
 
               <li
                 onClick={() => {
                   navigate("/admin/users");
                   store.adminSideBar.setData(false);
-                  setShowCategoryMenu(true);
+
                 }}
                 style={
                   window.location.pathname === "/admin/users"
@@ -124,7 +110,7 @@ function AdminSidebar() {
                 onClick={() => {
                   navigate("/admin/history");
                   store.adminSideBar.setData(false);
-                  setShowCategoryMenu(true);
+
                 }}
                 style={
                   window.location.pathname === "/admin/history"
@@ -136,37 +122,83 @@ function AdminSidebar() {
                 {store.adminSideBar.data && <span>Tarixçə</span>}
               </li>
 
-              <li
-                onClick={() => {
-                  navigate("/admin/ads");
-                  store.adminSideBar.setData(false);
-                  setShowCategoryMenu(true);
-                }}
-                style={
-                  window.location.pathname === "/admin/ads"
-                    ? { color: "#2c3e50", backgroundColor: "white" }
-                    : {}
-                }
-              >
-                <CampaignIcon className={styles.icon} />
-                {store.adminSideBar.data && <span>Reklamlar</span>}
-              </li>
+              {!isWorker && (
+                <li
+                  onClick={() => {
+                    navigate("/admin/ads");
+                    store.adminSideBar.setData(false);
+                  }}
+                  style={
+                    window.location.pathname === "/admin/ads"
+                      ? { color: "#2c3e50", backgroundColor: "white" }
+                      : {}
+                  }
+                >
+                  <CampaignIcon className={styles.icon} />
+                  {store.adminSideBar.data && <span>Elanlar</span>}
+                </li>
+              )}
 
               <li
                 onClick={() => {
-                  setShowCategoryMenu(!showCategoryMenu);
-                  store.adminSideBar.setData(true);
-                  console.log(window.location.pathname);
+                  navigate("/admin/categories/books");
+                  store.adminSideBar.setData(false);
                 }}
                 style={
-                  window.location.pathname === "/admin/categories/books" ||
-                  window.location.pathname === "/admin/categories/news"
+                  window.location.pathname === "/admin/categories/books"
                     ? { color: "#2c3e50", backgroundColor: "white" }
                     : {}
                 }
               >
                 <CategoryIcon className={styles.icon} />
                 {store.adminSideBar.data && <span>Kateqoriyalar</span>}
+              </li>
+
+              <li
+                onClick={() => {
+                  navigate("/admin/languages");
+                  store.adminSideBar.setData(false);
+                }}
+                style={
+                  window.location.pathname === "/admin/languages"
+                    ? { color: "#2c3e50", backgroundColor: "white" }
+                    : {}
+                }
+              >
+                <TranslateIcon className={styles.icon} />
+                {store.adminSideBar.data && <span>Dillər</span>}
+              </li>
+
+              {isSuperAdmin && (
+                <li
+                  onClick={() => {
+                    navigate("/admin/institutions");
+                    store.adminSideBar.setData(false);
+                  }}
+                  style={
+                    window.location.pathname === "/admin/institutions"
+                      ? { color: "#2c3e50", backgroundColor: "white" }
+                      : {}
+                  }
+                >
+                  <BusinessIcon className={styles.icon} />
+                  {store.adminSideBar.data && <span>Müəssisələr</span>}
+                </li>
+              )}
+
+              <li
+                onClick={() => {
+                  navigate("/admin/rentals");
+                  store.adminSideBar.setData(false);
+                }}
+                style={
+                  window.location.pathname === "/admin/rentals"
+                    ? { color: "#2c3e50", backgroundColor: "white" }
+                    : {}
+                }
+              >
+                <BookmarkIcon className={styles.icon} />
+                {store.adminSideBar.data && <span>Kirayə Sorğuları</span>}
               </li>
             </ul>
           </div>
@@ -176,6 +208,12 @@ function AdminSidebar() {
           <li
             className={styles.logoutBtn}
             onClick={() => {
+              const tokenAdmin = localStorage.getItem("tokenAdmin");
+              const adminID = localStorage.getItem("admin");
+              if (tokenAdmin && adminID && !localStorage.getItem("token")) {
+                localStorage.setItem("token", tokenAdmin);
+                localStorage.setItem("user", adminID);
+              }
               navigate("/");
             }}
           >
@@ -183,52 +221,6 @@ function AdminSidebar() {
             {store.adminSideBar.data && <span>Sayta qayıt</span>}
           </li>
         </div>
-      </div>
-      <div
-        className={`${styles.categoryPanel} ${
-          showCategoryMenu ? styles.open : ""
-        }`}
-        // style={showCategoryMenu ? { right: "100" } : {right : "-200px"}}
-      >
-        <div className={styles.categoryHeader}>
-          <h3>Kateqoriyalar</h3>
-          <CloseIcon
-            className={styles.closeIcon}
-            onClick={() => {
-              setShowCategoryMenu(true);
-            }}
-          />
-        </div>
-        <ul>
-          <li
-            style={
-              window.location.pathname === "/admin/categories/books"
-                ? { color: "#2c3e50", backgroundColor: "white" }
-                : {}
-            }
-            onClick={() => {
-              navigate("/admin/categories/books");
-              setShowCategoryMenu(true);
-              store.adminSideBar.setData(false);
-            }}
-          >
-            <MenuBookIcon className={styles.icon} /> Kitab kateqoriyaları
-          </li>
-          <li
-            style={
-              window.location.pathname === "/admin/categories/news"
-                ? { color: "#2c3e50", backgroundColor: "white" }
-                : {}
-            }
-            onClick={() => {
-              navigate("/admin/categories/news");
-              setShowCategoryMenu(true);
-              store.adminSideBar.setData(false);
-            }}
-          >
-            <NewspaperIcon className={styles.icon} /> Xəbər kateqoriyaları
-          </li>
-        </ul>
       </div>
     </div>
   );

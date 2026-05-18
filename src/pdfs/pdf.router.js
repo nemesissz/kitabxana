@@ -12,7 +12,10 @@ import {
   submitPdf,
   searchPdfs,
   approvePdf,
-  rejectPdf
+  rejectPdf,
+  incrementReads,
+  getMyReads,
+  getMyDownloads,
 } from './pdf.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { optionalAuthMiddleware } from '../middlewares/optionalAuth.middleware.js';
@@ -99,10 +102,9 @@ router.get('/preview', optionalAuthMiddleware, getPdfsPreview);
  * 200:
  * description: Giriş olan PDF-lər uğurla əldə edildi
  */
-router.get('/my-accessible',
-  authMiddleware,
-  getMyAccessiblePdfs
-);
+router.get('/my-accessible', authMiddleware, getMyAccessiblePdfs);
+router.get('/my-reads',     authMiddleware, getMyReads);
+router.get('/my-downloads', authMiddleware, getMyDownloads);
 
 /**
  * @swagger
@@ -151,7 +153,8 @@ router.get('/:id/check-access',
  * 404:
  * description: PDF tapılmadı
  */
-router.get('/:id/download', authMiddleware, downloadPdf);
+router.get('/:id/download', optionalAuthMiddleware, downloadPdf);
+router.post('/:id/read', optionalAuthMiddleware, incrementReads);
 
 /**
  * @swagger

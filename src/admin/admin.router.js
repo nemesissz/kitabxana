@@ -89,7 +89,7 @@ router.get('/users', authMiddleware, adminMiddleware, getAllUsers);
  * type: string
  * enum: [user, admin]
  */
-router.put('/users/:id/role', authMiddleware, adminMiddleware, updateUserRole);
+router.put('/users/:id/role', authMiddleware, roleCheck(3), updateUserRole);
 
 /**
  * @swagger

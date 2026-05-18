@@ -1,39 +1,36 @@
 import styles from "./index.module.scss";
-import { useState, useEffect } from "react";
-import logo from "./../../Assets/logo.png";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import PhoneIcon from "@mui/icons-material/Phone";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { useNavigate } from "react-router-dom";
 import AdSpace from "../../Components/AdSpace";
 
 function Footer() {
-  const [path, setPath] = useState(false);
   const navigate = useNavigate();
 
-  const handleScroll = () => {
-    window.scrollTo(0, 0);
-  };
-
-  useEffect(() => {
-    setPath(window.location.pathname);
-  }, []);
   return (
     <>
       <AdSpace position="footer-top" />
       <div className={styles.footerStart}>
         <div className={styles.container}>
+
+          {/* Brend + Sosial */}
           <div className={styles.info}>
             <div className={styles.title}>
-              <img src={logo} alt="" />
-              <h3>Mühasibat jurnalı</h3>
+              <LocalLibraryIcon className={styles.logoIcon} />
+              <div className={styles.logoText}>
+                <span className={styles.logoTitle}>MMU Kitabxana</span>
+                <span className={styles.logoSub}>Ağıllı Kitabxana Sistemi</span>
+              </div>
             </div>
             <p className={styles.paragraph}>
-              Vergi və hesabat işləri artıq sizin üçün çətinlik yaratmayacaq.
-              Peşəkar komandamız dəqiq, sürətli və etibarlı xidmətlə daim
-              yanınızdadır.
+              PDF kitablar, xəbərlər və elanlarla həmişə məlumatlı qalın.
+              Mühasibat, vergi və maliyyə sahəsində keyfiyyətli resurslar
+              bir yerdə — pulsuz əlçatan.
             </p>
             <div className={styles.socials}>
               <a href="https://www.instagram.com/muhasibatjurnal" target="_blank" rel="noreferrer" aria-label="Instagram">
@@ -50,84 +47,58 @@ function Footer() {
               </a>
             </div>
           </div>
-          {/* <div className={styles.hr}></div> */}
+
+          {/* Naviqasiya */}
           <div className={styles.navigation}>
             <div className={styles.title}>
               <h3>Naviqasiya</h3>
             </div>
             <ul>
-              <li onClick={() => navigate('/')}>
+              <li onClick={() => navigate("/")}>
                 <ArrowForwardIosIcon className={styles.icon} />
                 Ana səhifə
               </li>
-              <li onClick={() => navigate('/')}>
+              <li onClick={() => navigate("/library")}>
                 <ArrowForwardIosIcon className={styles.icon} />
                 Kitabxana
               </li>
-              <li onClick={() => navigate('/cv-templates')}>
-                <ArrowForwardIosIcon className={styles.icon} />
-                CV Nümunələri
-              </li>
-              <li onClick={() => navigate('/services')}>
-                <ArrowForwardIosIcon className={styles.icon} />
-                Servislər
-              </li>
-              <li onClick={() => navigate('/news')}>
+              <li onClick={() => navigate("/news")}>
                 <ArrowForwardIosIcon className={styles.icon} />
                 Xəbərlər
               </li>
-              <li onClick={() => navigate('/calculator')}>
+              <li onClick={() => navigate("/announcements")}>
                 <ArrowForwardIosIcon className={styles.icon} />
-                Kalkulyator
+                Elanlar
+              </li>
+              <li onClick={() => navigate("/about")}>
+                <ArrowForwardIosIcon className={styles.icon} />
+                Haqqımızda
               </li>
             </ul>
           </div>
-          {/* <div className= {styles.hr}></div> */}
 
-          <div className={styles.security}>
+          {/* Əlaqə */}
+          <div className={styles.contact}>
             <div className={styles.title}>
-              <h3>© Müəllif hüquqları qorunur</h3>
+              <h3>Əlaqə</h3>
+            </div>
+            <div className={styles.contactItem}>
+              <PhoneIcon className={styles.contactIcon} />
+              <span>+994 55 210 85 97</span>
             </div>
             <p className={styles.paragraph}>
-              Hər bir saytın məzmunu – məqalələr, dizayn elementləri, şəkillər,
-              videolar və proqram təminatı – müəlliflik hüququ ilə qorunur və bu
-              materialların icazəsiz istifadəsi qanunsuz hesab olunur.
-            </p>
-             <p className={styles.paragraph}>
-              "Əlaqə nömrəsi: +994 55 210 85 97"
+              Hər bir saytın məzmunu – məqalələr, dizayn elementləri, şəkillər
+              və proqram təminatı – müəlliflik hüququ ilə qorunur.
             </p>
           </div>
 
-          {/* <div className={styles.action}>
-            <div className={styles.title}>
-              <h3>Hərəkət</h3>
-            </div>
-            <ul>
-              <li onClick={handleScroll}>
-                <ArrowForwardIosIcon className={styles.icon} />
-                Başlığa qayıt
-              </li>
-              <li onClick={handleScroll}>
-                <ArrowForwardIosIcon className={styles.icon} />
-                Başlığa qayıt
-              </li>
-              <li onClick={handleScroll}>
-                <ArrowForwardIosIcon className={styles.icon} />
-                Başlığa qayıt
-              </li>
-              <li onClick={handleScroll}>
-                <ArrowForwardIosIcon className={styles.icon} />
-                Başlığa qayıt
-              </li>
-            </ul>
-          </div> */}
         </div>
       </div>
       <a
         href="https://www.instagram.com/reverdigitallab.az?igsh=MTFvamdoOXN1dWxvZg=="
         target="_blank"
+        rel="noreferrer"
         className={styles.footerEnd}
-        // style={path == "/" ? { display: "none" } : {}}
       >
         Developed by Rever Digital Lab
       </a>

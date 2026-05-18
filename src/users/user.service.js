@@ -5,15 +5,20 @@ import activityLog from '../activity-logs/activity-log.service.js';
 const saltRounds = 10;
 
 class UserService {
-  async getAllUsers() {
-    const sql = `
+  async getAllUsers({ scope = 'global', institutionFilter = null, callerInstId = null } = {}) {
+    let sql = `
       SELECT
         u.id,
+        u.login,
         u.email,
         u.role,
+        u.institution_id as institutionId,
         u.is_verified as isVerified,
         u.edu_email as eduEmail,
         u.upload_permission as uploadPermission,
+        u.category_permission as categoryPermission,
+        u.language_permission as languagePermission,
+        u.pdf_review_permission as pdfReviewPermission,
         u.created_at as createdAt,
         u.updated_at as updatedAt,
         p.id as profile_id,
@@ -23,10 +28,38 @@ class UserService {
         p.position as profile_position
       FROM users u
       LEFT JOIN user_profiles p ON u.profile_id = p.id
-      ORDER BY u.created_at DESC
     `;
-    
-    const users = await executeQuery(sql);
+
+    const conditions = [];
+    const params = [];
+
+    if (scope === 'global') {
+      if (institutionFilter) {
+        conditions.push('u.institution_id = ?');
+        params.push(institutionFilter);
+      }
+    } else if (scope === 'main_worker') {
+      // Exclude superadmins
+      conditions.push('u.role < 4');
+      // Exclude managers from main institutions
+      conditions.push(`NOT (u.role >= 3 AND u.institution_id IS NOT NULL AND EXISTS (
+        SELECT 1 FROM institutions i2 WHERE i2.id = u.institution_id AND i2.is_main = 1
+      ))`);
+    } else if (scope === 'nonmain_worker') {
+      // Exclude superadmins
+      conditions.push('u.role < 4');
+      // Only own institution members (role<3) OR users with no institution
+      conditions.push('(u.institution_id IS NULL OR (u.institution_id = ? AND u.role < 3))');
+      params.push(callerInstId);
+    }
+
+    if (conditions.length > 0) {
+      sql += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    sql += ' ORDER BY u.created_at DESC';
+
+    const users = await executeQuery(sql, params);
     
     // Get subscriptions for each user
     for (const user of users) {
@@ -74,12 +107,11 @@ class UserService {
   }
 
   async createUser(data) {
-    const { email, password, role = 1, fullName, phone, company } = data;
+    const { login, password, role = 1, fullName, phone, company } = data;
 
-    // Email-in mövcudluğunu yoxlayırıq
     const existingUser = await getOne(
-      'SELECT id FROM users WHERE email = ?',
-      [email]
+      'SELECT id FROM users WHERE login = ?',
+      [login]
     );
 
     if (existingUser) {
@@ -87,9 +119,6 @@ class UserService {
     }
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    // .edu və .edu.az email yoxlaması
-    const emailLower = email.toLowerCase();
-    const isEduEmail = emailLower.endsWith('.edu') || emailLower.endsWith('.edu.az');
 
     return await transaction(async (connection) => {
       // Create profile first if profile data provided
@@ -104,14 +133,15 @@ class UserService {
 
       // Create user
       const [userResult] = await connection.execute(
-        'INSERT INTO users (email, password, role, is_verified, edu_email, profile_id) VALUES (?, ?, ?, ?, ?, ?)',
-        [email, hashedPassword, role, false, isEduEmail, profileId]
+        'INSERT INTO users (login, password, role, is_verified, edu_email, profile_id) VALUES (?, ?, ?, ?, ?, ?)',
+        [login, hashedPassword, role, true, 0, profileId]
       );
 
       // Get created user with profile
       const [users] = await connection.execute(`
-        SELECT 
+        SELECT
           u.id,
+          u.login,
           u.email,
           u.role,
           u.is_verified as isVerified,
@@ -148,10 +178,10 @@ class UserService {
 
       await activityLog.log({
         eventType: 'user_registered',
-        actorEmail: email,
+        actorEmail: login,
         targetType: 'user',
         targetId: userResult.insertId,
-        details: { email },
+        details: { login },
       });
 
       return user;
@@ -162,11 +192,17 @@ class UserService {
     const sql = `
       SELECT
         u.id,
+        u.login,
         u.email,
         u.role,
+        u.institution_id as institutionId,
+        i.name as institutionName,
         u.is_verified as isVerified,
         u.edu_email as eduEmail,
         u.upload_permission as uploadPermission,
+        u.category_permission as categoryPermission,
+        u.language_permission as languagePermission,
+        u.pdf_review_permission as pdfReviewPermission,
         u.created_at as createdAt,
         u.updated_at as updatedAt,
         p.id as profile_id,
@@ -175,6 +211,7 @@ class UserService {
         p.company as profile_company,
         p.position as profile_position
       FROM users u
+      LEFT JOIN institutions i ON u.institution_id = i.id
       LEFT JOIN user_profiles p ON u.profile_id = p.id
       WHERE u.id = ?
     `;
@@ -210,29 +247,7 @@ class UserService {
       user.subscriptions = subscriptions;
     }
 
-    // Get purchased PDFs - həmişə göstər (subscription yoxlama frontend-də olur)
-    const purchasedPdfs = await executeQuery(`
-      SELECT 
-        p.id,
-        p.title,
-        p.description,
-        p.price,
-        p.file_path as filePath,
-        pay.created_at as purchasedAt,
-        pay.amount as paidAmount
-      FROM payments pay
-      JOIN pdfs p ON pay.pdf_id = p.id
-      WHERE pay.user_id = ? 
-        AND pay.type = 'single-pdf' 
-        AND pay.status = 'success'
-      ORDER BY pay.created_at DESC
-    `, [user.id]);
-    
-    // PDF URL-ni gizlədək - downloadUrl əlavə edək
-    user.purchasedPdfs = (purchasedPdfs || []).map(pdf => ({
-      ...pdf,
-      downloadUrl: `/pdfs/${pdf.id}/download`
-    }));
+    user.purchasedPdfs = [];
     
     if (user.profile_id) {
       user.profile = {
@@ -353,7 +368,7 @@ class UserService {
   }
 
   async deleteUserById(id, deletedByEmail = null) {
-    const existingUser = await getOne('SELECT id, email, profile_id FROM users WHERE id = ?', [id]);
+    const existingUser = await getOne('SELECT id, login, profile_id FROM users WHERE id = ?', [id]);
 
     if (!existingUser) {
       throw new Error('User not found');
@@ -364,7 +379,7 @@ class UserService {
       actorEmail: deletedByEmail,
       targetType: 'user',
       targetId: id,
-      details: { email: existingUser.email },
+      details: { login: existingUser.login },
     });
 
     return await transaction(async (connection) => {
@@ -393,10 +408,24 @@ class UserService {
   }
 
   // Helper method for auth
-  async findUserByEmail(email) {
+  async updatePermissions(userId, { category_permission, language_permission, pdf_review_permission, upload_permission }) {
+    const existing = await getOne('SELECT id FROM users WHERE id = ?', [userId]);
+    if (!existing) throw new Error('User not found');
+    const updates = {};
+    if (category_permission !== undefined) updates.category_permission = category_permission;
+    if (language_permission !== undefined) updates.language_permission = language_permission;
+    if (pdf_review_permission !== undefined) updates.pdf_review_permission = pdf_review_permission;
+    if (upload_permission !== undefined) updates.upload_permission = upload_permission;
+    if (Object.keys(updates).length === 0) return this.findUserById(userId);
+    await update('users', userId, updates);
+    return this.findUserById(userId);
+  }
+
+  async findUserByLogin(login) {
     const sql = `
-      SELECT 
+      SELECT
         u.id,
+        u.login,
         u.email,
         u.password,
         u.role,
@@ -409,10 +438,10 @@ class UserService {
         p.position as profile_position
       FROM users u
       LEFT JOIN user_profiles p ON u.profile_id = p.id
-      WHERE u.email = ?
+      WHERE u.login = ?
     `;
-    
-    const user = await getOne(sql, [email]);
+
+    const user = await getOne(sql, [login]);
     
     if (!user) {
       return null;

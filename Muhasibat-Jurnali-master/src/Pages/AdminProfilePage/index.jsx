@@ -4,23 +4,23 @@ import dataContext from "../../Contexts/GlobalState";
 import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
 import { useNavigate } from "react-router-dom";
+import { ROLE_LABELS } from "../../Constants/roles";
 
 const AdminProfilPage = () => {
   const store = useContext(dataContext);
   const user = store?.admin?.data;
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    email: "",
-    role: "",
-    plan: "",
-    status: "",
-  });
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(false);
+
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [passwordMsg, setPasswordMsg] = useState("");
+
+  const [newLogin, setNewLogin] = useState("");
+  const [loginMsg, setLoginMsg] = useState("");
 
   useEffect(() => {
     const tokenAdmin = localStorage.getItem("tokenAdmin");
@@ -31,33 +31,21 @@ const AdminProfilPage = () => {
     } else {
       axios
         .get(Base_Url_Server + "users/" + adminID, {
-          headers: {
-            Authorization: `Bearer ${tokenAdmin}`,
-          },
+          headers: { Authorization: `Bearer ${tokenAdmin}` },
         })
         .then((response) => {
           store.admin.setData(response.data.data.user);
-          console.log(response.data.data.user);
         })
-        .catch(() => {
-          store.admin.setData(null);
-          localStorage.removeItem("tokenAdmin");
-          localStorage.removeItem("admin");
-          navigate("/admin/login");
+        .catch((error) => {
+          if (error.response?.status === 401) {
+            store.admin.setData(null);
+            localStorage.removeItem("tokenAdmin");
+            localStorage.removeItem("admin");
+            navigate("/admin/login");
+          }
         });
     }
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      setForm({
-        email: user.email || "",
-        role: user.role || "",
-        plan: user.subscriptions?.[0]?.plan || "",
-        status: user.subscriptions?.[0]?.status || "",
-      });
-    }
-  }, [user]);
 
   const handleLogout = () => {
     localStorage.removeItem("tokenAdmin");
@@ -68,34 +56,47 @@ const AdminProfilPage = () => {
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
+    setPasswordMsg("");
     if (!oldPassword || !newPassword || !confirmPassword) {
-      return setMessage("Bütün xanaları doldurun ❗");
+      return setPasswordMsg("Bütün xanaları doldurun");
     }
     if (newPassword !== confirmPassword) {
-      return setMessage("Yeni şifrələr uyğun gəlmir ❌");
+      return setPasswordMsg("Yeni şifrələr uyğun gəlmir");
     }
-
     try {
-      // Server tərəfdə oldPassword yoxlanışı olmalıdır
       await axios.patch(
         `${Base_Url_Server}users/${user.id}`,
-        {
-          password: newPassword,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("tokenAdmin")}`,
-          },
-        }
+        { password: newPassword },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("tokenAdmin")}` } }
       );
-      setMessage("Şifrə uğurla dəyişdirildi 🔒");
+      setPasswordMsg("Şifrə uğurla dəyişdirildi");
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
       setShowPasswordForm(false);
     } catch (error) {
-      console.error(error);
-      setMessage("Şifrə dəyişdirilə bilmədi ❌");
+      setPasswordMsg(error.response?.data?.message || "Şifrə dəyişdirilə bilmədi");
+    }
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setLoginMsg("");
+    if (!newLogin.trim() || newLogin.trim().length < 3) {
+      return setLoginMsg("İstifadəçi adı minimum 3 simvol olmalıdır");
+    }
+    try {
+      const res = await axios.patch(
+        `${Base_Url_Server}users/${user.id}`,
+        { login: newLogin.trim() },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("tokenAdmin")}` } }
+      );
+      store.admin.setData(res.data.data.user);
+      setLoginMsg("İstifadəçi adı uğurla dəyişdirildi");
+      setNewLogin("");
+      setShowLoginForm(false);
+    } catch (error) {
+      setLoginMsg(error.response?.data?.message || "Dəyişdirilə bilmədi");
     }
   };
 
@@ -108,11 +109,11 @@ const AdminProfilPage = () => {
 
         <div className={styles.inputsWrapper}>
           <div className={styles.inputGroup}>
-            <label>Email</label>
+            <label>İstifadəçi adı</label>
             <input
               className={styles.input}
-              type="email"
-              value={form.email}
+              type="text"
+              value={user.login || "—"}
               readOnly
             />
           </div>
@@ -121,31 +122,7 @@ const AdminProfilPage = () => {
             <input
               className={styles.input}
               type="text"
-              value={
-                form.role == 3
-                  ? "Super Admin"
-                  : form.role == 2
-                  ? "Admin"
-                  : "User"
-              }
-              readOnly
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label>Plan</label>
-            <input
-              className={styles.input}
-              type="text"
-              value={form.plan === "none" ? "Yoxdur" : form.plan}
-              readOnly
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label>Status</label>
-            <input
-              className={styles.input}
-              type="text"
-              value={user.isVerified ? "Aktiv" : "Deaktiv"}
+              value={ROLE_LABELS[user.role] || "—"}
               readOnly
             />
           </div>
@@ -155,12 +132,19 @@ const AdminProfilPage = () => {
           <button
             type="button"
             className={styles.button}
+            style={{ background: "#1565c0" }}
+            onClick={() => { setShowLoginForm(v => !v); setLoginMsg(""); }}
+          >
+            {showLoginForm ? "Bağla" : "İstifadəçi adını dəyiş"}
+          </button>
+          <button
+            type="button"
+            className={styles.button}
             style={{ background: "#28a745" }}
-            onClick={() => setShowPasswordForm((prev) => !prev)}
+            onClick={() => { setShowPasswordForm(v => !v); setPasswordMsg(""); }}
           >
             {showPasswordForm ? "Şifrə Formunu Bağla" : "Şifrəni Dəyiş"}
           </button>
-
           <button
             type="button"
             className={styles.button}
@@ -171,6 +155,31 @@ const AdminProfilPage = () => {
           </button>
         </div>
 
+        {/* İstifadəçi adı dəyiş formu */}
+        {showLoginForm && (
+          <form onSubmit={handleLoginSubmit} className={styles.passwordForm}>
+            <div className={styles.inputGroup}>
+              <label>Yeni istifadəçi adı</label>
+              <input
+                type="text"
+                value={newLogin}
+                onChange={(e) => setNewLogin(e.target.value)}
+                placeholder="Yeni istifadəçi adını yazın..."
+                className={styles.input}
+              />
+            </div>
+            {loginMsg && (
+              <p style={{ textAlign: "center", color: loginMsg.includes("uğurla") ? "green" : "#d64545", marginTop: "6px" }}>
+                {loginMsg}
+              </p>
+            )}
+            <button type="submit" className={styles.button} style={{ background: "#1565c0" }}>
+              Yadda saxla
+            </button>
+          </form>
+        )}
+
+        {/* Şifrə dəyiş formu */}
         {showPasswordForm && (
           <form onSubmit={handlePasswordSubmit} className={styles.passwordForm}>
             <div className={styles.inputGroup}>
@@ -203,20 +212,15 @@ const AdminProfilPage = () => {
                 className={styles.input}
               />
             </div>
-            <button
-              type="submit"
-              className={styles.button}
-              style={{ background: "#28a745" }}
-            >
+            {passwordMsg && (
+              <p style={{ textAlign: "center", color: passwordMsg.includes("uğurla") ? "green" : "#d64545", marginTop: "6px" }}>
+                {passwordMsg}
+              </p>
+            )}
+            <button type="submit" className={styles.button} style={{ background: "#28a745" }}>
               Yenilə
             </button>
           </form>
-        )}
-
-        {message && (
-          <p style={{ textAlign: "center", color: "#333", marginTop: "10px" }}>
-            {message}
-          </p>
         )}
       </div>
     </div>

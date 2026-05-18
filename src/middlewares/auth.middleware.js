@@ -26,11 +26,16 @@ export const authMiddleware = async (req, res, next) => {
     req.user = {
       id: user.id,
       userId: user.id, // geriye uyumluluk için
-      email: user.email,
+      login: user.login,
       role: user.role,
+      institutionId: user.institutionId || null,
       isVerified: user.isVerified,
       eduEmail: user.eduEmail,
-      profile: user.profile
+      profile: user.profile,
+      categoryPermission: user.categoryPermission || 'request',
+      languagePermission: user.languagePermission || 'request',
+      pdfReviewPermission: user.pdfReviewPermission || 'none',
+      uploadPermission: user.uploadPermission || 'pending',
     };
 
     next();

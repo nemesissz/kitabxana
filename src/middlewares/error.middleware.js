@@ -32,7 +32,7 @@ export const errorHandler = (err, req, res, next) => {
 
   // Default error response
   console.error('Error:', err);
-  res.status(err.status || 500).json({
+  res.status(err.status || err.statusCode || 500).json({
     status: 'error',
     message: err.message || 'Daxili server xətası'
   });

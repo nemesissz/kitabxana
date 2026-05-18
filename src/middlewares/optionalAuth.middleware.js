@@ -1,41 +1,45 @@
 import { verifyToken } from '../utils/jwt.js';
+import userService from '../users/user.service.js';
 
 /**
- * Optional auth middleware
- * Token varsa user məlumatlarını req.user-ə əlavə edir
- * Token yoxdursa və ya yanlışdırsa, sadəcə next() edir (xəta atmır)
+ * Optional auth middleware — token varsa DB-dən tam user çəkir (institutionId daxil),
+ * token yoxdursa/yanlışdırsa req.user = null saxlayır.
  */
-export const optionalAuthMiddleware = (req, res, next) => {
+export const optionalAuthMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    
-    if (!authHeader) {
-      // Token yoxdur, amma davam et
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       req.user = null;
       return next();
     }
 
     const token = authHeader.split(' ')[1];
-    
     if (!token) {
       req.user = null;
       return next();
     }
 
-    // Token-u verify et
     const decoded = verifyToken(token);
+    const user = await userService.findUserById(decoded.userId || decoded.id);
+
+    if (!user) {
+      req.user = null;
+      return next();
+    }
+
     req.user = {
-      id: decoded.id || decoded.userId,
-      userId: decoded.id || decoded.userId,
-      email: decoded.email,
-      role: decoded.role,
-      hasActiveSubscription: decoded.hasActiveSubscription || false
+      id: user.id,
+      userId: user.id,
+      login: user.login,
+      role: user.role,
+      institutionId: user.institutionId || null,
+      isVerified: user.isVerified,
+      eduEmail: user.eduEmail,
+      hasActiveSubscription: false
     };
 
     next();
   } catch (error) {
-    // Token yanlışdır və ya expire olub, amma davam et
-    console.log('⚠️ Optional auth: Invalid token, continuing without user');
     req.user = null;
     next();
   }

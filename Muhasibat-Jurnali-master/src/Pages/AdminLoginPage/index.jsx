@@ -10,14 +10,13 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 const AdminLoginPage = () => {
   const [pass, setPass] = useState(false);
 
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ login: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const store = useContext(dataContext);
-  const navigate = useNavigate(); // Router istifadə olunur
-  // formReset funksiyası əskik idi
+  const navigate = useNavigate();
   const formReset = () => {
-    setForm({ email: "", password: "" });
+    setForm({ login: "", password: "" });
     setError("");
   };
 
@@ -40,10 +39,12 @@ const AdminLoginPage = () => {
           store.admin.setData(response.data.data.user);
           navigate("/admin");
         })
-        .catch(() => {
-          store.admin.setData(null);
-          localStorage.removeItem("tokenAdmin");
-          localStorage.removeItem("admin");
+        .catch((error) => {
+          if (error.response?.status === 401) {
+            store.admin.setData(null);
+            localStorage.removeItem("tokenAdmin");
+            localStorage.removeItem("admin");
+          }
         });
     }
   }, []);
@@ -87,13 +88,13 @@ const AdminLoginPage = () => {
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <h2 className={styles.title}>Mühasibat Jurnalı</h2>
+        <h2 className={styles.title}>MMU Kitabxana</h2>
         <div className={styles.inputGroup}>
           <input
             placeholder="İstifadəçi adı"
-            id="email"
-            name="email"
-            value={form.email}
+            id="login"
+            name="login"
+            value={form.login}
             onChange={handleChange}
             required
             className={styles.input}

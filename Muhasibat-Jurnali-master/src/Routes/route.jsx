@@ -3,42 +3,34 @@ import NewsPage from "../Pages/NewsPage";
 import MainRoute from "../Pages/MainRoute";
 import LibraryPage from "../Pages/LibraryPage";
 import CategoryLibraryPage from "../Pages/CategoryLibraryPage";
-import CalculatorPage from "../Pages/CalculatorPage";
-import ServicesPage from "../Pages/ServicesPage";
 import HomePage from "../Pages/Homepage";
 import AboutPage from "../Pages/About";
 import AdminHomePage from "../Pages/AdminHomePage";
 import AdminMainRoute from "../Pages/AdminMainRoute";
-import AdminNewsPage from "../Pages/AdminNewsPage";
 import AdminLibraryPage from "../Pages/AdminLibraryPage";
 import AdminServicesPage from "../Pages/AdminServicesPage";
 import AdminUsersPage from "../Pages/AdminUsersPage";
 import AddNewsPage from "../Pages/AddNewsPage";
 import AddBookPage from "../Pages/AddBookPage";
-import AddServicePage from "../Pages/AddServicePage";
 import AddUserPage from "../Pages/AddUserPage";
 import AdminProfilePage from "../Pages/AdminProfilePage";
 import LoginPage from "../Pages/LoginPage";
 import ProfilPage from "../Pages/ProfilPage";
 import AdminLoginPage from "../Pages/AdminLoginPage";
 import RegisterPage from "../Pages/RegisterPage";
+import PdfReaderPage from "../Pages/PdfReaderPage";
 import AdminCategoryPage from "../Pages/AdminCategoryPage";
 import AdminCategoryPagePdfs from "../Pages/AdminCategoryPdfPage";
-import TermsOfUsePage from "../Pages/TermsOfUse";
-import PrivacyPolicyPage from "../Pages/PrivacyPolicy";
-import CopyrightPage from "../Pages/Copyright";
-import PaymentSuccess from "../Pages/PaymentSuccess";
-import PaymentError from "../Pages/PaymentError";
 import PDFDetailPage from "../Pages/PDFDetailPage";
 import NewsDetailPage from "../Pages/NewsDetailPage";
-import ServiceDetailPage from "../Pages/ServiceDetailPage";
-import SubscriptionsPage from "../Pages/SubscriptionsPage";
-import AdminSubscriptionsPage from "../Pages/AdminSubscriptionsPage";
 import AdminHistoryPage from "../Pages/AdminHistoryPage";
 import AdminAdsPage from "../Pages/AdminAdsPage";
-import CVsPage from "../Pages/CVsPage";
 import UserSubmitPdfPage from "../Pages/UserSubmitPdfPage";
 import AllPdfsPage from "../Pages/AllPdfsPage";
+import AnnouncementsPage from "../Pages/AnnouncementsPage";
+import AdminInstitutionsPage from "../Pages/AdminInstitutionsPage";
+import AdminLanguagesPage from "../Pages/AdminLanguagesPage";
+import AdminRentalsPage from "../Pages/AdminRentalsPage";
 
 const router = createBrowserRouter([
   {
@@ -70,18 +62,6 @@ const router = createBrowserRouter([
         element: <AllPdfsPage />,
       },
       {
-        path: "cv-templates",
-        element: <CVsPage />,
-      },
-      {
-        path: "calculator",
-        element: <CalculatorPage />,
-      },
-      {
-        path: "services",
-        element: <ServicesPage />,
-      },
-      {
         path: "about",
         element: <AboutPage />,
       },
@@ -98,34 +78,6 @@ const router = createBrowserRouter([
         element: <ProfilPage />,
       },
       {
-        path: "profile",
-        element: <ProfilPage />,
-      },
-      {
-        path: "term-of-use",
-        element: <TermsOfUsePage />,
-      },
-      {
-        path: "terms-of-use",
-        element: <TermsOfUsePage />,
-      },
-      {
-        path: "privacy-policy",
-        element: <PrivacyPolicyPage />,
-      },
-      {
-        path: "copyright",
-        element: <CopyrightPage />,
-      },
-      {
-        path: "payment/success",
-        element: <PaymentSuccess />,
-      },
-      {
-        path: "payment/error",
-        element: <PaymentError />,
-      },
-      {
         path: "library/:id",
         element: <PDFDetailPage />,
       },
@@ -134,12 +86,8 @@ const router = createBrowserRouter([
         element: <NewsDetailPage />,
       },
       {
-        path: "services/:id",
-        element: <ServiceDetailPage />,
-      },
-      {
-        path: "subscriptions",
-        element: <SubscriptionsPage />,
+        path: "announcements",
+        element: <AnnouncementsPage />,
       },
     ],
   },
@@ -150,10 +98,6 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <AdminHomePage />,
-      },
-      {
-        path: "news",
-        element: <AdminNewsPage />,
       },
       {
         path: "library",
@@ -176,10 +120,6 @@ const router = createBrowserRouter([
         element: <AddBookPage />,
       },
       {
-        path: "add-service",
-        element: <AddServicePage />,
-      },
-      {
         path: "add-user",
         element: <AddUserPage />,
       },
@@ -196,10 +136,6 @@ const router = createBrowserRouter([
         element: <AdminCategoryPagePdfs />,
       },
       {
-        path: "subscriptions",
-        element: <AdminSubscriptionsPage />,
-      },
-      {
         path: "history",
         element: <AdminHistoryPage />,
       },
@@ -207,11 +143,27 @@ const router = createBrowserRouter([
         path: "ads",
         element: <AdminAdsPage />,
       },
+      {
+        path: "institutions",
+        element: <AdminInstitutionsPage />,
+      },
+      {
+        path: "languages",
+        element: <AdminLanguagesPage />,
+      },
+      {
+        path: "rentals",
+        element: <AdminRentalsPage />,
+      },
     ],
   },
   {
     path: "/admin/login",
     element: <AdminLoginPage />,
+  },
+  {
+    path: "/library/:id/read",
+    element: <PdfReaderPage />,
   },
 ]);
 

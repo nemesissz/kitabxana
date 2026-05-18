@@ -7,6 +7,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import CloseIcon from "@mui/icons-material/Close";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
@@ -14,8 +15,8 @@ import Swal from "sweetalert2";
 import Base_Url_Server, { formatServerFilePath } from "../../Constants/baseUrl";
 import dataContext from "../../Contexts/GlobalState";
 import CircularProgress from "@mui/material/CircularProgress";
-
-const LANG_LABELS = { az: "AZ", ru: "RU", en: "EN" };
+import { useLanguages } from "../../Hooks/useLanguages";
+import "flag-icons/css/flag-icons.min.css";
 const STATUS_LABELS = { pending: "Gözləyən", approved: "Qəbul" };
 
 const EMPTY_FILTERS = { category: "", language: "", status: "", uploadedBy: "" };
@@ -23,9 +24,11 @@ const EMPTY_FILTERS = { category: "", language: "", status: "", uploadedBy: "" }
 function AdminLibraryPage() {
   const navigate = useNavigate();
   const store = useContext(dataContext);
+  const { languages } = useLanguages();
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [users, setUsers] = useState([]);
+  const [institutions, setInstitutions] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -37,11 +40,21 @@ function AdminLibraryPage() {
   const filterRef = useRef(null);
   const debounceRef = useRef(null);
 
+  const [selectedIds, setSelectedIds] = useState(new Set());
+
   const [editingBook, setEditingBook] = useState(null);
   const [editData, setEditData] = useState({});
   const [editLoading, setEditLoading] = useState(false);
 
-  useEffect(() => {
+  const adminRole = store.admin.data?.role ?? 0;
+  const adminInstId = store.admin.data?.institutionId ?? null;
+  const adminInst = institutions.find(i => i.id === adminInstId);
+  const pdfReviewPermission = store.admin.data?.pdfReviewPermission || 'none';
+  const canApprovePdfs = adminRole >= 4 || !adminInstId ||
+    (institutions.length > 0 && adminInst?.is_main === true) ||
+    pdfReviewPermission === 'allowed';
+
+  const fetchAdminUser = () => {
     const tokenAdmin = localStorage.getItem("tokenAdmin");
     const adminID = localStorage.getItem("admin");
     if (!tokenAdmin || !adminID) { navigate("/admin/login"); return; }
@@ -49,6 +62,13 @@ function AdminLibraryPage() {
       headers: { Authorization: `Bearer ${tokenAdmin}` },
     }).then((r) => store.admin.setData(r.data.data.user))
       .catch(() => navigate("/admin/login"));
+  };
+
+  useEffect(() => {
+    fetchAdminUser();
+    const onVisible = () => { if (document.visibilityState === "visible") fetchAdminUser(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
   }, []);
 
   useEffect(() => {
@@ -58,6 +78,9 @@ function AdminLibraryPage() {
     const tokenAdmin = localStorage.getItem("tokenAdmin");
     axios.get(Base_Url_Server + "users", { headers: { Authorization: `Bearer ${tokenAdmin}` } })
       .then((r) => setUsers(r.data.data.users || []))
+      .catch(() => {});
+    axios.get(Base_Url_Server + "institutions", { headers: { Authorization: `Bearer ${tokenAdmin}` } })
+      .then((r) => setInstitutions(r.data.data.institutions || []))
       .catch(() => {});
   }, []);
 
@@ -94,7 +117,7 @@ function AdminLibraryPage() {
     }
   }, []);
 
-  useEffect(() => { fetchPdfs(page, search, filters); }, [page]);
+  useEffect(() => { fetchPdfs(page, search, filters); setSelectedIds(new Set()); }, [page]);
 
   const handleSearchChange = (e) => {
     const val = e.target.value;
@@ -113,6 +136,7 @@ function AdminLibraryPage() {
     setFilters(draftFilters);
     setPage(1);
     setFilterOpen(false);
+    setSelectedIds(new Set());
     fetchPdfs(1, search, draftFilters);
   };
 
@@ -121,6 +145,7 @@ function AdminLibraryPage() {
     setDraftFilters(EMPTY_FILTERS);
     setPage(1);
     setFilterOpen(false);
+    setSelectedIds(new Set());
     fetchPdfs(1, search, EMPTY_FILTERS);
   };
 
@@ -131,7 +156,10 @@ function AdminLibraryPage() {
       const cat = categories.find(c => String(c.id) === String(filters.category));
       if (cat) parts.push(cat.name);
     }
-    if (filters.language) parts.push(LANG_LABELS[filters.language] || filters.language);
+    if (filters.language) {
+      const lang = languages.find(l => l.code === filters.language);
+      parts.push(lang ? lang.name : filters.language.toUpperCase());
+    }
     if (filters.status) parts.push(STATUS_LABELS[filters.status] || filters.status);
     if (filters.uploadedBy) {
       const u = users.find(u => String(u.id) === String(filters.uploadedBy));
@@ -202,27 +230,122 @@ function AdminLibraryPage() {
     }
   };
 
+  const toggleSelect = (id) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (books.every(b => selectedIds.has(b.id))) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(books.map(b => b.id)));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    const result = await Swal.fire({
+      title: `${selectedIds.size} PDF silinsin?`,
+      text: "Bu əməliyyat geri alına bilməz.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Bəli, sil!",
+      cancelButtonText: "Ləğv et",
+    });
+    if (!result.isConfirmed) return;
+    const tokenAdmin = localStorage.getItem("tokenAdmin");
+    try {
+      await Promise.all([...selectedIds].map(id =>
+        axios.delete(`${Base_Url_Server}pdfs/${id}`, { headers: { Authorization: `Bearer ${tokenAdmin}` } })
+      ));
+      setSelectedIds(new Set());
+      await fetchPdfs(page, search, filters);
+      Swal.fire({ icon: "success", title: "Silindi!", timer: 1500, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire("Xəta!", err.response?.data?.message || "Silinə bilmədi", "error");
+    }
+  };
+
+  const handleBulkApprove = async () => {
+    const pendingIds = books.filter(b => selectedIds.has(b.id) && b.status === "pending").map(b => b.id);
+    if (!pendingIds.length) return;
+    const tokenAdmin = localStorage.getItem("tokenAdmin");
+    try {
+      await Promise.all(pendingIds.map(id =>
+        axios.patch(`${Base_Url_Server}pdfs/${id}/approve`, {}, { headers: { Authorization: `Bearer ${tokenAdmin}` } })
+      ));
+      setSelectedIds(new Set());
+      await fetchPdfs(page, search, filters);
+      Swal.fire({ icon: "success", title: `${pendingIds.length} PDF təsdiqləndi!`, timer: 1500, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire("Xəta!", err.response?.data?.message || "Xəta baş verdi", "error");
+    }
+  };
+
+  const handleBulkReject = async () => {
+    const pendingIds = books.filter(b => selectedIds.has(b.id) && b.status === "pending").map(b => b.id);
+    if (!pendingIds.length) return;
+    const result = await Swal.fire({
+      title: `${pendingIds.length} PDF rədd edilsin?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Bəli!",
+      cancelButtonText: "Ləğv et",
+    });
+    if (!result.isConfirmed) return;
+    const tokenAdmin = localStorage.getItem("tokenAdmin");
+    try {
+      await Promise.all(pendingIds.map(id =>
+        axios.delete(`${Base_Url_Server}pdfs/${id}/reject`, { headers: { Authorization: `Bearer ${tokenAdmin}` } })
+      ));
+      setSelectedIds(new Set());
+      await fetchPdfs(page, search, filters);
+      Swal.fire({ icon: "success", title: `${pendingIds.length} PDF rədd edildi!`, timer: 1500, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire("Xəta!", err.response?.data?.message || "Xəta baş verdi", "error");
+    }
+  };
+
   const openEdit = (book) => {
     setEditingBook(book);
     setEditData({
       title: book.title || "",
       description: book.description || "",
       category_id: book.category_id || "",
+      _catName: book.category?.name || "",
       language: book.language || "az",
       order_number: book.order_number || "",
       author: book.author || "",
+      isbn: book.isbn || "",
+      publication_year: book.publication_year || "",
+      publisher_location: book.publisher_location || "",
+      foreword: book.foreword || "",
+      price: book.price !== undefined ? String(book.price) : "0",
+      allow_download: book.allow_download !== undefined ? String(book.allow_download) : "1",
+      institution_id: book.institution_id ? String(book.institution_id) : "",
       newCoverImage: null,
     });
   };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    if (editIsBookFiziki && !editData.institution_id) {
+      return Swal.fire("Xəta", "Kitab-fiziki üçün müəssisə seçilməlidir", "error");
+    }
     const tokenAdmin = localStorage.getItem("tokenAdmin");
     setEditLoading(true);
     try {
       const fd = new FormData();
-      const { newCoverImage, ...textFields } = editData;
-      Object.entries(textFields).forEach(([k, v]) => { if (v !== "" && v !== null) fd.append(k, v); });
+      const { newCoverImage, _catName, ...textFields } = editData;
+      const submitFields = editIsBookFiziki ? { ...textFields, allow_download: "0" } : textFields;
+      Object.entries(submitFields).forEach(([k, v]) => { if (v !== "" && v !== null) fd.append(k, v); });
       if (newCoverImage) fd.append("image", newCoverImage);
       await axios.put(`${Base_Url_Server}pdfs/${editingBook.id}`, fd, {
         headers: { Authorization: `Bearer ${tokenAdmin}`, "Content-Type": "multipart/form-data" },
@@ -236,6 +359,17 @@ function AdminLibraryPage() {
       setEditLoading(false);
     }
   };
+
+  const allSelected = books.length > 0 && books.every(b => selectedIds.has(b.id));
+  const someSelected = selectedIds.size > 0;
+  const selectedPendingCount = books.filter(b => selectedIds.has(b.id) && b.status === "pending").length;
+
+  // Edit modalı üçün kateqoriya növü — _catName state ilə saxlanır, find() asılılığı yoxdur
+  const editCatLower = (editData._catName || "").toLowerCase();
+  const editIsBookElektron = editCatLower.includes("kitab-elektron");
+  const editIsBookFiziki   = editCatLower.includes("kitab-fiziki");
+  const editIsBookHerIkisi = editCatLower.includes("kitab-hər ikisi") || editCatLower.includes("kitab-her ikisi");
+  const editIsBookCategory = editIsBookElektron || editIsBookFiziki || editIsBookHerIkisi;
 
   return (
     <div className={styles.page}>
@@ -298,9 +432,9 @@ function AdminLibraryPage() {
                   onChange={(e) => setDraftFilters(p => ({ ...p, language: e.target.value }))}
                 >
                   <option value="">Hamısı</option>
-                  <option value="az">Azərbaycan</option>
-                  <option value="ru">Rus</option>
-                  <option value="en">İngilis</option>
+                  {languages.map(l => (
+                    <option key={l.code} value={l.code}>{l.name}</option>
+                  ))}
                 </select>
               </div>
               <div className={styles.filterRow}>
@@ -341,6 +475,29 @@ function AdminLibraryPage() {
         </p>
       )}
 
+      {/* Bulk action bar */}
+      {someSelected && (
+        <div className={styles.bulkBar}>
+          <span className={styles.bulkCount}>{selectedIds.size} seçilib</span>
+          {selectedPendingCount > 0 && canApprovePdfs && (
+            <>
+              <button className={styles.bulkApproveBtn} onClick={handleBulkApprove}>
+                ✓ Təsdiqlə ({selectedPendingCount})
+              </button>
+              <button className={styles.bulkRejectBtn} onClick={handleBulkReject}>
+                ✕ Rədd et ({selectedPendingCount})
+              </button>
+            </>
+          )}
+          <button className={styles.bulkDelBtn} onClick={handleBulkDelete}>
+            🗑 Sil ({selectedIds.size})
+          </button>
+          <button className={styles.bulkClearBtn} onClick={() => setSelectedIds(new Set())}>
+            Ləğv et
+          </button>
+        </div>
+      )}
+
       {/* Table */}
       <div className={styles.tableWrap}>
         {loading && books.length === 0 ? (
@@ -351,6 +508,14 @@ function AdminLibraryPage() {
           <table className={styles.table}>
             <thead>
               <tr>
+                <th className={styles.checkCell}>
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    onChange={toggleSelectAll}
+                    title="Hamısını seç"
+                  />
+                </th>
                 <th>ID</th>
                 <th>Şəkil</th>
                 <th>Ad</th>
@@ -365,7 +530,14 @@ function AdminLibraryPage() {
             </thead>
             <tbody>
               {books.map((b) => (
-                <tr key={b.id} className={b.status === "pending" ? styles.rowPending : ""}>
+                <tr key={b.id} className={`${b.status === "pending" ? styles.rowPending : ""} ${selectedIds.has(b.id) ? styles.rowSelected : ""}`}>
+                  <td className={styles.checkCell}>
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.has(b.id)}
+                      onChange={() => toggleSelect(b.id)}
+                    />
+                  </td>
                   <td>{b.id}</td>
                   <td>
                     {b.image_path ? (
@@ -380,9 +552,19 @@ function AdminLibraryPage() {
                     )}
                   </td>
                   <td className={styles.titleCell} title={b.title}>{b.title}</td>
-                  <td>{b.category_name || <span className={styles.none}>—</span>}</td>
+                  <td>{b.category?.name || <span className={styles.none}>—</span>}</td>
                   <td>
-                    <span className={styles.langBadge}>{LANG_LABELS[b.language] || b.language || "—"}</span>
+                    {b.language ? (() => {
+                      const flagCode = b.language_flag
+                        || languages.find(l => l.code === b.language)?.flag
+                        || b.language;
+                      return (
+                        <span
+                          className={`fi fi-${flagCode} ${styles.langFlag}`}
+                          title={b.language.toUpperCase()}
+                        />
+                      );
+                    })() : "—"}
                   </td>
                   <td>
                     {b.status === "pending"
@@ -400,7 +582,7 @@ function AdminLibraryPage() {
                   <td className={styles.small}>{b.created_at?.split("T")[0]}</td>
                   <td>
                     <div className={styles.actions}>
-                      {b.status === "pending" && (
+                      {b.status === "pending" && canApprovePdfs && (
                         <>
                           <button className={styles.approveBtn} onClick={() => handleApprove(b.id)} title="Qəbul et">
                             <CheckCircleOutlineIcon fontSize="small" />
@@ -410,6 +592,9 @@ function AdminLibraryPage() {
                           </button>
                         </>
                       )}
+                      <button className={styles.viewBtn} onClick={() => window.open(`/library/${b.id}/read`, "_blank")} title="Bax">
+                        <VisibilityIcon fontSize="small" />
+                      </button>
                       <button className={styles.editBtn} onClick={() => openEdit(b)} title="Redaktə et">
                         <EditIcon fontSize="small" />
                       </button>
@@ -452,7 +637,10 @@ function AdminLibraryPage() {
               <label>Kateqoriya</label>
               <select
                 value={editData.category_id}
-                onChange={(e) => setEditData(p => ({ ...p, category_id: e.target.value, order_number: "", author: "" }))}
+                onChange={(e) => {
+                  const cat = categories.find(c => String(c.id) === e.target.value);
+                  setEditData(p => ({ ...p, category_id: e.target.value, _catName: cat?.name || "" }));
+                }}
               >
                 <option value="">— Kateqoriyasız —</option>
                 {categories.map((c) => (
@@ -465,36 +653,84 @@ function AdminLibraryPage() {
                 value={editData.language}
                 onChange={(e) => setEditData(p => ({ ...p, language: e.target.value }))}
               >
-                <option value="az">Azərbaycan dili</option>
-                <option value="ru">Rus dili</option>
-                <option value="en">İngilis dili</option>
+                {languages.map(l => (
+                  <option key={l.code} value={l.code}>{l.name}</option>
+                ))}
               </select>
 
-              {(() => {
-                const cat = categories.find(c => String(c.id) === String(editData.category_id));
-                const pdfType = cat?.pdf_type;
-                if (pdfType === "kitab") return (
-                  <>
-                    <label>Müəllif</label>
-                    <input type="text" value={editData.author} placeholder="Müəllifin adı"
-                      onChange={(e) => setEditData(p => ({ ...p, author: e.target.value }))} />
-                  </>
-                );
-                if (pdfType === "serecam") return (
-                  <>
-                    <label>Şərəcam №</label>
-                    <input type="text" value={editData.order_number} placeholder="Məs: 15-Ş/2025"
-                      onChange={(e) => setEditData(p => ({ ...p, order_number: e.target.value }))} />
-                  </>
-                );
-                return (
-                  <>
-                    <label>Əmr №</label>
-                    <input type="text" value={editData.order_number} placeholder="Məs: 45/2025"
-                      onChange={(e) => setEditData(p => ({ ...p, order_number: e.target.value }))} />
-                  </>
-                );
-              })()}
+              {(editIsBookFiziki || editIsBookHerIkisi) && (
+                <>
+                  <label>Müəssisə (kitabın saxlanıldığı kitabxana){editIsBookFiziki ? <span style={{ color: "red" }}> *</span> : null}</label>
+                  <select
+                    value={editData.institution_id}
+                    onChange={(e) => setEditData(p => ({ ...p, institution_id: e.target.value }))}
+                    required={editIsBookFiziki}
+                  >
+                    <option value="">— Müəssisə seçin —</option>
+                    {institutions.map(inst => (
+                      <option key={inst.id} value={String(inst.id)}>{inst.name}</option>
+                    ))}
+                  </select>
+                </>
+              )}
+
+              <label>Müəllif (istəyə bağlı)</label>
+              <input type="text" value={editData.author} placeholder="Müəllifin adı"
+                onChange={(e) => setEditData(p => ({ ...p, author: e.target.value }))} />
+
+              {editIsBookCategory && (
+                <>
+                  <label>ISBN (istəyə bağlı)</label>
+                  <input type="text" value={editData.isbn} placeholder="Məs: 978-9952-8283-0-1"
+                    maxLength={20}
+                    onChange={(e) => setEditData(p => ({ ...p, isbn: e.target.value }))} />
+                </>
+              )}
+
+              {!editIsBookCategory && (
+                <>
+                  <label>Nömrə / Sıra № (istəyə bağlı)</label>
+                  <input type="text" value={editData.order_number} placeholder="Məs: 45/2025"
+                    onChange={(e) => setEditData(p => ({ ...p, order_number: e.target.value }))} />
+                </>
+              )}
+
+              {editIsBookCategory && (
+                <>
+                  <label>Nəşr tarixi (istəyə bağlı)</label>
+                  <input type="number" value={editData.publication_year} placeholder="Məs: 2023"
+                    min="1800" max={new Date().getFullYear()}
+                    onChange={(e) => setEditData(p => ({ ...p, publication_year: e.target.value }))} />
+
+                  <label>Nəşriyyat yeri (istəyə bağlı)</label>
+                  <input type="text" value={editData.publisher_location} placeholder="Məs: Bakı"
+                    onChange={(e) => setEditData(p => ({ ...p, publisher_location: e.target.value }))} />
+
+                  <label>Ön söz (istəyə bağlı)</label>
+                  <textarea rows={3} value={editData.foreword} placeholder="Kitabın ön sözü..."
+                    onChange={(e) => setEditData(p => ({ ...p, foreword: e.target.value }))} />
+                </>
+              )}
+
+              {!editIsBookElektron && (
+                <>
+                  <label>Qiymət (0 = pulsuz)</label>
+                  <input type="number" value={editData.price} placeholder="0.00"
+                    min="0" step="0.01"
+                    onChange={(e) => setEditData(p => ({ ...p, price: e.target.value }))} />
+                </>
+              )}
+
+              {!editIsBookFiziki && (
+                <>
+                  <label>Yükləmə icazəsi</label>
+                  <select value={editData.allow_download}
+                    onChange={(e) => setEditData(p => ({ ...p, allow_download: e.target.value }))}>
+                    <option value="1">İcazə var</option>
+                    <option value="0">İcazə yoxdur</option>
+                  </select>
+                </>
+              )}
 
               <label>Təsvir</label>
               <textarea rows={3} value={editData.description}

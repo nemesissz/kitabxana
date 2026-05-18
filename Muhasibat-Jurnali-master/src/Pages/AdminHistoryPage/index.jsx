@@ -46,6 +46,15 @@ function AdminHistoryPage() {
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState("all");
   const [page, setPage] = useState(1);
+  const [institutions, setInstitutions] = useState([]);
+  const [selectedInstitution, setSelectedInstitution] = useState("");
+
+  const adminRole = store.admin.data?.role ?? 0;
+  const adminInstitutionId = store.admin.data?.institutionId ?? null;
+  const adminIsMain = institutions.find(i => i.id === adminInstitutionId)?.is_main;
+  const isGlobalScope = institutions.length > 0
+    ? (adminRole >= 4 || (adminInstitutionId && adminIsMain))
+    : adminRole >= 4;
 
   useEffect(() => {
     const tokenAdmin = localStorage.getItem("tokenAdmin");
@@ -57,12 +66,20 @@ function AdminHistoryPage() {
       .catch(() => navigate("/admin/login"));
   }, []);
 
+  useEffect(() => {
+    const tokenAdmin = localStorage.getItem("tokenAdmin");
+    axios.get(`${Base_Url_Server}institutions`, {
+      headers: { Authorization: `Bearer ${tokenAdmin}` },
+    }).then(r => setInstitutions(r.data.data.institutions || [])).catch(() => {});
+  }, []);
+
   const fetchLogs = useCallback(async (p = 1, eventType = tab) => {
     setLoading(true);
     const tokenAdmin = localStorage.getItem("tokenAdmin");
     try {
       const params = new URLSearchParams({ page: p, limit: 30 });
       if (eventType !== "all") params.append("eventType", eventType);
+      if (isGlobalScope && selectedInstitution) params.append("institutionId", selectedInstitution);
       const res = await axios.get(`${Base_Url_Server}activity-logs?${params}`, {
         headers: { Authorization: `Bearer ${tokenAdmin}` },
       });
@@ -73,12 +90,17 @@ function AdminHistoryPage() {
     } finally {
       setLoading(false);
     }
-  }, [tab]);
+  }, [tab, selectedInstitution, isGlobalScope]);
 
-  useEffect(() => { fetchLogs(page, tab); }, [page, tab]);
+  useEffect(() => { fetchLogs(page, tab); }, [page, tab, selectedInstitution]);
 
   const handleTab = (key) => {
     setTab(key);
+    setPage(1);
+  };
+
+  const handleInstitutionChange = (e) => {
+    setSelectedInstitution(e.target.value);
     setPage(1);
   };
 
@@ -90,6 +112,22 @@ function AdminHistoryPage() {
           <span className={styles.total}>Cəmi {pagination.total} hadisə</span>
         )}
       </div>
+
+      {isGlobalScope && institutions.length > 0 && (
+        <div className={styles.filterBar}>
+          <label className={styles.filterLabel}>Müəssisə:</label>
+          <select
+            className={styles.filterSelect}
+            value={selectedInstitution}
+            onChange={handleInstitutionChange}
+          >
+            <option value="">Hamısı</option>
+            {institutions.map(inst => (
+              <option key={inst.id} value={inst.id}>{inst.name}</option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div className={styles.tabs}>
         {TABS.map(t => (

@@ -103,9 +103,11 @@ function CategoryLibraryPage() {
           store.user.setData(response.data.data.user);
         })
         .catch((error) => {
-          store.user.setData(null);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+          if (error.response?.status === 401) {
+            store.user.setData(null);
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+          }
         });
     }
   }, []);

@@ -2,152 +2,174 @@
   padding: 40px 0;
   width: 100vw;
   background-color: #ffde20;
+
   .container {
-    // border: 1px solid red;
     width: 80%;
-    height: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: start;
+    align-items: flex-start;
     flex-wrap: wrap;
-    .info {
-      padding: 30px 0;
+    gap: 24px;
+  }
+}
+
+/* Brend kolonu */
+.info {
+  padding: 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 280px;
+  color: #032062;
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .logoIcon {
+      font-size: 40px;
+      color: #032062;
+    }
+
+    .logoText {
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      width: 300px;
-      color: #032062;
-      .title {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        img {
-          height: 40px;
-        }
-        h3 {
-          font-size: 24px;
-        }
+
+      .logoTitle {
+        font-size: 18px;
+        font-weight: 700;
+        color: #032062;
+        line-height: 1.2;
       }
-      .socials {
-        display: flex;
-        gap: 12px;
-        margin-top: 8px;
-        a {
-          width: 36px;
-          height: 36px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          background: #032062;
-          color: #fff;
-          text-decoration: none;
-          transition: transform 0.2s ease, opacity 0.2s ease;
-          &:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-          }
-          svg {
-            font-size: 20px;
-          }
-        }
+
+      .logoSub {
+        font-size: 11px;
+        color: #032062aa;
+        letter-spacing: 0.3px;
       }
     }
-    .security {
-      padding: 30px 0;
+  }
 
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 300px;
-      color: #032062;
-      .title {
-        display: flex;
-        // align-items: center;
-        gap: 10px;
+  .paragraph {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #032062cc;
+  }
 
-        h3 {
-          font-size: 20px;
-        }
-      }
-    }
+  .socials {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
 
-    .hr {
-      height: 150px;
-      border: 1px solid #032062;
-    }
+    a {
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #032062;
+      color: #fff;
+      text-decoration: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
 
-    .navigation {
-      padding: 30px 0;
-
-      //   width: 250px;
-      .title {
-        padding-bottom: 15px;
-        color: #032062;
-      }
-      ul {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        list-style: none;
-        color: #032062;
-
-        li {
-          display: flex;
-          // justify-content: center;
-          align-items: center;
-          transition: 0.2s;
-          .icon {
-            font-size: 14px;
-          }
-          cursor: pointer;
-          &:hover {
-            transform: translateX(5px);
-          }
-        }
-      }
-    }
-
-    .action {
-      //   width: 250px;
-      .title {
-        padding-bottom: 15px;
-        color: #032062;
-      }
-      ul {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        list-style: none;
-        color: #032062;
-
-        li {
-          display: flex;
-          // justify-content: center;
-          align-items: center;
-          transition: 0.2s;
-          .icon {
-            font-size: 14px;
-          }
-          cursor: pointer;
-          &:hover {
-            transform: translateX(5px);
-          }
-        }
-      }
+      &:hover { transform: translateY(-2px); opacity: 0.85; }
+      svg { font-size: 20px; }
     }
   }
 }
 
+/* Naviqasiya kolonu */
+.navigation {
+  padding: 30px 0;
+
+  .title {
+    padding-bottom: 15px;
+    color: #032062;
+    h3 { font-size: 20px; }
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+    color: #032062;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: transform 0.15s;
+
+      .icon { font-size: 12px; }
+
+      &:hover { transform: translateX(5px); }
+    }
+  }
+}
+
+/* Əlaqə kolonu */
+.contact {
+  padding: 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 260px;
+  color: #032062;
+
+  .title h3 { font-size: 20px; }
+
+  .contactItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+
+    .contactIcon { font-size: 20px; }
+  }
+
+  .paragraph {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #032062cc;
+  }
+}
+
+/* Alt şerit */
 .footerEnd {
   height: 50px;
-  background-color: #032062 !important;
+  background-color: #032062;
   width: 100vw;
-  color: white;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 14px;
   text-decoration: none;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.85; }
+}
+
+/* Responsiv */
+@media (max-width: 768px) {
+  .footerStart .container {
+    width: 90%;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .info, .navigation, .contact {
+    width: 100%;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(3, 32, 98, 0.15);
+
+    &:last-child { border-bottom: none; }
+  }
 }
