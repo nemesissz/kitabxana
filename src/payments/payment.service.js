@@ -29,7 +29,7 @@ class PaymentService {
    */
   async createPayment(userId, type, amount, pdfId = null, plan = null) {
     const user = await getOne(
-      'SELECT id, email, edu_email FROM users WHERE id = ?',
+      'SELECT id FROM users WHERE id = ?',
       [userId]
     );
 
@@ -61,24 +61,6 @@ class PaymentService {
       }
       finalAmount = pdf.price;
       description = `PDF: ${pdf.title}`;
-      console.log('📄 PDF ödənişi:', { pdfId, originalPrice: pdf.price, userEmail: user.email });
-    }
-
-    // Tələbə endirimi (50%) - .edu və .edu.az email üçün
-    const emailLower = user.email.toLowerCase();
-    const isEduEmail = emailLower.endsWith('.edu') || emailLower.endsWith('.edu.az') || user.edu_email;
-    console.log('🎓 Tələbə endirimi yoxlaması:', { 
-      email: user.email, 
-      emailLower, 
-      edu_email: user.edu_email,
-      isEduEmail,
-      finalAmountBefore: finalAmount 
-    });
-    
-    if (isEduEmail) {
-      finalAmount = finalAmount * 0.5;
-      description += ' (Tələbə endirimi)';
-      console.log('✅ Tələbə endirimi tətbiq edildi:', { finalAmountAfter: finalAmount });
     }
 
     // Unikal order ID yaradırıq
@@ -249,20 +231,16 @@ class PaymentService {
 
       // Əgər ödəniş uğurludursa, subscription və ya PDF access veririk
       if (statusInfo.success) {
-        const user = await getOne('SELECT id, email FROM users WHERE id = ?', [payment.user_id]);
+        const user = await getOne('SELECT id, login FROM users WHERE id = ?', [payment.user_id]);
 
         if (payment.type === 'subscription') {
-          // Subscription planını təyin edirik (payment description-dan və ya amount-dan)
           const plan = this.determinePlanFromPayment(payment);
           await subscriptionService.createSubscription(payment.user_id, plan);
-          console.log('✅ Subscription activated for user:', user.email);
         } else if (payment.type === 'single-pdf' && payment.pdf_id) {
-          await this.grantPdfAccess(user.email, payment.pdf_id);
-          console.log('✅ PDF access granted to user:', user.email);
+          await this.grantPdfAccess(user.login, payment.pdf_id);
         }
 
-        // Email göndəririk
-        await emailService.sendPaymentConfirmation(user.email, payment);
+        await emailService.sendPaymentConfirmation(user.login, payment);
       } else {
         console.log('❌ Payment failed:', statusInfo.message);
       }

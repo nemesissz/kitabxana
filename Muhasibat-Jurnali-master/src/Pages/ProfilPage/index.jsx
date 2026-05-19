@@ -503,7 +503,7 @@ function ProfilPage() {
                       <div key={pdf.id} className={styles.pdfRow} onClick={() => navigate(`/library/${pdf.id}`)}>
                         <div className={styles.pdfThumb}>
                           {pdf.image_path ? (
-                            <img src={pdf.image_path} alt={pdf.title} onError={(e) => { e.target.style.display = "none"; }} />
+                            <img src={formatServerFilePath(pdf.image_path)} alt={pdf.title} onError={(e) => { e.target.style.display = "none"; }} />
                           ) : (
                             <PictureAsPdfIcon style={{ color: "#032062", fontSize: 28 }} />
                           )}
@@ -538,7 +538,7 @@ function ProfilPage() {
                       <div key={pdf.id} className={styles.pdfRow} onClick={() => navigate(`/library/${pdf.id}`)}>
                         <div className={styles.pdfThumb}>
                           {pdf.image_path ? (
-                            <img src={pdf.image_path} alt={pdf.title} onError={(e) => { e.target.style.display = "none"; }} />
+                            <img src={formatServerFilePath(pdf.image_path)} alt={pdf.title} onError={(e) => { e.target.style.display = "none"; }} />
                           ) : (
                             <PictureAsPdfIcon style={{ color: "#032062", fontSize: 28 }} />
                           )}

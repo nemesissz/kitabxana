@@ -140,7 +140,7 @@ export const createPdf = async (req, res, next) => {
     (async () => {
       try {
         // Tüm kullanıcıların email'lerini al
-        const users = await executeQuery('SELECT email FROM users WHERE email IS NOT NULL AND email != ""');
+        const users = await executeQuery('SELECT login FROM users WHERE login IS NOT NULL AND login != ""');
         
         if (users && users.length > 0) {
           console.log(`📧 ${users.length} istifadəçiyə yeni PDF bildirimi göndərilir...`);
@@ -192,12 +192,17 @@ export const getAllPdfs = async (req, res, next) => {
     const {
       page, limit, categoryId, language, search,
       minPrice, maxPrice, startDate, endDate,
-      status, uploadedBy
+      status, uploadedBy, submittedBy
     } = req.query;
 
+    // submittedBy — istifadəçinin öz PDF-lərini görmək üçün
+    const resolvedUploadedBy = uploadedBy || submittedBy || null;
+    const isOwnPdfs = !!submittedBy && req.user && String(submittedBy) === String(req.user.id);
+
     // Admin olmayan istifadəçilərə yalnız qəbul edilmiş PDFlər göstərilir
+    // İSTİSNA: istifadəçi öz PDF-lərini sorğulayırsa bütün statuslar görünür
     const isAdmin = req.user && req.user.role >= 2;
-    const effectiveStatus = status || (!isAdmin ? 'approved' : null);
+    const effectiveStatus = status || ((!isAdmin && !isOwnPdfs) ? 'approved' : null);
 
     let uploaderInstitutionId = null;
     if (isAdmin) {
@@ -212,7 +217,7 @@ export const getAllPdfs = async (req, res, next) => {
     const result = await pdfService.getAllPdfs({
       page, limit, categoryId, language, search,
       minPrice, maxPrice, startDate, endDate,
-      status: effectiveStatus, uploadedBy, uploaderInstitutionId
+      status: effectiveStatus, uploadedBy: resolvedUploadedBy, uploaderInstitutionId
     });
 
     // Check access for each PDF if user is authenticated
@@ -223,22 +228,25 @@ export const getAllPdfs = async (req, res, next) => {
     
     // Real-time subscription yoxla (token-ə etibar etmə) və istifadəçi email-ni al
     if (userId) {
-      const subscription = await getOne(`
-        SELECT id FROM subscriptions
-        WHERE user_id = ? 
-          AND status = 'active' 
-          AND end_date > NOW()
-          AND plan != 'none'
-        LIMIT 1
-      `, [userId]);
-      
-      hasActiveSubscription = !!subscription;
+      try {
+        const subscription = await getOne(`
+          SELECT id FROM subscriptions
+          WHERE user_id = ?
+            AND status = 'active'
+            AND end_date > NOW()
+            AND plan != 'none'
+          LIMIT 1
+        `, [userId]);
+        hasActiveSubscription = !!subscription;
+      } catch (_) {
+        hasActiveSubscription = false;
+      }
       console.log(`🔍 User ${userId} subscription check:`, hasActiveSubscription ? 'ACTIVE' : 'NO SUBSCRIPTION');
       
       // İstifadəçi email-ni al (indirim üçün)
-      const user = await getOne('SELECT email FROM users WHERE id = ?', [userId]);
+      const user = await getOne('SELECT login FROM users WHERE id = ?', [userId]);
       if (user) {
-        userEmail = user.email;
+        userEmail = user.login;
       }
     }
     
@@ -382,9 +390,9 @@ export const getPdfById = async (req, res, next) => {
     console.log('📄 getPdfById - userId:', userId, 'pdfId:', id);
     
     if (userId) {
-      const user = await getOne('SELECT email FROM users WHERE id = ?', [userId]);
+      const user = await getOne('SELECT login FROM users WHERE id = ?', [userId]);
       if (user) {
-        userEmail = user.email;
+        userEmail = user.login;
       }
       
       // Access yoxla
@@ -583,7 +591,7 @@ export const approvePdf = async (req, res, next) => {
   try {
     const { id } = req.params;
     await assertCanApprovePdfs(req.user, Number(id));
-    const pdf = await pdfService.approvePdf(Number(id), req.user?.email);
+    const pdf = await pdfService.approvePdf(Number(id), req.user?.login);
     res.status(200).json({ status: 'success', data: { pdf } });
   } catch (error) {
     if (error.message === 'forbidden') {
@@ -600,7 +608,7 @@ export const rejectPdf = async (req, res, next) => {
   try {
     const { id } = req.params;
     await assertCanApprovePdfs(req.user, Number(id));
-    await pdfService.rejectPdf(Number(id), req.user?.email);
+    await pdfService.rejectPdf(Number(id), req.user?.login);
     res.status(200).json({ status: 'success', message: 'PDF rejected and deleted' });
   } catch (error) {
     if (error.message === 'forbidden') {
@@ -616,7 +624,7 @@ export const rejectPdf = async (req, res, next) => {
 export const deletePdf = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await pdfService.deletePdf(Number(id), req.user?.email);
+    await pdfService.deletePdf(Number(id), req.user?.login);
 
     res.status(200).json({
       status: 'success',
@@ -776,8 +784,8 @@ export const searchPdfs = async (req, res, next) => {
     const userId = req.user?.id;
     let userEmail = null;
     if (userId) {
-      const user = await getOne('SELECT email FROM users WHERE id = ?', [userId]);
-      if (user) userEmail = user.email;
+      const user = await getOne('SELECT login FROM users WHERE id = ?', [userId]);
+      if (user) userEmail = user.login;
     }
 
     const transformedPdfs = result.pdfs.map(pdf => {
@@ -818,9 +826,9 @@ export const getPdfsPreview = async (req, res, next) => {
     let userEmail = null;
     const userId = req.user?.id;
     if (userId) {
-      const user = await getOne('SELECT email FROM users WHERE id = ?', [userId]);
+      const user = await getOne('SELECT login FROM users WHERE id = ?', [userId]);
       if (user) {
-        userEmail = user.email;
+        userEmail = user.login;
       }
     }
 

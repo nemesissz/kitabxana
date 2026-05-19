@@ -10,11 +10,9 @@ class UserService {
       SELECT
         u.id,
         u.login,
-        u.email,
         u.role,
         u.institution_id as institutionId,
         u.is_verified as isVerified,
-        u.edu_email as eduEmail,
         u.upload_permission as uploadPermission,
         u.category_permission as categoryPermission,
         u.language_permission as languagePermission,
@@ -63,16 +61,20 @@ class UserService {
     
     // Get subscriptions for each user
     for (const user of users) {
-      const subscriptions = await executeQuery(`
-        SELECT s.id, s.plan, s.status, s.start_date as startDate, s.end_date as endDate, 
-               s.price, s.created_at as createdAt
-        FROM subscriptions s
-        JOIN user_subscriptions us ON s.id = us.subscription_id
-        WHERE us.user_id = ? 
-        ORDER BY s.created_at DESC
-      `, [user.id]);
-      
-      // If no subscriptions, return default subscription structure
+      let subscriptions = [];
+      try {
+        subscriptions = await executeQuery(`
+          SELECT s.id, s.plan, s.status, s.start_date as startDate, s.end_date as endDate,
+                 s.price, s.created_at as createdAt
+          FROM subscriptions s
+          JOIN user_subscriptions us ON s.id = us.subscription_id
+          WHERE us.user_id = ?
+          ORDER BY s.created_at DESC
+        `, [user.id]);
+      } catch (_) {
+        subscriptions = [];
+      }
+
       if (subscriptions.length === 0) {
         user.subscriptions = [{
           id: null,
@@ -133,8 +135,8 @@ class UserService {
 
       // Create user
       const [userResult] = await connection.execute(
-        'INSERT INTO users (login, password, role, is_verified, edu_email, profile_id) VALUES (?, ?, ?, ?, ?, ?)',
-        [login, hashedPassword, role, true, 0, profileId]
+        'INSERT INTO users (login, password, role, is_verified, profile_id) VALUES (?, ?, ?, ?, ?)',
+        [login, hashedPassword, role, true, profileId]
       );
 
       // Get created user with profile
@@ -142,10 +144,8 @@ class UserService {
         SELECT
           u.id,
           u.login,
-          u.email,
           u.role,
           u.is_verified as isVerified,
-          u.edu_email as eduEmail,
           u.created_at as createdAt,
           u.updated_at as updatedAt,
           p.id as profile_id,
@@ -193,12 +193,10 @@ class UserService {
       SELECT
         u.id,
         u.login,
-        u.email,
         u.role,
         u.institution_id as institutionId,
         i.name as institutionName,
         u.is_verified as isVerified,
-        u.edu_email as eduEmail,
         u.upload_permission as uploadPermission,
         u.category_permission as categoryPermission,
         u.language_permission as languagePermission,
@@ -222,17 +220,21 @@ class UserService {
       throw new Error('User not found');
     }
 
-    // Get subscriptions
-    const subscriptions = await executeQuery(`
-      SELECT s.id, s.plan, s.status, s.start_date as startDate, s.end_date as endDate, 
-             s.price, s.created_at as createdAt
-      FROM subscriptions s
-      JOIN user_subscriptions us ON s.id = us.subscription_id
-      WHERE us.user_id = ? 
-      ORDER BY s.created_at DESC
-    `, [user.id]);
-    
-    // If no subscriptions, return default subscription structure
+    // Get subscriptions (wrapped in try-catch so missing tables don't break auth)
+    let subscriptions = [];
+    try {
+      subscriptions = await executeQuery(`
+        SELECT s.id, s.plan, s.status, s.start_date as startDate, s.end_date as endDate,
+               s.price, s.created_at as createdAt
+        FROM subscriptions s
+        JOIN user_subscriptions us ON s.id = us.subscription_id
+        WHERE us.user_id = ?
+        ORDER BY s.created_at DESC
+      `, [user.id]);
+    } catch (_) {
+      subscriptions = [];
+    }
+
     if (subscriptions.length === 0) {
       user.subscriptions = [{
         id: null,
@@ -305,8 +307,6 @@ class UserService {
           let dbField = key;
           if (key === 'isVerified') {
             dbField = 'is_verified';
-          } else if (key === 'eduEmail') {
-            dbField = 'edu_email';
           }
           
           updateFields.push(`${dbField} = ?`);
@@ -393,18 +393,21 @@ class UserService {
 
   // Check if user has active subscription
   async checkActiveSubscription(userId) {
-    const subscription = await getOne(`
-      SELECT s.* 
-      FROM subscriptions s
-      WHERE s.user_id = ? 
-        AND s.status = 'active' 
-        AND s.end_date > NOW()
-        AND s.plan != 'none'
-      ORDER BY s.end_date DESC
-      LIMIT 1
-    `, [userId]);
-
-    return !!subscription;
+    try {
+      const subscription = await getOne(`
+        SELECT s.*
+        FROM subscriptions s
+        WHERE s.user_id = ?
+          AND s.status = 'active'
+          AND s.end_date > NOW()
+          AND s.plan != 'none'
+        ORDER BY s.end_date DESC
+        LIMIT 1
+      `, [userId]);
+      return !!subscription;
+    } catch (_) {
+      return false;
+    }
   }
 
   // Helper method for auth
@@ -426,11 +429,9 @@ class UserService {
       SELECT
         u.id,
         u.login,
-        u.email,
         u.password,
         u.role,
         u.is_verified as isVerified,
-        u.edu_email as eduEmail,
         p.id as profile_id,
         p.full_name as profile_fullName,
         p.phone as profile_phone,

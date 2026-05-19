@@ -2,6 +2,19 @@ import { executeQuery, getOne, insert, update, deleteRecord } from '../config/da
 import activityLog from '../activity-logs/activity-log.service.js';
 import settingsService from '../settings/settings.service.js';
 
+// Cache: pdfs.institution_id sütununun mövcudluğunu bir dəfə yoxla
+let _hasInstitutionId = null;
+async function checkInstitutionIdColumn() {
+  if (_hasInstitutionId !== null) return _hasInstitutionId;
+  try {
+    await getOne('SELECT institution_id FROM pdfs LIMIT 1');
+    _hasInstitutionId = true;
+  } catch (_) {
+    _hasInstitutionId = false;
+  }
+  return _hasInstitutionId;
+}
+
 class PdfService {
   async getAllPdfs(filters = {}) {
     const {
@@ -99,6 +112,8 @@ class PdfService {
       queryParams
     );
 
+    const hasInstitutionId = await checkInstitutionIdColumn();
+
     // Get paginated PDFs with category details
     const query = `
       SELECT
@@ -109,9 +124,9 @@ class PdfService {
         p.order_number, p.author, p.isbn, p.status,
         p.publication_year, p.publisher_location, p.allow_download,
         p.uploaded_by, p.created_at, p.updated_at,
-        p.institution_id,
+        ${hasInstitutionId ? 'p.institution_id,' : ''}
         c.name as category_name,
-        u.email as uploader_email
+        u.login as uploader_email
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
       LEFT JOIN languages l ON p.language_id = l.id
@@ -120,7 +135,7 @@ class PdfService {
       ORDER BY p.created_at DESC
       LIMIT ${validLimit} OFFSET ${offset}
     `;
-    
+
     const pdfs = await executeQuery(query, queryParams);
     
     return {
@@ -151,40 +166,23 @@ class PdfService {
   }
 
   async getPdfById(id) {
+    const hasInstitutionId = await checkInstitutionIdColumn();
+
     const query = `
       SELECT
-        p.id,
-        p.title,
-        p.description,
-        p.table_of_contents,
-        l.code AS language,
-        l.name AS language_name,
-        l.flag AS language_flag,
-        p.file_path,
-        p.cover_image_path AS image_path,
-        p.cover_image_path,
-        p.content_images_paths,
-        p.price,
-        p.downloads,
-        p.category_id,
-        p.author,
-        p.isbn,
-        p.order_number,
-        p.publication_year,
-        p.publisher_location,
-        p.allow_download,
-        p.foreword,
-        p.uploaded_by,
-        p.status,
-        p.created_at,
-        p.updated_at,
-        p.institution_id,
-        c.name as category_name,
-        inst.name as institution_name
+        p.id, p.title, p.description, p.table_of_contents,
+        l.code AS language, l.name AS language_name, l.flag AS language_flag,
+        p.file_path, p.cover_image_path AS image_path, p.cover_image_path,
+        p.content_images_paths, p.price, p.downloads, p.category_id,
+        p.author, p.isbn, p.order_number, p.publication_year,
+        p.publisher_location, p.allow_download, p.foreword,
+        p.uploaded_by, p.status, p.created_at, p.updated_at,
+        ${hasInstitutionId ? 'p.institution_id, inst.name as institution_name,' : ''}
+        c.name as category_name
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
       LEFT JOIN languages l ON p.language_id = l.id
-      LEFT JOIN institutions inst ON p.institution_id = inst.id
+      ${hasInstitutionId ? 'LEFT JOIN institutions inst ON p.institution_id = inst.id' : ''}
       WHERE p.id = ?
     `;
     const pdf = await getOne(query, [id]);
@@ -418,8 +416,8 @@ class PdfService {
       };
 
     } catch (error) {
-      console.error('Error checking PDF access:', error);
-      throw error;
+      console.error('Error checking PDF access:', error.message);
+      return { hasAccess: false, accessType: null, message: 'PDF-ə giriş üçün abunə olun' };
     }
   }
 
@@ -501,8 +499,8 @@ class PdfService {
       };
 
     } catch (error) {
-      console.error('Error getting accessible PDFs:', error);
-      throw error;
+      console.error('Error getting accessible PDFs:', error.message);
+      return { accessType: 'none', subscription: null, pdfs: [] };
     }
   }
 
@@ -598,10 +596,10 @@ class PdfService {
 
     // PDF yükləmə hadisəsini qeyd et
     if (uploaded_by) {
-      const uploader = await getOne('SELECT email FROM users WHERE id = ?', [uploaded_by]);
+      const uploader = await getOne('SELECT login FROM users WHERE id = ?', [uploaded_by]);
       await activityLog.log({
         eventType: 'pdf_uploaded',
-        actorEmail: uploader?.email || null,
+        actorEmail: uploader?.login || null,
         targetType: 'pdf',
         targetId: pdfId,
         details: { title: created.title, status: pdfData.status },

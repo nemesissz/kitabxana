@@ -40,9 +40,10 @@ export const authMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(401).json({
-      status: 'error',
-      message: 'Token etibarsızdır'
-    });
+    if (error.message === 'Invalid token' || error.message === 'No token provided') {
+      return res.status(401).json({ status: 'error', message: 'Token etibarsızdır' });
+    }
+    console.error('AuthMiddleware error:', error.message);
+    return res.status(500).json({ status: 'error', message: 'Server xətası' });
   }
 };

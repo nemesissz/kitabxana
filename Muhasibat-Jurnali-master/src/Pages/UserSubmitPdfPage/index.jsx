@@ -87,6 +87,13 @@ function UserSubmitPdfPage() {
       .catch(() => {});
   }, []);
 
+  const selectedCatName = categories.find((c) => String(c.id) === String(formData.category_id))?.name || "";
+  const catNameLower = selectedCatName.toLowerCase();
+  const isBookElektron = catNameLower.includes("kitab-elektron");
+  const isBookFiziki   = catNameLower.includes("kitab-fiziki");
+  const isBookHerIkisi = catNameLower.includes("kitab-hər ikisi") || catNameLower.includes("kitab-her ikisi");
+  const isBookCategory = isBookElektron || isBookFiziki || isBookHerIkisi;
+
   useEffect(() => {
     if (isBookFiziki || isBookHerIkisi) {
       axios.get(Base_Url_Server + "institutions/public")
@@ -94,13 +101,6 @@ function UserSubmitPdfPage() {
         .catch(() => {});
     }
   }, [isBookFiziki, isBookHerIkisi]);
-
-  const selectedCatName = categories.find((c) => String(c.id) === String(formData.category_id))?.name || "";
-  const catNameLower = selectedCatName.toLowerCase();
-  const isBookElektron = catNameLower.includes("kitab-elektron");
-  const isBookFiziki   = catNameLower.includes("kitab-fiziki");
-  const isBookHerIkisi = catNameLower.includes("kitab-hər ikisi") || catNameLower.includes("kitab-her ikisi");
-  const isBookCategory = isBookElektron || isBookFiziki || isBookHerIkisi;
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

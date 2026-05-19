@@ -49,31 +49,32 @@ class ActivityLogService {
 
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
-    const total = (await getOne(`SELECT COUNT(*) as cnt FROM activity_logs ${where}`, params))?.cnt || 0;
+    try {
+      const total = (await getOne(`SELECT COUNT(*) as cnt FROM activity_logs ${where}`, params))?.cnt || 0;
 
-    const logs = await executeQuery(
-      `SELECT id, event_type, actor_email, target_type, target_id, details, created_at
-       FROM activity_logs ${where}
-       ORDER BY created_at DESC
-       LIMIT ${validLimit} OFFSET ${offset}`,
-      params
-    );
+      const logs = await executeQuery(
+        `SELECT id, event_type, actor_email, target_type, target_id, details, created_at
+         FROM activity_logs ${where}
+         ORDER BY created_at DESC
+         LIMIT ${validLimit} OFFSET ${offset}`,
+        params
+      );
 
-    // details JSON string-dən parse et
-    const parsed = logs.map(l => ({
-      ...l,
-      details: l.details ? (() => { try { return JSON.parse(l.details); } catch { return {}; } })() : {},
-    }));
+      const parsed = logs.map(l => ({
+        ...l,
+        details: l.details ? (() => { try { return JSON.parse(l.details); } catch { return {}; } })() : {},
+      }));
 
-    return {
-      logs: parsed,
-      pagination: {
-        current_page: validPage,
-        per_page: validLimit,
-        total,
-        total_pages: Math.ceil(total / validLimit),
-      },
-    };
+      return {
+        logs: parsed,
+        pagination: { current_page: validPage, per_page: validLimit, total, total_pages: Math.ceil(total / validLimit) },
+      };
+    } catch (_) {
+      return {
+        logs: [],
+        pagination: { current_page: validPage, per_page: validLimit, total: 0, total_pages: 0 },
+      };
+    }
   }
 }
 

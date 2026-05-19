@@ -115,9 +115,9 @@ export const getPlanPrices = async (req, res, next) => {
     // İstifadəçi email-ni al (indirim üçün)
     let userEmail = null;
     if (req.user?.id) {
-      const user = await getOne('SELECT email FROM users WHERE id = ?', [req.user.id]);
+      const user = await getOne('SELECT login FROM users WHERE id = ?', [req.user.id]);
       if (user) {
-        userEmail = user.email;
+        userEmail = user.login;
       }
     }
 

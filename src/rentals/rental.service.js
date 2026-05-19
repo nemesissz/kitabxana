@@ -24,7 +24,7 @@ class RentalService {
 
   async _getRentalById(id) {
     return await getOne(
-      `SELECT r.*, p.title AS pdf_title, u.email AS user_email, u.login AS user_login,
+      `SELECT r.*, p.title AS pdf_title, u.login AS user_email, u.login AS user_login,
               i.name AS institution_name
        FROM book_rentals r
        JOIN pdfs p ON r.pdf_id = p.id
@@ -37,7 +37,7 @@ class RentalService {
 
   async getRentalsForInstitution(institutionId) {
     return await executeQuery(
-      `SELECT r.*, p.title AS pdf_title, u.email AS user_email, u.login AS user_login,
+      `SELECT r.*, p.title AS pdf_title, u.login AS user_email, u.login AS user_login,
               i.name AS institution_name
        FROM book_rentals r
        JOIN pdfs p ON r.pdf_id = p.id
@@ -51,7 +51,7 @@ class RentalService {
 
   async getAllRentals() {
     return await executeQuery(
-      `SELECT r.*, p.title AS pdf_title, u.email AS user_email, u.login AS user_login,
+      `SELECT r.*, p.title AS pdf_title, u.login AS user_email, u.login AS user_login,
               i.name AS institution_name
        FROM book_rentals r
        JOIN pdfs p ON r.pdf_id = p.id

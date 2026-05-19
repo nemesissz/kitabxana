@@ -20,6 +20,12 @@ function AdminHomePage() {
   const [institutions, setInstitutions] = useState([]);
   const [selectedInstitution, setSelectedInstitution] = useState("");
   const [topPdfSort, setTopPdfSort] = useState("downloads");
+  const [timeScope, setTimeScope] = useState("all");
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const monthStr = new Date().toISOString().slice(0, 7);
+  const [selectedDay, setSelectedDay] = useState(todayStr);
+  const [selectedMonth, setSelectedMonth] = useState(monthStr);
+  const [periodData, setPeriodData] = useState(null);
 
   const tokenAdmin = localStorage.getItem("tokenAdmin");
   const adminID = localStorage.getItem("admin");
@@ -54,6 +60,7 @@ function AdminHomePage() {
   }, [tokenAdmin, adminID]);
 
   useEffect(() => {
+    if (!tokenAdmin) return;
     axios
       .get(Base_Url_Server + "institutions", {
         headers: { Authorization: `Bearer ${tokenAdmin}` },
@@ -63,6 +70,7 @@ function AdminHomePage() {
   }, [tokenAdmin]);
 
   useEffect(() => {
+    if (!tokenAdmin) return;
     store.loader.setData(true);
     const params = isGlobalScope && selectedInstitution
       ? { institutionId: selectedInstitution }
@@ -76,6 +84,20 @@ function AdminHomePage() {
       .catch((err) => console.log("Dashboard yüklənmədi:", err))
       .finally(() => store.loader.setData(false));
   }, [tokenAdmin, selectedInstitution]);
+
+  useEffect(() => {
+    if (!tokenAdmin) return;
+    if (timeScope !== "today" && timeScope !== "month") return;
+    const period = timeScope === "today" ? "day" : "month";
+    const value  = timeScope === "today" ? selectedDay : selectedMonth;
+    axios
+      .get(Base_Url_Server + "sessions/stats/period", {
+        headers: { Authorization: `Bearer ${tokenAdmin}` },
+        params: { period, value },
+      })
+      .then((res) => setPeriodData(res.data.data))
+      .catch(() => setPeriodData(null));
+  }, [tokenAdmin, timeScope, selectedDay, selectedMonth]);
 
   return (
     <div className={styles.container}>
@@ -220,52 +242,96 @@ function AdminHomePage() {
         </div>
       )}
 
-      {/* Zaman sərfiyatı statistikası */}
-      <div className={styles.statsGrid}>
-        <div className={styles.statBox}>
-          <h3>🕐 Ümumi Zaman</h3>
-          <p>{fmtTime(dashboard?.totalSeconds)}</p>
+      {/* Zaman statistikası — tab seçici */}
+      <div className={styles.timeStatBlock}>
+        <div className={styles.timeScopeHeader}>
+          <div className={styles.timeScopeTabs}>
+            {[["all","🕐 Ümumi"],["today","📅 Bu gün"],["month","📆 Bu ay"]].map(([val, label]) => (
+              <button
+                key={val}
+                className={`${styles.timeScopeBtn} ${timeScope === val ? styles.timeScopeActive : ""}`}
+                onClick={() => { setTimeScope(val); setPeriodData(null); }}
+              >{label}</button>
+            ))}
+          </div>
+          {timeScope === "today" && (
+            <input
+              type="date"
+              className={styles.periodPicker}
+              value={selectedDay}
+              max={todayStr}
+              onChange={(e) => setSelectedDay(e.target.value)}
+            />
+          )}
+          {timeScope === "month" && (
+            <input
+              type="month"
+              className={styles.periodPicker}
+              value={selectedMonth}
+              max={monthStr}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+            />
+          )}
         </div>
-        <div className={styles.statBox}>
-          <h3>🖥️ Unikal Sessiya</h3>
-          <p>{dashboard?.totalSessions || 0}</p>
-        </div>
-        <div className={styles.statBox}>
-          <h3>👤 Anonim Ziyarətçi</h3>
-          <p>{dashboard?.anonSessions || 0}</p>
-        </div>
-        <div className={styles.statBox}>
-          <h3>👥 Login Etmiş</h3>
-          <p>{dashboard?.uniqueUsers || 0}</p>
-        </div>
+
+        {(() => {
+          const d = timeScope === "all"
+            ? dashboard
+            : (periodData || (timeScope === "today" ? dashboard?.todayStats : dashboard?.monthStats));
+          return (
+            <>
+              <div className={styles.statsGrid}>
+                <div className={styles.statBox}><h3>Ümumi Vaxt</h3><p>{fmtTime(d?.totalSeconds)}</p></div>
+                <div className={styles.statBox}><h3>Sessiya Sayı</h3><p>{d?.totalSessions || 0}</p></div>
+                <div className={styles.statBox}><h3>Anonim Ziyarətçi</h3><p>{d?.anonSessions || 0}</p></div>
+                <div className={styles.statBox}><h3>Login Etmiş</h3><p>{d?.uniqueUsers || 0}</p></div>
+              </div>
+              {d?.topByTime?.length > 0 && (
+                <table className={styles.table} style={{ marginTop: 12 }}>
+                  <thead>
+                    <tr><th>№</th><th>İstifadəçi</th><th>Vaxt</th></tr>
+                  </thead>
+                  <tbody>
+                    {d.topByTime.map((u, i) => (
+                      <tr key={u.login}>
+                        <td>{i + 1}</td><td>{u.login}</td><td>{fmtTime(u.totalSeconds)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </>
+          );
+        })()}
       </div>
 
-      {/* Ən çox vaxt keçirən istifadəçilər */}
-      {dashboard?.topByTime && dashboard.topByTime.length > 0 && (
+      {/* Son 30 günün gündəlik statistikası */}
+      {dashboard?.dailyChart && dashboard.dailyChart.length > 0 && (
         <div className={styles.topPdfsSection}>
-          <h3>⏱️ Ən Çox Vaxt Keçirən İstifadəçilər</h3>
+          <h3>📊 Son 30 Günün Gündəlik Statistikası</h3>
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>№</th>
-                <th>İstifadəçi adı</th>
-                <th>E-poçt</th>
-                <th>Keçirilən vaxt</th>
+                <th>Tarix</th>
+                <th>Vaxt</th>
+                <th>Sessiya</th>
+                <th>Login Etmiş</th>
               </tr>
             </thead>
             <tbody>
-              {dashboard.topByTime.map((u, i) => (
-                <tr key={u.login}>
-                  <td>{i + 1}</td>
-                  <td>{u.login}</td>
-                  <td>{u.email}</td>
-                  <td>{fmtTime(u.totalSeconds)}</td>
+              {dashboard.dailyChart.map((row) => (
+                <tr key={row.day}>
+                  <td>{String(row.day).slice(0, 10)}</td>
+                  <td>{fmtTime(row.totalSeconds)}</td>
+                  <td>{row.sessions}</td>
+                  <td>{row.uniqueUsers}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
+
 
       {/* Ən çox PDF yükləyən istifadəçilər */}
       {dashboard?.topUploaders && dashboard.topUploaders.length > 0 && (

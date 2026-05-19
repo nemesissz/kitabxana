@@ -3,68 +3,92 @@ import sessionService from '../sessions/session.service.js';
 
 class AdminService {
   async getStats(institutionId = null) {
-    let sql;
-    let params;
+    const safe = async (fn) => { try { return await fn(); } catch (_) { return null; } };
 
-    if (institutionId) {
-      sql = `
-        SELECT
-          (SELECT COUNT(*) FROM users WHERE institution_id = ?) as totalUsers,
-          (SELECT COUNT(*) FROM pdfs WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)) as totalPdfs,
-          (SELECT COUNT(*) FROM pdfs WHERE status = 'approved' AND uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)) as approvedPdfs,
-          (SELECT COUNT(*) FROM pdfs WHERE status = 'pending' AND uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)) as pendingPdfs,
-          (SELECT COUNT(*) FROM activity_logs WHERE event_type = 'pdf_rejected' AND JSON_EXTRACT(details, '$.uploader_institution_id') = ?) as rejectedPdfs,
-          (SELECT COUNT(*) FROM news) as totalNews,
-          (SELECT COALESCE(SUM(downloads), 0) FROM pdfs WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)) as totalDownloads
-      `;
-      params = [institutionId, institutionId, institutionId, institutionId, institutionId, institutionId];
-    } else {
-      sql = `
-        SELECT
-          (SELECT COUNT(*) FROM users) as totalUsers,
-          (SELECT COUNT(*) FROM pdfs) as totalPdfs,
-          (SELECT COUNT(*) FROM pdfs WHERE status = 'approved') as approvedPdfs,
-          (SELECT COUNT(*) FROM pdfs WHERE status = 'pending') as pendingPdfs,
-          (SELECT COUNT(*) FROM activity_logs WHERE event_type = 'pdf_rejected') as rejectedPdfs,
-          (SELECT COUNT(*) FROM news) as totalNews,
-          (SELECT COALESCE(SUM(downloads), 0) FROM pdfs) as totalDownloads
-      `;
-      params = [];
-    }
+    const instFilter = institutionId
+      ? 'uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)'
+      : null;
+    const p = institutionId ? [institutionId] : [];
 
-    const stats = await getOne(sql, params);
-    return stats;
+    const [totalUsers, totalPdfs, approvedPdfs, pendingPdfs, rejectedPdfs, totalNews, totalDownloads] =
+      await Promise.all([
+        safe(() => getOne(
+          institutionId
+            ? 'SELECT COUNT(*) as v FROM users WHERE institution_id = ?'
+            : 'SELECT COUNT(*) as v FROM users',
+          p
+        )),
+        safe(() => getOne(
+          institutionId
+            ? `SELECT COUNT(*) as v FROM pdfs WHERE ${instFilter}`
+            : 'SELECT COUNT(*) as v FROM pdfs',
+          p
+        )),
+        safe(() => getOne(
+          institutionId
+            ? `SELECT COUNT(*) as v FROM pdfs WHERE status = 'approved' AND ${instFilter}`
+            : "SELECT COUNT(*) as v FROM pdfs WHERE status = 'approved'",
+          p
+        )),
+        safe(() => getOne(
+          institutionId
+            ? `SELECT COUNT(*) as v FROM pdfs WHERE status = 'pending' AND ${instFilter}`
+            : "SELECT COUNT(*) as v FROM pdfs WHERE status = 'pending'",
+          p
+        )),
+        safe(() => getOne(
+          institutionId
+            ? "SELECT COUNT(*) as v FROM activity_logs WHERE event_type = 'pdf_rejected' AND JSON_EXTRACT(details, '$.uploader_institution_id') = ?"
+            : "SELECT COUNT(*) as v FROM activity_logs WHERE event_type = 'pdf_rejected'",
+          p
+        )),
+        safe(() => getOne('SELECT COUNT(*) as v FROM news', [])),
+        safe(() => getOne(
+          institutionId
+            ? `SELECT COALESCE(SUM(downloads), 0) as v FROM pdfs WHERE ${instFilter}`
+            : 'SELECT COALESCE(SUM(downloads), 0) as v FROM pdfs',
+          p
+        )),
+      ]);
+
+    return {
+      totalUsers:     Number(totalUsers?.v)     || 0,
+      totalPdfs:      Number(totalPdfs?.v)      || 0,
+      approvedPdfs:   Number(approvedPdfs?.v)   || 0,
+      pendingPdfs:    Number(pendingPdfs?.v)     || 0,
+      rejectedPdfs:   Number(rejectedPdfs?.v)   || 0,
+      totalNews:      Number(totalNews?.v)       || 0,
+      totalDownloads: Number(totalDownloads?.v)  || 0,
+    };
   }
 
   async getDashboardData(institutionId = null) {
     const stats = await this.getStats(institutionId);
 
-    let categoryStats;
-    if (institutionId) {
-      categoryStats = await executeQuery(`
-        SELECT
-          c.name,
-          COUNT(p.id) as pdfCount,
-          COALESCE(SUM(p.downloads), 0) as totalDownloads,
-          COALESCE(SUM(p.\`reads\`), 0) as totalReads
-        FROM category_pdfs c
-        LEFT JOIN pdfs p ON c.id = p.category_id
-          AND p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)
-        GROUP BY c.id, c.name
-        ORDER BY pdfCount DESC
-      `, [institutionId]);
-    } else {
-      categoryStats = await executeQuery(`
-        SELECT
-          c.name,
-          COUNT(p.id) as pdfCount,
-          COALESCE(SUM(p.downloads), 0) as totalDownloads,
-          COALESCE(SUM(p.\`reads\`), 0) as totalReads
-        FROM category_pdfs c
-        LEFT JOIN pdfs p ON c.id = p.category_id
-        GROUP BY c.id, c.name
-        ORDER BY pdfCount DESC
-      `);
+    let categoryStats = [];
+    try {
+      if (institutionId) {
+        categoryStats = await executeQuery(`
+          SELECT c.name, COUNT(p.id) as pdfCount,
+            COALESCE(SUM(p.downloads), 0) as totalDownloads,
+            COALESCE(SUM(p.\`reads\`), 0) as totalReads
+          FROM category_pdfs c
+          LEFT JOIN pdfs p ON c.id = p.category_id
+            AND p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)
+          GROUP BY c.id, c.name ORDER BY pdfCount DESC
+        `, [institutionId]);
+      } else {
+        categoryStats = await executeQuery(`
+          SELECT c.name, COUNT(p.id) as pdfCount,
+            COALESCE(SUM(p.downloads), 0) as totalDownloads,
+            COALESCE(SUM(p.\`reads\`), 0) as totalReads
+          FROM category_pdfs c
+          LEFT JOIN pdfs p ON c.id = p.category_id
+          GROUP BY c.id, c.name ORDER BY pdfCount DESC
+        `);
+      }
+    } catch (_) {
+      categoryStats = [];
     }
 
     const detailedStats = await this.getDetailedStats(institutionId);
@@ -83,70 +107,64 @@ class AdminService {
       : '';
     const p = institutionId ? [institutionId] : [];
 
-    const newUsersLast30Days = await getOne(
-      `SELECT COUNT(*) as count FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${instFilter}`,
-      p
-    );
+    const safe = async (fn) => { try { return await fn(); } catch (_) { return null; } };
 
-    const newPdfsLast30Days = await getOne(
-      `SELECT COUNT(*) as count FROM pdfs WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${pdfInstFilter}`,
-      p
-    );
+    const newUsersLast30Days = await safe(() => getOne(
+      `SELECT COUNT(*) as count FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${instFilter}`, p
+    ));
 
-    const newNewsLast30Days = await getOne(`
-      SELECT COUNT(*) as count FROM news
-      WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-    `);
+    const newPdfsLast30Days = await safe(() => getOne(
+      `SELECT COUNT(*) as count FROM pdfs WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${pdfInstFilter}`, p
+    ));
 
-    const activeNewsCount = await getOne(`SELECT COUNT(*) as count FROM news`);
+    const newNewsLast30Days = await safe(() => getOne(
+      `SELECT COUNT(*) as count FROM news WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)`
+    ));
 
-    const topPdfs = await executeQuery(
-      `SELECT id, title, downloads FROM pdfs ${institutionId ? 'WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)' : ''} ORDER BY downloads DESC LIMIT 5`,
-      p
-    );
+    const activeNewsCount = await safe(() => getOne(`SELECT COUNT(*) as count FROM news`));
 
-    const topUploaders = await executeQuery(
+    const topPdfs = await safe(() => executeQuery(
+      `SELECT id, title, downloads FROM pdfs ${institutionId ? 'WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)' : ''} ORDER BY downloads DESC LIMIT 5`, p
+    )) || [];
+
+    const topUploaders = await safe(() => executeQuery(
       `SELECT u.login, COUNT(p.id) as pdfCount
-       FROM users u
-       JOIN pdfs p ON u.id = p.uploaded_by
+       FROM users u JOIN pdfs p ON u.id = p.uploaded_by
        ${institutionId ? 'WHERE u.institution_id = ?' : ''}
-       GROUP BY u.id, u.login
-       ORDER BY pdfCount DESC
-       LIMIT 10`,
-      p
-    );
+       GROUP BY u.id, u.login ORDER BY pdfCount DESC LIMIT 10`, p
+    )) || [];
 
-    const topByReads = await executeQuery(
-      `SELECT id, title, \`reads\` FROM pdfs ${institutionId ? 'WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)' : ''} ORDER BY \`reads\` DESC LIMIT 5`,
-      p
-    );
+    const topByReads = await safe(() => executeQuery(
+      `SELECT id, title, \`reads\` FROM pdfs ${institutionId ? 'WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)' : ''} ORDER BY \`reads\` DESC LIMIT 5`, p
+    )) || [];
 
     const timeStats = await sessionService.getTimeStats();
 
     return {
-      newUsersLast30Days: newUsersLast30Days.count,
-      newPdfsLast30Days: newPdfsLast30Days.count,
-      newNewsLast30Days: newNewsLast30Days.count,
-      activeNewsCount: activeNewsCount.count,
+      newUsersLast30Days: newUsersLast30Days?.count ?? 0,
+      newPdfsLast30Days:  newPdfsLast30Days?.count  ?? 0,
+      newNewsLast30Days:  newNewsLast30Days?.count   ?? 0,
+      activeNewsCount:    activeNewsCount?.count     ?? 0,
       topPdfs,
       topByReads,
       topUploaders,
-      totalSeconds:   Number(timeStats.totalSeconds)  || 0,
-      totalSessions:  Number(timeStats.totalSessions) || 0,
-      anonSessions:   Number(timeStats.anonSessions)  || 0,
-      uniqueUsers:    Number(timeStats.uniqueUsers)   || 0,
-      topByTime:      timeStats.topByTime             || [],
+      totalSeconds:  Number(timeStats.totalSeconds)  || 0,
+      totalSessions: Number(timeStats.totalSessions) || 0,
+      anonSessions:  Number(timeStats.anonSessions)  || 0,
+      uniqueUsers:   Number(timeStats.uniqueUsers)   || 0,
+      topByTime:     timeStats.topByTime             || [],
+      todayStats:    timeStats.today                 || { totalSeconds: 0, totalSessions: 0, anonSessions: 0, uniqueUsers: 0 },
+      monthStats:    timeStats.thisMonth             || { totalSeconds: 0, totalSessions: 0, anonSessions: 0, uniqueUsers: 0 },
+      dailyChart:    timeStats.dailyChart            || [],
     };
   }
 
   async getAllUsers(filters = {}) {
     let sql = `
-      SELECT 
+      SELECT
         u.id,
-        u.email,
         u.role,
         u.is_verified as isVerified,
-        u.edu_email as eduEmail,
         u.created_at as createdAt,
         u.updated_at as updatedAt,
         p.id as profile_id,
@@ -171,13 +189,8 @@ class AdminService {
       params.push(filters.isVerified);
     }
 
-    if (filters.eduEmail !== undefined) {
-      conditions.push('u.edu_email = ?');
-      params.push(filters.eduEmail);
-    }
-
     if (filters.search) {
-      conditions.push('(u.email LIKE ? OR p.full_name LIKE ?)');
+      conditions.push('(u.login LIKE ? OR p.full_name LIKE ?)');
       params.push(`%${filters.search}%`, `%${filters.search}%`);
     }
 
@@ -191,15 +204,20 @@ class AdminService {
     
     // Get subscriptions for each user
     for (const user of users) {
-      const subscriptions = await executeQuery(`
-        SELECT id, plan, status, start_date as startDate, end_date as endDate, 
-               price, created_at as createdAt
-        FROM subscriptions 
-        WHERE user_id = ? 
-        ORDER BY created_at DESC
-      `, [user.id]);
-      
-      user.subscriptions = subscriptions;
+      let subscriptions = [];
+      try {
+        subscriptions = await executeQuery(`
+          SELECT id, plan, status, start_date as startDate, end_date as endDate,
+                 price, created_at as createdAt
+          FROM subscriptions
+          WHERE user_id = ?
+          ORDER BY created_at DESC
+        `, [user.id]);
+      } catch (_) {
+        subscriptions = [];
+      }
+
+      user.subscriptions = subscriptions.length > 0 ? subscriptions : [{ id: null, plan: 'none', status: null, startDate: null, endDate: null, price: null, createdAt: null }];
       user.profile = user.profile_id ? {
         id: user.profile_id,
         fullName: user.profile_fullName,
@@ -352,23 +370,22 @@ class AdminService {
   }
 
   async getAllSubscriptions() {
-    const subscriptions = await executeQuery(`
-      SELECT 
-        s.id,
-        s.plan,
-        s.price,
-        s.status,
-        s.start_date as startDate,
-        s.end_date as endDate,
-        s.created_at as createdAt,
-        u.id as user_id,
-        u.email as user_email,
-        p.full_name as user_fullName
-      FROM subscriptions s
-      JOIN users u ON s.user_id = u.id
-      LEFT JOIN user_profiles p ON u.profile_id = p.id
-      ORDER BY s.created_at DESC
-    `);
+    let subscriptions = [];
+    try {
+      subscriptions = await executeQuery(`
+        SELECT
+          s.id, s.plan, s.price, s.status,
+          s.start_date as startDate, s.end_date as endDate, s.created_at as createdAt,
+          u.id as user_id, u.login as user_login,
+          p.full_name as user_fullName
+        FROM subscriptions s
+        JOIN users u ON s.user_id = u.id
+        LEFT JOIN user_profiles p ON u.profile_id = p.id
+        ORDER BY s.created_at DESC
+      `);
+    } catch (_) {
+      return [];
+    }
 
     return subscriptions.map(sub => ({
       id: sub.id,
@@ -396,7 +413,7 @@ class AdminService {
     }
 
     // Check if user exists
-    const user = await getOne('SELECT id, email, role FROM users WHERE id = ?', [userId]);
+    const user = await getOne('SELECT id, login, role FROM users WHERE id = ?', [userId]);
     if (!user) {
       throw new Error('User not found');
     }
@@ -405,7 +422,7 @@ class AdminService {
     await update('users', userId, { role: parseInt(newRole) });
 
     // Return updated user
-    return await getOne('SELECT id, email, role FROM users WHERE id = ?', [userId]);
+    return await getOne('SELECT id, login, role FROM users WHERE id = ?', [userId]);
   }
 
   // PDF Price Management

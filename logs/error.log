@@ -6422,3 +6422,1424 @@
     "id": 6
   }
 }
+[2026-05-18T12:18:46.196Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:18:46.200Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "17ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:18:46.212Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:18:46.217Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "26ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:18:46.237Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:18:46.239Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "31ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:18:46.248Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:18:46.252Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "68ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:18:46.258Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:18:46.261Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "69ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:18:47.859Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'u.email' in 'field list'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at UserService.findUserByLogin (file:///C:/Users/AO/Desktop/e-kitabxana/src/users/user.service.js:444:24)\n    at AuthService.login (file:///C:/Users/AO/Desktop/e-kitabxana/src/auth/auth.service.js:25:36)\n    at login (file:///C:/Users/AO/Desktop/e-kitabxana/src/auth/auth.controller.js:50:38)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)",
+  "error": "Unknown column 'u.email' in 'field list'",
+  "method": "POST",
+  "path": "/auth/login",
+  "body": {
+    "login": "as",
+    "password": "as123"
+  },
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:18:47.867Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/auth/login",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:19:20.269Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'u.email' in 'field list'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at UserService.findUserByLogin (file:///C:/Users/AO/Desktop/e-kitabxana/src/users/user.service.js:444:24)\n    at AuthService.login (file:///C:/Users/AO/Desktop/e-kitabxana/src/auth/auth.service.js:25:36)\n    at adminLogin (file:///C:/Users/AO/Desktop/e-kitabxana/src/auth/auth.controller.js:87:38)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)",
+  "error": "Unknown column 'u.email' in 'field list'",
+  "method": "POST",
+  "path": "/auth/login/admin",
+  "body": {
+    "login": "superadmin",
+    "password": "SuperAdmin555@"
+  },
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T12:19:20.273Z] [ERROR] Server error
+{
+  "method": "POST",
+  "path": "/auth/login/admin",
+  "statusCode": 500,
+  "duration": "8ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-18T12:42:52.617Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:42:52.628Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "40ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:42:52.665Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:42:52.671Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "81ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:42:52.679Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:42:52.685Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "93ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:42:52.716Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:42:52.721Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "statusCode": 500,
+  "duration": "82ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:42:52.729Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:42:52.734Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "statusCode": 500,
+  "duration": "94ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:42:52.744Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:42:52.750Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "51ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:42:52.762Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:42:52.772Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "67ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:44:54.611Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:44:54.613Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "8ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:44:54.624Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:44:54.627Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "12ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:44:54.630Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:44:54.634Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "18ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:44:54.642Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:44:54.645Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "statusCode": 500,
+  "duration": "25ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:44:54.648Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:44:54.652Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "statusCode": 500,
+  "duration": "30ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:44:54.665Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:44:54.668Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "28ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T12:44:54.674Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T12:44:54.677Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "21ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:01:56.125Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:01:56.129Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "15ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:01:56.135Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:01:56.140Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "24ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:01:56.143Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:01:56.148Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "31ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:01:56.157Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:01:56.161Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "statusCode": 500,
+  "duration": "39ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:01:56.182Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:01:56.186Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "statusCode": 500,
+  "duration": "32ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:01:56.208Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:01:56.220Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "45ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:01:56.234Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:01:56.244Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "68ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:10:01.120Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:10:01.129Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "60ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:10:06.828Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.subscriptions' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:226:34)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.subscriptions' doesn't exist",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "limit": "20"
+  },
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:10:06.835Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "87ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:10:09.592Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:10:09.599Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "34ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:10:24.049Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:10:24.060Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "76ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:10:27.397Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.subscriptions' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:226:34)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.subscriptions' doesn't exist",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "limit": "20"
+  },
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:10:27.403Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "65ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:10:33.090Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:10:33.096Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "22ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:10:37.814Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:10:37.818Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "12ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:10:40.181Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.subscriptions' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:226:34)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.subscriptions' doesn't exist",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "limit": "20"
+  },
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:10:40.188Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "36ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:14:38.507Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:14:38.513Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "52ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:17:46.340Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:17:46.351Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "68ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:18:23.075Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:18:23.085Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "54ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:21:47.165Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:21:47.171Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "46ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:22:02.155Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:22:02.163Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "40ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:22:07.614Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:22:07.623Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "27ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:22:26.293Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at AdminService.getStats (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:35:25)\n    at AdminService.getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.service.js:40:30)\n    at getDashboardData (file:///C:/Users/AO/Desktop/e-kitabxana/src/admin/admin.controller.js:76:46)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "query": {},
+  "user": {
+    "id": 23
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-18T13:22:26.301Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/admin/dashboard",
+  "statusCode": 500,
+  "duration": "46ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 23
+  }
+}
+[2026-05-18T13:28:46.651Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:46.662Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "25ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:46.672Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:46.682Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "44ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:46.707Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:46.716Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "72ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:46.727Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:46.735Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "statusCode": 500,
+  "duration": "45ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:46.746Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:46.754Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "statusCode": 500,
+  "duration": "57ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:46.763Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:46.770Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "73ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:46.800Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:46.811Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "29ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:57.307Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:57.316Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "23ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:57.337Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:57.344Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "statusCode": 500,
+  "duration": "23ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:57.351Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:57.370Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "48ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:57.404Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:57.416Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "92ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:57.437Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:57.442Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "statusCode": 500,
+  "duration": "112ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:57.466Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:57.472Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "38ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:28:57.490Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:28:57.507Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "58ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:29:09.180Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:29:09.189Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/sidebar-top",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:29:09.206Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:29:09.212Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-top",
+  "statusCode": 500,
+  "duration": "35ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:29:09.221Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:29:09.226Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/header-bottom",
+  "statusCode": 500,
+  "duration": "31ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:29:09.246Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:29:09.255Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-library-bottom",
+  "statusCode": 500,
+  "duration": "55ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:29:09.268Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:29:09.276Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/home-hero-bottom",
+  "statusCode": 500,
+  "duration": "76ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:29:09.297Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:29:09.307Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-top",
+  "statusCode": 500,
+  "duration": "66ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}
+[2026-05-18T13:29:09.329Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.ads' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at AdService.getActiveAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.service.js:112:26)\n    at getAdsByPosition (file:///C:/Users/AO/Desktop/e-kitabxana/src/ads/ad.controller.js:158:33)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:295:15",
+  "error": "Table 'kitabxana.ads' doesn't exist",
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}
+[2026-05-18T13:29:09.340Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/ads/spaces/footer-bottom",
+  "statusCode": 500,
+  "duration": "98ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
+  "user": null
+}

@@ -55,7 +55,7 @@ class InstitutionService {
   async getMembers(id) {
     await this.getById(id);
     return executeQuery(
-      `SELECT id, login, email, role, upload_permission AS uploadPermission
+      `SELECT id, login, role, upload_permission AS uploadPermission
        FROM users WHERE institution_id = ? ORDER BY role DESC, login ASC`,
       [id]
     );

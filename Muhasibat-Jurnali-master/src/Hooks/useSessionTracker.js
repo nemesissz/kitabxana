@@ -21,9 +21,16 @@ export default function useSessionTracker() {
   const userIdRef  = useRef(null);
   const timerRef   = useRef(null);
 
-  // user değişince ref'i güncelle
+  // user dəyişdikdə ref-i yenilə və yeni session ID yarat
   useEffect(() => {
-    userIdRef.current = store?.user?.data?.id || null;
+    const newId = store?.user?.data?.id || null;
+    if (newId !== userIdRef.current) {
+      // Fərqli istifadəçi — köhnə sessionu bağla, yeni başlat
+      sendHeartbeat(elapsedRef.current);
+      elapsedRef.current = 0;
+      localStorage.removeItem('_sid');
+    }
+    userIdRef.current = newId;
   }, [store?.user?.data?.id]);
 
   const sendHeartbeat = (delta) => {

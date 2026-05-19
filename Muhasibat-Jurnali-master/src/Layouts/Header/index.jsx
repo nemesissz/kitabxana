@@ -150,6 +150,7 @@ function Header() {
                       onClick={() => {
                         localStorage.removeItem("token");
                         localStorage.removeItem("user");
+                        localStorage.removeItem("_sid");
                         store.user.setData(null);
                         navigator("/");
                         setShowUserDropdown(false);
