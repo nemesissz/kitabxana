@@ -15,6 +15,58 @@ async function checkInstitutionIdColumn() {
   return _hasInstitutionId;
 }
 
+// Cache: pdfs.reads sütununun mövcudluğunu bir dəfə yoxla
+let _hasReads = null;
+async function checkReadsColumn() {
+  if (_hasReads !== null) return _hasReads;
+  try {
+    await getOne('SELECT `reads` FROM pdfs LIMIT 1');
+    _hasReads = true;
+  } catch (_) {
+    _hasReads = false;
+  }
+  return _hasReads;
+}
+
+// Cache: book_rentals cədvəlinin mövcudluğunu bir dəfə yoxla
+let _hasRentals = null;
+async function checkRentalsTable() {
+  if (_hasRentals !== null) return _hasRentals;
+  try {
+    await getOne('SELECT 1 FROM book_rentals LIMIT 1');
+    _hasRentals = true;
+  } catch (_) {
+    _hasRentals = false;
+  }
+  return _hasRentals;
+}
+
+// Cache: user_pdf_downloads cədvəlinin mövcudluğunu bir dəfə yoxla
+let _hasDlActivity = null;
+async function checkDlActivityTable() {
+  if (_hasDlActivity !== null) return _hasDlActivity;
+  try {
+    await getOne('SELECT 1 FROM user_pdf_downloads LIMIT 1');
+    _hasDlActivity = true;
+  } catch (_) {
+    _hasDlActivity = false;
+  }
+  return _hasDlActivity;
+}
+
+// Cache: user_pdf_reads cədvəlinin mövcudluğunu bir dəfə yoxla
+let _hasRdActivity = null;
+async function checkRdActivityTable() {
+  if (_hasRdActivity !== null) return _hasRdActivity;
+  try {
+    await getOne('SELECT 1 FROM user_pdf_reads LIMIT 1');
+    _hasRdActivity = true;
+  } catch (_) {
+    _hasRdActivity = false;
+  }
+  return _hasRdActivity;
+}
+
 class PdfService {
   async getAllPdfs(filters = {}) {
     const {
@@ -29,7 +81,8 @@ class PdfService {
       endDate = null,
       status = null,
       uploadedBy = null,
-      uploaderInstitutionId = null
+      uploaderInstitutionId = null,
+      sortBy = null
     } = filters;
 
     // Ensure page and limit are integers
@@ -113,6 +166,16 @@ class PdfService {
     );
 
     const hasInstitutionId = await checkInstitutionIdColumn();
+    const hasReads = await checkReadsColumn();
+
+    let orderBy;
+    if (sortBy === 'popular' || sortBy === 'downloads') {
+      orderBy = hasReads
+        ? 'COALESCE(p.downloads,0) + COALESCE(p.`reads`,0) DESC, p.created_at DESC'
+        : 'COALESCE(p.downloads,0) DESC, p.created_at DESC';
+    } else {
+      orderBy = 'p.created_at DESC';
+    }
 
     // Get paginated PDFs with category details
     const query = `
@@ -120,7 +183,9 @@ class PdfService {
         p.id, p.title, p.description,
         l.code AS language, l.name AS language_name, l.flag AS language_flag,
         p.file_path, p.cover_image_path AS image_path,
-        p.price, p.downloads, p.category_id,
+        p.price, p.downloads,
+        ${hasReads ? 'p.`reads`,' : '0 AS reads,'}
+        p.category_id,
         p.order_number, p.author, p.isbn, p.status,
         p.publication_year, p.publisher_location, p.allow_download,
         p.uploaded_by, p.created_at, p.updated_at,
@@ -132,12 +197,12 @@ class PdfService {
       LEFT JOIN languages l ON p.language_id = l.id
       LEFT JOIN users u ON p.uploaded_by = u.id
       ${whereClause}
-      ORDER BY p.created_at DESC
+      ORDER BY ${orderBy}
       LIMIT ${validLimit} OFFSET ${offset}
     `;
 
     const pdfs = await executeQuery(query, queryParams);
-    
+
     return {
       pdfs,
       pagination: {

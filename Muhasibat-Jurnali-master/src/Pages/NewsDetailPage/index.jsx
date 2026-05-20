@@ -1,225 +1,152 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Base_Url_Server from '../../Constants/baseUrl';
-import styles from './index.module.scss';
-import AdSpace from '../../Components/AdSpace';
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import Base_Url_Server from "../../Constants/baseUrl";
+import styles from "./index.module.scss";
+import Footer from "../../Layouts/Footer";
 
-const NewsDetailPage = () => {
+function NewsDetailPage() {
   const [news, setNews] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'Tarix yoxdur';
-    
+  const formatDate = (d) => {
+    if (!d) return "";
     try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return 'Tarix yoxdur';
-      
-      // gün.ay.il formatında (dd.mm.yyyy)
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const year = date.getFullYear();
-      
-      return `${day}.${month}.${year}`;
-    } catch (error) {
-      console.error('Date formatlaşdırması xətası:', error);
-      return 'Tarix yoxdur';
-    }
-  };
-
-  // Image URL formatlaşdırması üçün helper funksiya
-  const formatImageUrl = (imagePath) => {
-    if (!imagePath) return '/src/Assets/heroImage.jpg';
-    
-    // Server path-i web URL-ə çevir
-    const webPath = imagePath.replace('/home/muhasibatjurnal/backend-mmu', '');
-    return `https://api.muhasibatjurnal.az${webPath}`;
+      const dt = new Date(d);
+      return `${dt.getDate().toString().padStart(2, "0")}.${(dt.getMonth() + 1).toString().padStart(2, "0")}.${dt.getFullYear()}`;
+    } catch { return ""; }
   };
 
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        setLoading(true);
-        console.log('Fetching news with ID:', id);
-        console.log('API URL:', Base_Url_Server + `news/${id}`);
-        
-        const response = await axios.get(Base_Url_Server + `news/${id}`);
-        console.log('Full API response:', response);
-        console.log('Response data:', response.data);
-        
-        // API response structure: {status: "success", data: {news: {...}}}
-        const newsData = response.data?.data?.news;
-        console.log('Parsed news data:', newsData);
-        
-        if (newsData) {
-          setNews(newsData);
-        } else {
-          console.error('No news data found in response');
-          setError('Xəbər məlumatları tapılmadı');
-        }
-      } catch (error) {
-        console.error('API Error details:', error);
-        console.error('Error response:', error.response);
-        console.error('Error message:', error.message);
-        
-        if (error.response) {
-          console.error('Error status:', error.response.status);
-          console.error('Error data:', error.response.data);
-          setError(`API xətası: ${error.response.status} - ${error.response.data?.message || error.message}`);
-        } else {
-          setError('Şəbəkə xətası: ' + error.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchNews();
-    } else {
-      setError('Xəbər ID-si tapılmadı');
+    // Fast path: data passed via navigation state (from NewsPage card click)
+    const stateAnn = location.state?.announcement;
+    if (stateAnn) {
+      setNews(stateAnn);
+      document.title = `${stateAnn.title} — MMU Kitabxana`;
       setLoading(false);
+      return;
     }
+
+    if (!id) { setError("ID tapılmadı"); setLoading(false); return; }
+
+    const tryFetch = async () => {
+      try {
+        const res = await axios.get(Base_Url_Server + `announcements/${id}`);
+        const data = res.data?.data?.announcement || res.data?.data?.news;
+        if (data) { setNews(data); document.title = `${data.title} — MMU Kitabxana`; return; }
+      } catch {}
+      setError("Elan tapılmadı");
+    };
+    tryFetch().finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className={styles.newsDetailPage}>
-        <div className={styles.loading}>Xəbər yüklənir...</div>
-      </div>
-    );
-  }
-
-  if (error || !news) {
-    return (
-      <div className={styles.newsDetailPage}>
-        <div className={styles.error}>
-          <h2>Xəta</h2>
-          <p>{error || 'Xəbər tapılmadı'}</p>
-          <button 
-            className={styles.backBtn}
-            onClick={() => navigate('/news')}
-          >
-            Xəbərlərə qayıt
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.newsDetailPage}>
-      <div className={styles.hero}>
-        <div className={styles.heroImage}>
-          {news.image ? (
-            <img 
-              src={formatImageUrl(news.image)} 
-              alt={news.title}
-              onError={(e) => {
-                e.target.src = '/src/Assets/heroImage.jpg'; // Fallback image
-              }}
-            />
-          ) : (
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              height: '100%',
-              color: '#fff',
-              fontSize: '18px',
-              textAlign: 'center',
-              backgroundColor: 'rgba(0,0,0,0.3)'
-            }}>
-              Şəkil yoxdur
-            </div>
-          )}
-        </div>
-        <div className={styles.heroOverlay}>
-          <div className={styles.heroContent}>
-            <div className={styles.breadcrumb}>
-              <span 
-                className={styles.breadcrumbLink}
-                onClick={() => navigate('/')}
-              >
-                Ana səhifə
-              </span>
-              <span className={styles.breadcrumbSeparator}>/</span>
-              <span 
-                className={styles.breadcrumbLink}
-                onClick={() => navigate('/news')}
-              >
-                Xəbərlər
-              </span>
-              <span className={styles.breadcrumbSeparator}>/</span>
-              <span className={styles.breadcrumbCurrent}>Xəbər</span>
-            </div>
-            <h1>{news.title}</h1>
-            <div className={styles.heroMeta}>
-              {news.language && (
-                <span className={styles.language}>{news.language}</span>
-              )}
-              {news.category?.name && (
-                <span className={styles.category}>{news.category.name}</span>
-              )}
-              <span className={styles.date}>
-                {formatDate(news.created_at)}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.container}>
-        <div className={styles.contentWrapper}>
-          <div className={styles.newsContent}>
-            <div className={styles.contentBody}>
-              <p>{news.content}</p>
-            </div>
-          </div>
-
-          <div className={styles.sidebar}>
-            <AdSpace position="detail-sidebar" />
-            <div className={styles.newsInfo}>
-              <h3>Xəbər Məlumatları</h3>
-              <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Başlıq:</span>
-                <span className={styles.infoValue}>{news.title}</span>
-              </div>
-              {news.language && (
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Dil:</span>
-                  <span className={styles.infoValue}>{news.language}</span>
-                </div>
-              )}
-              {news.category?.name && (
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Kateqoriya:</span>
-                  <span className={styles.infoValue}>{news.category.name}</span>
-                </div>
-              )}
-              <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Tarix:</span>
-                <span className={styles.infoValue}>{formatDate(news.created_at)}</span>
-              </div>
-            </div>
-
-            <div className={styles.actions}>
-              <button 
-                className={styles.backButton}
-                onClick={() => navigate('/news')}
-              >
-                Xəbərlərə qayıt
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+  if (loading) return (
+    <div className={styles.stateWrap}>
+      <div className={styles.spinner} />
+      <p>Yüklənir…</p>
     </div>
   );
-};
+
+  if (error || !news) return (
+    <div className={styles.stateWrap}>
+      <h2>Xəta</h2>
+      <p>{error || "Elan tapılmadı"}</p>
+      <button className="mmu-btn mmu-btn-primary" onClick={() => navigate("/news")}>Geri</button>
+    </div>
+  );
+
+  return (
+    <>
+      <main>
+        {/* ── Hero ── */}
+        <section className={styles.hero}>
+          <div className="mmu-container">
+            <nav className={styles.crumb}>
+              <button onClick={() => navigate("/")}>Ana səhifə</button>
+              <span>/</span>
+              <button onClick={() => navigate("/news")}>Elanlar</button>
+              <span>/</span>
+              <span>{news.title}</span>
+            </nav>
+            <div className={styles.heroBadges}>
+              <span className={`${styles.priorityChip} ${news.priority === "urgent" ? styles.chipUrgent : styles.chipNormal}`}>
+                {news.priority === "urgent" ? "Təcili" : "Normal"}
+              </span>
+            </div>
+            <h1 className={styles.heroTitle}>{news.title}</h1>
+            {news.created_at && (
+              <p className={styles.heroDate}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                {formatDate(news.created_at)}
+              </p>
+            )}
+          </div>
+        </section>
+
+        {/* ── Body ── */}
+        <section className={styles.body}>
+          <div className="mmu-container">
+            <div className={styles.layout}>
+
+              {/* Main column */}
+              <div className={styles.mainCol}>
+                {news.image && (
+                  <div className={styles.imgWrap}>
+                    <img
+                      src={news.image}
+                      alt={news.title}
+                      onError={(e) => { e.target.parentElement.style.display = "none"; }}
+                    />
+                  </div>
+                )}
+
+                {news.description && (
+                  <p className={styles.lead}>{news.description}</p>
+                )}
+
+                {news.content && (
+                  <div className={styles.content}>
+                    <p>{news.content}</p>
+                  </div>
+                )}
+
+                <div className={styles.backRow}>
+                  <button
+                    className="mmu-btn mmu-btn-outline mmu-btn-sm"
+                    onClick={() => navigate("/news")}
+                  >
+                    ← Elanlar siyahısı
+                  </button>
+                </div>
+              </div>
+
+              {/* Sidebar */}
+              <aside className={styles.aside}>
+                <div className={styles.infoCard}>
+                  <h4>Elan məlumatları</h4>
+                  {[
+                    { l: "Tarix", v: formatDate(news.created_at) },
+                    { l: "Prioritet", v: news.priority === "urgent" ? "Təcili" : "Normal" },
+                  ].filter(({ v }) => v).map(({ l, v }) => (
+                    <div key={l} className={styles.infoRow}>
+                      <span className={styles.infoKey}>{l}</span>
+                      <span className={styles.infoVal}>{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </aside>
+
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}
 
 export default NewsDetailPage;

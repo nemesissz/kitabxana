@@ -192,7 +192,7 @@ export const getAllPdfs = async (req, res, next) => {
     const {
       page, limit, categoryId, language, search,
       minPrice, maxPrice, startDate, endDate,
-      status, uploadedBy, submittedBy
+      status, uploadedBy, submittedBy, sortBy
     } = req.query;
 
     // submittedBy — istifadəçinin öz PDF-lərini görmək üçün
@@ -217,7 +217,8 @@ export const getAllPdfs = async (req, res, next) => {
     const result = await pdfService.getAllPdfs({
       page, limit, categoryId, language, search,
       minPrice, maxPrice, startDate, endDate,
-      status: effectiveStatus, uploadedBy: resolvedUploadedBy, uploaderInstitutionId
+      status: effectiveStatus, uploadedBy: resolvedUploadedBy, uploaderInstitutionId,
+      sortBy
     });
 
     // Check access for each PDF if user is authenticated
@@ -278,6 +279,7 @@ export const getAllPdfs = async (req, res, next) => {
             id: pdf.category_id,
             name: pdf.category_name
           } : null,
+          reads: pdf.reads || 0,
           hasAccess: true,
           accessType: 'subscription',
           downloadUrl: `/pdfs/${pdf.id}/download`
@@ -350,6 +352,7 @@ export const getAllPdfs = async (req, res, next) => {
           id: pdf.category_id,
           name: pdf.category_name
         } : null,
+        reads: pdf.reads || 0,
         hasAccess: hasAccess,
         accessType: accessType,
         downloadUrl: hasAccess ? `/pdfs/${pdf.id}/download` : null

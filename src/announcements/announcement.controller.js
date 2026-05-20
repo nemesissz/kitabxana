@@ -51,6 +51,16 @@ export const getAll = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+export const getOne = async (req, res, next) => {
+  try {
+    const ann = await announcementService.getById(req.params.id);
+    res.json({ status: 'success', data: { announcement: { ...ann, image: buildImageUrl(req, ann.image) } } });
+  } catch (err) {
+    if (err.message === 'Elan tapılmadı') return res.status(404).json({ status: 'error', message: err.message });
+    next(err);
+  }
+};
+
 export const create = async (req, res, next) => {
   try {
     const { title, description, priority } = req.body;

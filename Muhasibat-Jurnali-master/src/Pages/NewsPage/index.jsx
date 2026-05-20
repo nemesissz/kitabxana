@@ -1,196 +1,152 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
-import bg from "./../../Assets/heroImage.jpg";
-import CampaignIcon from "@mui/icons-material/Campaign";
 import Footer from "../../Layouts/Footer";
-import dataContext from "../../Contexts/GlobalState";
 import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
-import SearchIcon from "@mui/icons-material/Search";
-import TuneIcon from "@mui/icons-material/Tune";
-import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 
 function NewsPage() {
+  const navigate = useNavigate();
   const [announcements, setAnnouncements] = useState(null);
-  const store = useContext(dataContext);
-  const [loader, setLoader] = useState(false);
-  const [filter, setFilter] = useState(false);
   const [search, setSearch] = useState("");
   const [priority, setPriority] = useState("");
 
   useEffect(() => {
-    document.title = "Elanlar";
-  }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userID = localStorage.getItem("user");
-    if (!token || !userID) {
-      store.user.setData(null);
-    } else {
-      axios
-        .get(Base_Url_Server + "users/" + userID, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => store.user.setData(res.data.data.user))
-        .catch((error) => {
-          if (error.response?.status === 401) {
-            store.user.setData(null);
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-          }
-        });
-    }
-  }, []);
-
-  useEffect(() => {
-    setLoader(true);
+    document.title = "Elanlar — MMU Kitabxana";
     axios
       .get(Base_Url_Server + "announcements")
-      .then((res) => {
-        setAnnouncements(res.data.data.announcements || []);
-        setLoader(false);
-      })
-      .catch(() => {
-        setAnnouncements([]);
-        setLoader(false);
-      });
+      .then((res) => setAnnouncements(res.data.data.announcements || []))
+      .catch(() => setAnnouncements([]));
   }, []);
 
   const filtered = announcements
-    ? announcements.filter((ann) => {
-        const matchSearch =
-          !search || ann.title.toLowerCase().includes(search.toLowerCase());
-        const matchPriority = !priority || ann.priority === priority;
+    ? announcements.filter((a) => {
+        const matchSearch = !search || a.title.toLowerCase().includes(search.toLowerCase());
+        const matchPriority = !priority || a.priority === priority;
         return matchSearch && matchPriority;
       })
     : [];
 
+  const formatDate = (d) => {
+    if (!d) return "";
+    try {
+      const dt = new Date(d);
+      return `${dt.getDate().toString().padStart(2, "0")}.${(dt.getMonth() + 1).toString().padStart(2, "0")}.${dt.getFullYear()}`;
+    } catch { return ""; }
+  };
+
   return (
     <>
-      <section className={styles.news}>
-        <div className={styles.hero}>
-          <div className={styles.bgImage}>
-            <img src={bg} alt="elanlar" />
-            <h1>Universitetin ən son elanları və duyuruları.</h1>
+      <main>
+        {/* ── Hero strip ── */}
+        <section className={styles.heroStrip}>
+          <div className="mmu-container">
+            <span className="mmu-eyebrow">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline", marginRight: 4 }}>
+                <path d="M18 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/>
+                <path d="M8 10h8M8 14h5"/>
+              </svg>
+              Bildirişlər
+            </span>
+            <h1 className={styles.heroTitle}>Elanlar</h1>
+            <p className="mmu-lead">Universitetin ən son elanları və duyuruları.</p>
           </div>
-        </div>
+        </section>
 
-        <div className={styles.newsList}>
-          <div className={styles.header}>
-            <div></div>
-            <CampaignIcon className={styles.icon} />
-            <div></div>
-          </div>
-
-          <div className={styles.filter}>
-            <div
-              className={styles.content}
-              style={filter ? {} : { height: "60px" }}
-            >
-              <TuneIcon
-                className={styles.iconFilter}
-                onClick={() => setFilter(!filter)}
+        <div className="mmu-container" style={{ paddingBottom: 80 }}>
+          {/* ── Filter bar ── */}
+          <form className={styles.filterBar} onSubmit={(e) => e.preventDefault()}>
+            <div className={styles.searchWrap}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--muted)", flexShrink: 0 }}>
+                <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+              </svg>
+              <input
+                className={styles.searchField}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Elan axtar…"
               />
-              <div className={styles.head}>
-                <div>
-                  <input
-                    onChange={(e) => setSearch(e.target.value)}
-                    type="text"
-                    placeholder="Axtar"
-                    value={search}
-                  />
-                  <button type="button">
-                    <SearchIcon className={styles.icon} />
-                  </button>
-                </div>
-              </div>
-              <form className={styles.dropDown}>
-                <select
-                  value={priority}
-                  onChange={(e) => setPriority(e.target.value)}
-                >
-                  <option value="">Bütün prioritetlər</option>
-                  <option value="normal">Normal</option>
-                  <option value="urgent">Təcili</option>
-                </select>
-                <button
-                  type="reset"
-                  onClick={() => { setSearch(""); setPriority(""); }}
-                >
-                  Filterləri təmizlə
-                </button>
-              </form>
+              {search && (
+                <button type="button" className={styles.clearBtn} onClick={() => setSearch("")}>✕</button>
+              )}
             </div>
-          </div>
 
-          <div
-            style={loader ? { display: "none" } : {}}
-            className={styles.container}
-          >
-            {filtered.length === 0 && !loader ? (
-              <div style={{ textAlign: "center", color: "#999", padding: "40px", width: "100%" }}>
-                Elan tapılmadı
-              </div>
-            ) : (
-              filtered.map((ann, i) => (
-                <div key={i} className={styles.card}>
-                  <div className={styles.cardContent}>
-                    <div className={styles.cardImage}>
-                      {ann.image ? (
-                        <img src={ann.image} alt={ann.title} />
-                      ) : (
-                        <div style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          height: "100%",
-                          color: "#666",
-                          fontSize: "14px",
-                          textAlign: "center",
-                          padding: "20px",
-                        }}>
-                          Şəkil yoxdur
-                        </div>
-                      )}
+            <div className={styles.priorityFilter}>
+              {[
+                { val: "", label: "Hamısı" },
+                { val: "normal", label: "Normal" },
+                { val: "urgent", label: "Təcili" },
+              ].map((p) => (
+                <button
+                  key={p.val}
+                  type="button"
+                  className={`${styles.priorityBtn} ${priority === p.val ? styles.priorityBtnActive : ""}`}
+                  onClick={() => setPriority(p.val)}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          </form>
+
+          {/* ── Count ── */}
+          {announcements !== null && (
+            <p className={styles.resultCount}>
+              {filtered.length} elan tapıldı
+            </p>
+          )}
+
+          {/* ── Results ── */}
+          {announcements === null ? (
+            <div className={styles.loader}><div className={styles.spinner} /></div>
+          ) : filtered.length === 0 ? (
+            <div className={styles.empty}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--muted)", margin: "0 auto 12px", display: "block" }}>
+                <path d="M18 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/>
+                <path d="M8 10h8M8 14h5"/>
+              </svg>
+              <p>Elan tapılmadı</p>
+            </div>
+          ) : (
+            <div className={styles.grid}>
+              {filtered.map((ann) => (
+                <article
+                  key={ann.id}
+                  className={`${styles.card} ${ann.priority === "urgent" ? styles.cardUrgent : ""}`}
+                  onClick={() => navigate(`/news/${ann.id}`, { state: { announcement: ann } })}
+                >
+                  {ann.image && (
+                    <div className={styles.cardImg}>
+                      <img
+                        src={ann.image}
+                        alt={ann.title}
+                        onError={(e) => { e.target.parentElement.style.display = "none"; }}
+                      />
                     </div>
-                    <div className={styles.cardText}>
-                      <span>{ann.title}</span>
-                      {ann.description && (
-                        <p style={{ fontSize: "13px", color: "#555", margin: "6px 0", lineHeight: "1.5" }}>
-                          {ann.description.length > 120
-                            ? ann.description.slice(0, 120) + "..."
-                            : ann.description}
-                        </p>
-                      )}
-                      <p>
-                        <span>{ann.created_at?.split("T")[0]}</span>
-                        <span style={{
-                          background: ann.priority === "urgent" ? "#ffeaea" : "#eaf4ff",
-                          color: ann.priority === "urgent" ? "#c0392b" : "#2471a3",
-                          borderRadius: "12px",
-                          padding: "2px 10px",
-                          fontSize: "12px",
-                          fontWeight: 600,
-                        }}>
-                          {ann.priority === "urgent" ? "Təcili" : "Normal"}
-                        </span>
+                  )}
+                  <div className={styles.cardBody}>
+                    <div className={styles.cardTop}>
+                      <span className={`${styles.priorityChip} ${ann.priority === "urgent" ? styles.chipUrgent : styles.chipNormal}`}>
+                        {ann.priority === "urgent" ? "Təcili" : "Normal"}
+                      </span>
+                      <span className={styles.cardDate}>{formatDate(ann.created_at)}</span>
+                    </div>
+                    <h3 className={styles.cardTitle}>{ann.title}</h3>
+                    {ann.description && (
+                      <p className={styles.cardDesc}>
+                        {ann.description.length > 110
+                          ? ann.description.slice(0, 110) + "…"
+                          : ann.description}
                       </p>
-                    </div>
+                    )}
+                    <span className={styles.readMore}>Ətraflı oxu →</span>
                   </div>
-                </div>
-              ))
-            )}
-          </div>
-
-          <div
-            style={loader ? {} : { display: "none" }}
-            className={styles.loader}
-          >
-            <CircularProgress />
-          </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
-      </section>
+      </main>
       <Footer />
     </>
   );

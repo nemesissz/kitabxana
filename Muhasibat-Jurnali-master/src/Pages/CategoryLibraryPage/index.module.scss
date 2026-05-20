@@ -1,0 +1,259 @@
+/* ── Hero ── */
+.heroStrip {
+  padding: 56px 0 32px;
+}
+
+.heroRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.heroTitle {
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.1;
+}
+
+/* ── Filter bar ── */
+.filterBar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 10px 14px;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.searchWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.searchField {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ink);
+  flex: 1;
+  min-width: 0;
+
+  &::placeholder { color: var(--muted); }
+}
+
+/* ── Year nav (tax-journal) ── */
+.yearNav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  overflow-x: auto;
+  padding: 4px 0;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.yearArrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink-2);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: border-color .15s, color .15s;
+
+  &:hover:not(:disabled) { border-color: var(--navy); color: var(--navy); }
+  &:disabled { opacity: .35; cursor: not-allowed; }
+}
+
+.yearList {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.yearBtn {
+  padding: 7px 20px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-pill);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+
+  &:hover { border-color: var(--navy); color: var(--navy); }
+}
+
+.yearBtnActive {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+
+  &:hover { color: #fff; }
+}
+
+/* ── Month sections (tax-journal) ── */
+.months {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 60px;
+}
+
+.monthSection {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+
+  @media (max-width: 600px) { flex-direction: column; }
+}
+
+.monthLabel {
+  min-width: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding-top: 6px;
+  flex-shrink: 0;
+}
+
+.monthCards {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.monthEmpty {
+  font-size: 13px;
+  color: var(--muted-2);
+  padding: 8px 0;
+  font-style: italic;
+}
+
+/* ── Grid (other-books) ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 48px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+}
+
+/* ── PDF card (used in tax-journal month cells) ── */
+.pdfCard {
+  width: 160px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+  box-shadow: var(--shadow-sm);
+
+  &:hover {
+    border-color: var(--navy);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 600px) { width: 140px; }
+}
+
+.pdfCover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.pdfCoverFallback {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper-2);
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 8px;
+}
+
+.pdfBody {
+  padding: 10px 12px 12px;
+}
+
+.pdfTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.pdfMeta {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Loader / Empty ── */
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--line);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--muted);
+  font-size: 15px;
+}

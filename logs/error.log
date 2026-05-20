@@ -7843,3 +7843,1243 @@
   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0",
   "user": null
 }
+[2026-05-19T07:52:57.435Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "limit": "100",
+    "search": "",
+    "language": "az",
+    "categoryId": "14",
+    "minPrice": "",
+    "maxPrice": "",
+    "startDate": "",
+    "endDate": ""
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T07:52:57.442Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "18ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:01:38.396Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "page": "1",
+    "limit": "100",
+    "search": "",
+    "language": "az",
+    "categoryId": "14",
+    "minPrice": "",
+    "maxPrice": "",
+    "startDate": "",
+    "endDate": ""
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:01:38.398Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "15ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:11:43.509Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "category": "10",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:11:43.516Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:11:44.608Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "category": "10",
+    "language": "en"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:11:44.612Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "12ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:11:46.666Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "category": "10",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:11:46.672Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "17ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:11:48.240Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "category": "10",
+    "language": "en"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:11:48.246Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "13ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:11:49.893Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "category": "10",
+    "language": "en"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:11:49.900Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:11:55.130Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "category": "10",
+    "language": "ru"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:11:55.136Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "13ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:12:02.764Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "category": "8",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:12:02.771Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:18:16.484Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "en"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:18:16.490Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "14ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:18:18.701Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:18:18.708Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "14ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:23:13.605Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "en"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:23:13.611Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:23:14.732Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:23:14.738Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "19ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T08:24:59.688Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:110:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T08:24:59.693Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T10:12:49.561Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at NewsService.getNewsById (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.service.js:98:24)\n    at getNewsById (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.controller.js:29:36)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/news/1",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T10:12:49.566Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/news/1",
+  "statusCode": 500,
+  "duration": "10ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T10:12:53.652Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Table 'kitabxana.news' doesn't exist\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at NewsService.getNewsById (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.service.js:98:24)\n    at getNewsById (file:///C:/Users/AO/Desktop/e-kitabxana/src/news/news.controller.js:29:36)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\router\\lib\\layer.js:152:17)",
+  "error": "Table 'kitabxana.news' doesn't exist",
+  "method": "GET",
+  "path": "/news/4",
+  "query": {},
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T10:12:53.657Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/news/4",
+  "statusCode": 500,
+  "duration": "9ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:08:39.540Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:08:39.547Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "27ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:09:22.213Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:09:22.219Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "22ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:09:23.114Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:09:23.120Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "12ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:09:23.441Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:09:23.447Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "12ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:09:23.711Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:09:23.713Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "6ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:09:24.220Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:09:24.224Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "9ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:09:24.498Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:09:24.501Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "8ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:09:24.749Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:09:24.753Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "8ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:20:59.536Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "9"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:20:59.545Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "34ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:21:03.777Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "14"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:21:03.787Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "21ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:21:07.166Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:199:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "13"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:21:07.174Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:25:14.194Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:204:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:25:14.204Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "34ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:25:29.497Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:204:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:25:29.500Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "8ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:26:05.667Z] [ERROR] Request error occurred
+{
+  "stack": "Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:204:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'reads,\n        p.category_id,\n        p.order_number, p.author, p.isbn, p.sta...' at line 6",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "limit": "8",
+    "sortBy": "popular",
+    "status": "approved"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:26:05.676Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "25ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-19T12:32:52.340Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:32:52.347Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "22ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:32:54.772Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "en"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:32:54.777Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "19ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:01.156Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:01.162Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "17ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:02.821Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "en"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:02.828Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "20ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:07.134Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "ru"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:07.138Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "12ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:09.155Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "language": "ru"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:09.160Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "15ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:10.677Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "language": "en"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:10.685Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "16ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:14.943Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "language": "en"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:14.949Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "20ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:18.024Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:18.029Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "22ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:19.983Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "language": "ru"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:19.990Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "24ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:23.193Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:23.199Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "25ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}
+[2026-05-19T12:33:30.794Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "language": "az"
+  },
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-19T12:33:30.800Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "17ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": {
+    "id": 22
+  }
+}

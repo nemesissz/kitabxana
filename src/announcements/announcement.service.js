@@ -73,6 +73,12 @@ class AnnouncementService {
     return await getOne(`${WITH_INST} WHERE a.id = ?`, [id]);
   }
 
+  async getById(id) {
+    const ann = await getOne(`${WITH_INST} WHERE a.id = ?`, [id]);
+    if (!ann) throw new Error('Elan tapılmadı');
+    return ann;
+  }
+
   async delete(id, institutionId = null) {
     const existing = await getOne('SELECT id, institution_id FROM announcements WHERE id = ?', [id]);
     if (!existing) throw new Error('Elan tapılmadı');

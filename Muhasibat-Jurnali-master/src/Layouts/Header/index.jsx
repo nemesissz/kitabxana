@@ -1,19 +1,29 @@
 import styles from "./index.module.scss";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import dataContext from "../../Contexts/GlobalState";
-import MenuIcon from "@mui/icons-material/Menu";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
-import HomeIcon from "@mui/icons-material/Home";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import CampaignIcon from "@mui/icons-material/Campaign";
-import PersonIcon from "@mui/icons-material/Person";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
-import AdSpace from "../../Components/AdSpace";
 import Swal from "sweetalert2";
+
+const BookIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22.5v-18Z"/>
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+  </svg>
+);
+
+const ChevDown = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m6 9 6 6 6-6"/>
+  </svg>
+);
+
+const MenuHamburger = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <path d="M3 6h18M3 12h18M3 18h18"/>
+  </svg>
+);
 
 function Header() {
   const navigator = useNavigate();
@@ -22,6 +32,14 @@ function Header() {
   const [categories, setCategories] = useState([]);
   const [showLibraryDropdown, setShowLibraryDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [theme, setTheme] = useState(() => localStorage.getItem("mmu-theme") || "modern");
+  const libTimer = useRef(null);
+  const userTimer = useRef(null);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("mmu-theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     axios
@@ -33,151 +51,190 @@ function Header() {
   const isActive = (path) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 
-  const userLabel = store.user.data
-    ? store.user.data.fullName?.split(" ")[0] || store.user.data.login
-    : "Daxil ol";
+  const user = store.user.data;
+
+  const initials = user
+    ? (user.fullName || user.login || "?")
+        .split(" ")
+        .slice(0, 2)
+        .map((w) => w[0]?.toUpperCase() || "")
+        .join("")
+    : "?";
+
+  const firstName = user
+    ? user.fullName?.split(" ")[0] || user.login
+    : null;
+
+  const openLib = () => { clearTimeout(libTimer.current); setShowLibraryDropdown(true); };
+  const closeLib = () => { libTimer.current = setTimeout(() => setShowLibraryDropdown(false), 120); };
+  const openUser = () => { clearTimeout(userTimer.current); setShowUserDropdown(true); };
+  const closeUser = () => { userTimer.current = setTimeout(() => setShowUserDropdown(false), 120); };
 
   return (
-    <>
-      <AdSpace position="header-top" />
-      <header className={styles.header}>
-        <div className={styles.container}>
+    <header className={styles.siteHeader}>
+      <nav className={`${styles.nav} mmu-container`}>
 
-          {/* ── Logo ── */}
-          <div className={styles.logo} onClick={() => navigator("/")}>
-            <LocalLibraryIcon className={styles.logoIcon} />
-            <div className={styles.logoText}>
-              <span className={styles.logoTitle}>MMU Kitabxana</span>
-              <span className={styles.logoSub}>Ağıllı Kitabxana Sistemi</span>
-            </div>
+        {/* ── Brand ── */}
+        <div className={styles.brand} onClick={() => navigator("/")}>
+          <div className={styles.brandMark}>
+            <BookIcon />
+          </div>
+          <div className={styles.brandName}>
+            <b>MMU Kitabxana</b>
+            <small>Ağıllı Kitabxana Sistemi</small>
+          </div>
+        </div>
+
+        {/* ── Nav links ── */}
+        <div className={styles.navLinks}>
+          <button
+            className={`${styles.navLink} ${isActive("/") ? styles.navLinkActive : ""}`}
+            onClick={() => navigator("/")}
+          >
+            Ana səhifə
+          </button>
+
+          {/* Kitabxana + dropdown */}
+          <div
+            className={styles.navLinkWrap}
+            onMouseEnter={openLib}
+            onMouseLeave={closeLib}
+          >
+            <button
+              className={`${styles.navLink} ${isActive("/library") ? styles.navLinkActive : ""}`}
+              onClick={() => navigator("/library")}
+            >
+              Kitabxana
+              <ChevDown />
+            </button>
+
+            {showLibraryDropdown && (
+              <div className={styles.dropdown}>
+                {user && (
+                  <button
+                    className={styles.dropItem}
+                    onClick={() => {
+                      if (!user.uploadPermission || user.uploadPermission === "none") {
+                        Swal.fire({ icon: "warning", title: "İcazə yoxdur", text: "Bu funksiya üçün rolunuz uyğun deyil.", confirmButtonColor: "#0B1F3D" });
+                        setShowLibraryDropdown(false);
+                        return;
+                      }
+                      navigator("/library/submit");
+                      setShowLibraryDropdown(false);
+                    }}
+                  >
+                    📤 PDF Yüklə
+                  </button>
+                )}
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    className={styles.dropItem}
+                    onClick={() => { navigator(`/library?category=${cat.id}`); setShowLibraryDropdown(false); }}
+                  >
+                    {cat.name}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* ── Nav ── */}
-          <nav className={styles.nav}>
-            {/* Ana səhifə */}
-            <div
-              className={`${styles.navItem} ${isActive("/") ? styles.active : ""}`}
-              onClick={() => navigator("/")}
-            >
-              <HomeIcon className={styles.navIcon} />
-              <span>Ana səhifə</span>
-            </div>
+          <button
+            className={`${styles.navLink} ${isActive("/news") ? styles.navLinkActive : ""}`}
+            onClick={() => navigator("/news")}
+          >
+            Elanlar
+          </button>
 
-            {/* Kitabxana dropdown */}
-            <div
-              className={`${styles.navItem} ${styles.hasDropdown} ${isActive("/library") ? styles.active : ""}`}
-              onMouseEnter={() => setShowLibraryDropdown(true)}
-              onMouseLeave={() => setShowLibraryDropdown(false)}
+          {user?.role >= 2 && (
+            <button
+              className={styles.navLink}
+              style={{ color: "var(--muted)" }}
+              onClick={() => navigator("/admin")}
             >
-              <MenuBookIcon className={styles.navIcon} />
-              <span>Kitabxana</span>
-              <ArrowDropDownIcon className={`${styles.chevron} ${showLibraryDropdown ? styles.chevronOpen : ""}`} />
+              Admin
+            </button>
+          )}
+        </div>
 
-              {showLibraryDropdown && (
-                <div className={styles.dropdown}>
-                  {store.user.data && (
-                    <div
-                      className={styles.dropdownLink}
-                      onClick={() => {
-                        if (!store.user.data.uploadPermission || store.user.data.uploadPermission === "none") {
-                          Swal.fire({ icon: "warning", title: "İcazə yoxdur", text: "Bu funksiya üçün rolunuz uyğun deyil.", confirmButtonColor: "#2c3e50" });
-                          setShowLibraryDropdown(false);
-                          return;
-                        }
-                        navigator("/library/submit");
-                        setShowLibraryDropdown(false);
-                      }}
-                    >
-                      PDF Yüklə
-                    </div>
-                  )}
-                  {categories.map((cat) => (
-                    <div
-                      key={cat.id}
-                      className={styles.dropdownLink}
-                      onClick={() => { navigator(`/library/category/${cat.id}`); setShowLibraryDropdown(false); }}
-                    >
-                      {cat.name}
-                    </div>
-                  ))}
+        {/* ── Theme toggle ── */}
+        <div className={styles.themeToggle}>
+          <button
+            className={`${styles.themeBtn} ${theme === "editorial" ? styles.themeBtnActive : ""}`}
+            onClick={() => setTheme("editorial")}
+          >
+            Editorial
+          </button>
+          <button
+            className={`${styles.themeBtn} ${theme === "modern" ? styles.themeBtnActive : ""}`}
+            onClick={() => setTheme("modern")}
+          >
+            Modern
+          </button>
+        </div>
+
+        {/* ── Right: user chip or login ── */}
+        <div className={styles.navRight}>
+          {user ? (
+            <div
+              className={styles.userChip}
+              onMouseEnter={openUser}
+              onMouseLeave={closeUser}
+            >
+              <div className={styles.avatar}>{initials}</div>
+              <span className={styles.userName}>{firstName}</span>
+              <ChevDown />
+
+              {showUserDropdown && (
+                <div className={`${styles.dropdown} ${styles.userDropdown}`}>
+                  <button className={styles.dropItem} onClick={() => navigator("/profile")}>
+                    👤 Profilim
+                  </button>
+                  <button
+                    className={`${styles.dropItem} ${styles.dropItemDanger}`}
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      localStorage.removeItem("user");
+                      localStorage.removeItem("_sid");
+                      store.user.setData(null);
+                      navigator("/");
+                      setShowUserDropdown(false);
+                    }}
+                  >
+                    Çıxış
+                  </button>
                 </div>
               )}
             </div>
-
-            {/* Elan */}
-            <div
-              className={`${styles.navItem} ${isActive("/news") ? styles.active : ""}`}
-              onClick={() => navigator("/news")}
-            >
-              <CampaignIcon className={styles.navIcon} />
-              <span>Elan</span>
-            </div>
-
-            {/* Admin panel — yalnız role>=2 üçün */}
-            {store.user.data?.role >= 2 && (
-              <div
-                className={styles.navItem}
-                style={{ color: "#6a1b9a" }}
-                onClick={() => navigator("/admin")}
+          ) : (
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                className="mmu-btn mmu-btn-ghost mmu-btn-sm"
+                onClick={() => navigator("/login")}
               >
-                <AdminPanelSettingsIcon className={styles.navIcon} />
-                <span>Admin panel</span>
-              </div>
-            )}
-          </nav>
-
-          {/* ── Sağ: user ── */}
-          <div
-            className={styles.userArea}
-            onMouseEnter={() => setShowUserDropdown(true)}
-            onMouseLeave={() => setShowUserDropdown(false)}
-          >
-            <div className={styles.userAvatar}>
-              <PersonIcon className={styles.avatarIcon} />
+                Daxil ol
+              </button>
+              <button
+                className="mmu-btn mmu-btn-primary mmu-btn-sm"
+                onClick={() => navigator("/register")}
+              >
+                Qeydiyyat
+              </button>
             </div>
-            <span className={styles.userName}>{userLabel}</span>
-            <ArrowDropDownIcon className={`${styles.chevron} ${showUserDropdown ? styles.chevronOpen : ""}`} />
-
-            {showUserDropdown && (
-              <div className={`${styles.dropdown} ${styles.userDropdown}`}>
-                {store.user.data ? (
-                  <>
-                    <div className={styles.dropdownLink} onClick={() => navigator("/profile")}>
-                      Profilim
-                    </div>
-                    <div
-                      className={styles.dropdownLink}
-                      onClick={() => {
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("user");
-                        localStorage.removeItem("_sid");
-                        store.user.setData(null);
-                        navigator("/");
-                        setShowUserDropdown(false);
-                      }}
-                    >
-                      Çıxış
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={styles.dropdownLink} onClick={() => navigator("/login")}>Daxil ol</div>
-                    <div className={styles.dropdownLink} onClick={() => navigator("/register")}>Qeydiyyat</div>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Mobil */}
-          <MenuIcon
-            className={styles.menuIcon}
-            onClick={() => store.sidebar.setData(!store.sidebar.data)}
-          />
+          )}
         </div>
-      </header>
-      <AdSpace position="header-bottom" />
-    </>
+
+        {/* Mobile hamburger */}
+        <button
+          className={styles.hamburger}
+          onClick={() => store.sidebar.setData(!store.sidebar.data)}
+          aria-label="Menyu"
+        >
+          <MenuHamburger />
+        </button>
+
+      </nav>
+    </header>
   );
 }
 

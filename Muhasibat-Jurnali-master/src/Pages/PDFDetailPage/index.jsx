@@ -4,20 +4,29 @@ import axios from 'axios';
 import Base_Url_Server, { formatServerFilePath } from '../../Constants/baseUrl';
 import styles from './index.module.scss';
 import { downloadPdf } from '../../Services/pdfService';
-import CircularProgress from '@mui/material/CircularProgress';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import AdSpace from '../../Components/AdSpace';
 import dataContext from '../../Contexts/GlobalState';
 import Swal from 'sweetalert2';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+import BookCover from '../../Components/BookCover';
+import Footer from '../../Layouts/Footer';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url
 ).toString();
+
+const PALETTES = [
+  ["#3D2914","#7A4A26"],
+  ["#1F3A2E","#3A6B53"],
+  ["#8B1A1A","#C0392B"],
+  ["#1A2B4A","#3E5B8B"],
+  ["#0B4F6C","#0F7895"],
+  ["#5B3A1F","#8E6840"],
+  ["#2D1B4E","#5A3D8A"],
+  ["#1B3A1B","#2E7D32"],
+];
 
 const PDFDetailPage = () => {
   const [pdf, setPdf] = useState(null);
@@ -42,10 +51,7 @@ const PDFDetailPage = () => {
     try {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) return 'Tarix yoxdur';
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const year = date.getFullYear();
-      return `${day}.${month}.${year}`;
+      return `${date.getDate().toString().padStart(2,'0')}.${(date.getMonth()+1).toString().padStart(2,'0')}.${date.getFullYear()}`;
     } catch {
       return 'Tarix yoxdur';
     }
@@ -63,6 +69,7 @@ const PDFDetailPage = () => {
         const pdfData = response.data?.data?.pdf;
         if (pdfData) {
           setPdf(pdfData);
+          document.title = pdfData.title + ' — MMU Kitabxana';
         } else {
           setError('PDF məlumatları tapılmadı');
         }
@@ -75,7 +82,6 @@ const PDFDetailPage = () => {
     fetchPdf();
   }, [id]);
 
-  // Touch swipe handlers
   const minSwipeDistance = 50;
   const onTouchStart = (e) => { setTouchEnd(null); setTouchStart(e.targetTouches[0].clientX); };
   const onTouchMove = (e) => { setTouchEnd(e.targetTouches[0].clientX); };
@@ -88,17 +94,17 @@ const PDFDetailPage = () => {
   };
 
   const catName = (pdf?.category?.name || '').toLowerCase();
-  const isFiziki    = catName.includes('kitab-fiziki');
-  const isElektron  = catName.includes('kitab-elektron');
-  const isHerIkisi  = catName.includes('kitab-hər ikisi') || catName.includes('kitab-her ikisi');
-  const isPhysical  = isFiziki || isHerIkisi;
+  const isFiziki   = catName.includes('kitab-fiziki');
+  const isElektron = catName.includes('kitab-elektron');
+  const isHerIkisi = catName.includes('kitab-hər ikisi') || catName.includes('kitab-her ikisi');
+  const isPhysical = isFiziki || isHerIkisi;
   const showPreview = (isElektron || isHerIkisi) && !!pdf?.file_path;
 
   const handleRent = async () => {
     const token = localStorage.getItem('token');
     if (!token) { navigate('/login'); return; }
     if (!pdf?.institution_id) {
-      alert('Bu kitab üçün müəssisə məlumatı mövcud deyil.');
+      Swal.fire({ icon: 'warning', title: 'Məlumat yoxdur', text: 'Bu kitab üçün müəssisə məlumatı mövcud deyil.', confirmButtonColor: '#0B1F3D' });
       return;
     }
     try {
@@ -109,9 +115,9 @@ const PDFDetailPage = () => {
         duration_days: rentalDuration,
       }, { headers: { Authorization: `Bearer ${token}` } });
       setRentalModal(false);
-      alert(`Kirayə sorğunuz göndərildi! Müəssisə tərəfindən təsdiqləndikdən sonra bildiriş alacaqsınız.`);
+      Swal.fire({ icon: 'success', title: 'Sorğu göndərildi', text: 'Müəssisə tərəfindən təsdiqləndikdən sonra bildiriş alacaqsınız.', confirmButtonColor: '#0B1F3D' });
     } catch (err) {
-      alert(err.response?.data?.message || 'Xəta baş verdi');
+      Swal.fire({ icon: 'error', title: 'Xəta', text: err.response?.data?.message || 'Xəta baş verdi', confirmButtonColor: '#0B1F3D' });
     } finally {
       setRentalLoading(false);
     }
@@ -135,313 +141,284 @@ const PDFDetailPage = () => {
       });
       if (res.data?.data?.pdf) setPdf(res.data.data.pdf);
     } catch (err) {
-      alert(err.response?.data?.message || 'PDF yüklənərkən xəta baş verdi.');
+      Swal.fire({ icon: 'error', title: 'Xəta', text: err.response?.data?.message || 'PDF yüklənərkən xəta baş verdi.', confirmButtonColor: '#0B1F3D' });
     } finally {
       setDownloading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className={styles.pdfDetailPage}>
-        <div className={styles.loading}>
-          <CircularProgress />
-          <p>Yüklənir...</p>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className={styles.stateWrap}>
+      <div className={styles.spinner} />
+      <p>Yüklənir…</p>
+    </div>
+  );
 
-  if (error || !pdf) {
-    return (
-      <div className={styles.pdfDetailPage}>
-        <div className={styles.error}>
-          <h2>Xəta</h2>
-          <p>{error || 'PDF tapılmadı'}</p>
-        </div>
-      </div>
-    );
-  }
+  if (error || !pdf) return (
+    <div className={styles.stateWrap}>
+      <h2>Xəta</h2>
+      <p>{error || 'PDF tapılmadı'}</p>
+      <button className="mmu-btn mmu-btn-primary" onClick={() => navigate(-1)}>Geri</button>
+    </div>
+  );
+
+  const [heroC1, heroC2] = PALETTES[(pdf?.category?.id || pdf?.id || 0) % PALETTES.length];
 
   return (
-    <div className={styles.pdfDetailPage}>
-      {/* Hero */}
-      <div className={styles.hero}>
-        <div className={styles.heroImage}>
-          {pdf.cover_image_path || pdf.image_path ? (
-            <img
-              src={formatServerFilePath(pdf.cover_image_path || pdf.image_path)}
-              alt={pdf.title}
-              onError={(e) => { e.target.src = '/src/Assets/heroImage.jpg'; }}
-            />
-          ) : (
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100%', color:'#fff', fontSize:'18px', backgroundColor:'rgba(0,0,0,0.3)' }}>
-              Şəkil yoxdur
-            </div>
-          )}
-        </div>
-        <div className={styles.heroOverlay}>
-          <div className={styles.heroContent}>
-            <div className={styles.breadcrumb}>
-              <span className={styles.breadcrumbLink} onClick={() => navigate('/')}>Ana səhifə</span>
-              <span className={styles.breadcrumbSeparator}>/</span>
-              <span className={styles.breadcrumbLink} onClick={() => navigate('/library')}>Kitabxana</span>
-              <span className={styles.breadcrumbSeparator}>/</span>
-              <span className={styles.breadcrumbCurrent}>PDF</span>
-            </div>
-            <h1>{pdf.title}</h1>
-            <div className={styles.heroMeta}>
-              {pdf.language && <span className={styles.language}>{pdf.language}</span>}
-              {pdf.category?.name && <span className={styles.category}>{pdf.category.name}</span>}
-              <span className={styles.date}>{formatDate(pdf.created_at)}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <>
+      <main>
+        {/* ── Hero ── */}
+        <section className={styles.hero} style={{ background: `linear-gradient(150deg, ${heroC1} 0%, ${heroC2} 100%)` }}>
+          <div className="mmu-container">
+            <nav className={styles.crumb}>
+              <button onClick={() => navigate('/')}>Ana səhifə</button>
+              <span>/</span>
+              <button onClick={() => navigate('/library/all')}>Kitabxana</button>
+              <span>/</span>
+              <span>{pdf.title}</span>
+            </nav>
 
-      <div className={styles.container}>
-        <div className={styles.contentWrapper}>
-          {/* Sol tərəf: Mündericat + Təsvir */}
-          <div className={styles.pdfContent}>
-            {(pdf.table_of_contents || (pdf.content_images_paths && pdf.content_images_paths.length > 0)) && (
-              <div className={styles.contentImagesSlider}>
-                <h3>
-                  Mündericat
-                  {pdf.table_of_contents && (
+            <div className={styles.heroBody}>
+              <div className={styles.heroCover}>
+                <BookCover pdf={pdf} />
+              </div>
+
+              <div className={styles.heroInfo}>
+                <div className={styles.heroBadges}>
+                  {pdf.category?.name && (
+                    <span className="mmu-badge mmu-badge-accent">{pdf.category.name}</span>
+                  )}
+                  {pdf.language && (
+                    <span className={styles.langBadge}>{pdf.language}</span>
+                  )}
+                </div>
+                <h1 className={styles.heroTitle}>{pdf.title}</h1>
+                {pdf.author && <p className={styles.heroAuthor}>{pdf.author}</p>}
+                <div className={styles.heroMeta}>
+                  {pdf.publication_year && <span>{pdf.publication_year}</span>}
+                  <span>↓ {pdf.downloads || 0} yüklənmə</span>
+                  <span>{formatDate(pdf.created_at)}</span>
+                </div>
+
+                <div className={styles.heroActions}>
+                  {!isFiziki && (
                     <button
-                      onClick={() => setShowToc(v => !v)}
-                      style={{ marginLeft: '12px', fontSize: '13px', padding: '4px 12px', borderRadius: '20px', border: 'none', cursor: 'pointer', background: showToc ? '#e0e7ff' : '#032062', color: showToc ? '#032062' : '#fff', fontWeight: '500' }}
+                      className={styles.btnWhite}
+                      onClick={() => window.open(`/library/${pdf.id}/read`, '_blank')}
                     >
-                      {showToc ? 'Gizlət' : 'Mündericatı gör'}
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                      Oxu
                     </button>
                   )}
-                </h3>
+                  {!isFiziki && pdf.allow_download !== 0 && (
+                    <button
+                      className={styles.btnAccent}
+                      onClick={handleDownload}
+                      disabled={downloading}
+                    >
+                      {downloading ? <span className={styles.btnSpinnerSm} /> : (
+                        <>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                          Yüklə
+                        </>
+                      )}
+                    </button>
+                  )}
+                  {isPhysical && (
+                    <button
+                      className={styles.btnOutlineWhite}
+                      onClick={() => {
+                        if (!isLoggedIn) {
+                          Swal.fire({
+                            icon: 'info', title: 'Giriş tələb olunur',
+                            text: 'Kitab kirayələmək üçün hesabınıza daxil olun.',
+                            confirmButtonText: 'Daxil ol', showCancelButton: true,
+                            cancelButtonText: 'Ləğv et', confirmButtonColor: '#0B1F3D',
+                          }).then(r => { if (r.isConfirmed) navigate('/login'); });
+                          return;
+                        }
+                        setRentalModal(true);
+                      }}
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22.5v-18Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg>
+                      Kirayələ
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                {/* Mətn mündericatı */}
-                {pdf.table_of_contents && showToc && (
-                  <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit', fontSize: '14px', lineHeight: '1.8', margin: '0 0 16px 0', padding: '16px', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #eee' }}>
-                    {pdf.table_of_contents}
-                  </pre>
+        {/* ── Body ── */}
+        <section className={styles.body}>
+          <div className="mmu-container">
+            <div className={styles.layout}>
+
+              {/* Main content */}
+              <div className={styles.mainCol}>
+
+                {/* TOC + image slider */}
+                {(pdf.table_of_contents || (pdf.content_images_paths && pdf.content_images_paths.length > 0)) && (
+                  <div className={styles.section}>
+                    <div className={styles.sectionHead}>
+                      <h3>Mündericat</h3>
+                      {pdf.table_of_contents && (
+                        <button
+                          className="mmu-btn mmu-btn-outline mmu-btn-sm"
+                          onClick={() => setShowToc(v => !v)}
+                        >
+                          {showToc ? 'Gizlət' : 'Mündericatı gör'}
+                        </button>
+                      )}
+                    </div>
+
+                    {pdf.table_of_contents && showToc && (
+                      <pre className={styles.tocText}>{pdf.table_of_contents}</pre>
+                    )}
+
+                    {pdf.content_images_paths && pdf.content_images_paths.length > 0 && (
+                      <div className={styles.slider}>
+                        <button
+                          className={styles.sliderArrow}
+                          onClick={() => setCurrentImageIndex(p => p === 0 ? pdf.content_images_paths.length - 1 : p - 1)}
+                          aria-label="Əvvəlki şəkil"
+                        >
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                        </button>
+                        <div
+                          className={styles.sliderWrap}
+                          onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
+                        >
+                          <img
+                            src={formatServerFilePath(pdf.content_images_paths[currentImageIndex])}
+                            alt={`Mündericat ${currentImageIndex + 1}`}
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                            draggable={false}
+                          />
+                          <div className={styles.sliderDots}>
+                            {pdf.content_images_paths.map((_, i) => (
+                              <button
+                                key={i}
+                                className={`${styles.dot} ${i === currentImageIndex ? styles.dotActive : ''}`}
+                                onClick={() => setCurrentImageIndex(i)}
+                                aria-label={`Şəkil ${i + 1}`}
+                              />
+                            ))}
+                          </div>
+                          <span className={styles.sliderCount}>{currentImageIndex + 1} / {pdf.content_images_paths.length}</span>
+                        </div>
+                        <button
+                          className={styles.sliderArrow}
+                          onClick={() => setCurrentImageIndex(p => p === pdf.content_images_paths.length - 1 ? 0 : p + 1)}
+                          aria-label="Növbəti şəkil"
+                        >
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
 
-                {/* Şəkil slider */}
-                {pdf.content_images_paths && pdf.content_images_paths.length > 0 && (
-                  <div className={styles.sliderContainer}>
-                    <button className={styles.sliderArrow}
-                      onClick={() => setCurrentImageIndex(p => p === 0 ? pdf.content_images_paths.length - 1 : p - 1)}
-                      aria-label="Əvvəlki şəkil">
-                      <ArrowBackIosIcon />
-                    </button>
-                    <div className={styles.sliderImageContainer}
-                      onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-                      <img
-                        src={formatServerFilePath(pdf.content_images_paths[currentImageIndex])}
-                        alt={`Mündericat ${currentImageIndex + 1}`}
-                        onError={(e) => { e.target.src = '/src/Assets/heroImage.jpg'; }}
-                        draggable={false}
-                      />
-                      <div className={styles.sliderIndicators}>
-                        {pdf.content_images_paths.map((_, i) => (
-                          <button key={i}
-                            className={`${styles.indicator} ${i === currentImageIndex ? styles.active : ''}`}
-                            onClick={() => setCurrentImageIndex(i)}
-                            aria-label={`Şəkil ${i + 1}`} />
+                {/* Description */}
+                {pdf.description && (
+                  <div className={styles.section}>
+                    <div className={styles.sectionHead}><h3>Təsvir</h3></div>
+                    <p className={styles.descText}>{pdf.description}</p>
+                  </div>
+                )}
+
+                {/* PDF Preview */}
+                {showPreview && (
+                  <div className={styles.section}>
+                    <div className={styles.sectionHead}><h3>Önizləmə</h3></div>
+                    <div className={styles.previewWrap}>
+                      <Document
+                        file={formatServerFilePath(pdf.file_path)}
+                        onLoadSuccess={({ numPages }) => setPreviewNumPages(numPages)}
+                        loading={<div className={styles.previewLoading}><div className={styles.spinner} /><span>Yüklənir…</span></div>}
+                        error={<p className={styles.previewError}>PDF önizləməsi mövcud deyil.</p>}
+                      >
+                        {[1, 2, 3].filter(p => !previewNumPages || p <= previewNumPages).map(pageNum => (
+                          <div key={pageNum} className={styles.previewPage}>
+                            <Page pageNumber={pageNum} width={560} renderTextLayer={false} renderAnnotationLayer={false} />
+                          </div>
                         ))}
-                      </div>
-                      <div className={styles.sliderCounter}>
-                        {currentImageIndex + 1} / {pdf.content_images_paths.length}
+                      </Document>
+                      <div className={styles.previewFade}>
+                        <button
+                          className="mmu-btn mmu-btn-primary"
+                          onClick={() => window.open(`/library/${id}/read`, '_blank')}
+                        >
+                          Tam oxu
+                        </button>
                       </div>
                     </div>
-                    <button className={styles.sliderArrow}
-                      onClick={() => setCurrentImageIndex(p => p === pdf.content_images_paths.length - 1 ? 0 : p + 1)}
-                      aria-label="Növbəti şəkil">
-                      <ArrowForwardIosIcon />
-                    </button>
                   </div>
                 )}
               </div>
-            )}
 
-            {pdf.description && (
-              <div className={styles.description}>
-                <h3>Təsvir</h3>
-                <p>{pdf.description}</p>
-              </div>
-            )}
-
-            {showPreview && (
-              <div className={styles.previewSection}>
-                <h3 className={styles.previewTitle}>📄 Önizləmə</h3>
-                <div className={styles.previewWrap}>
-                  <Document
-                    file={formatServerFilePath(pdf.file_path)}
-                    onLoadSuccess={({ numPages }) => setPreviewNumPages(numPages)}
-                    loading={<div className={styles.previewLoading}><CircularProgress size={28} /><span>Yüklənir...</span></div>}
-                    error={<p className={styles.previewError}>PDF önizləməsi mövcud deyil.</p>}
-                  >
-                    {[1, 2, 3].filter(p => !previewNumPages || p <= previewNumPages).map(pageNum => (
-                      <div key={pageNum} className={styles.previewPage}>
-                        <Page
-                          pageNumber={pageNum}
-                          width={560}
-                          renderTextLayer={false}
-                          renderAnnotationLayer={false}
-                        />
-                      </div>
-                    ))}
-                  </Document>
-                  <div className={styles.previewFade}>
-                    <button
-                      className={styles.previewReadBtn}
-                      onClick={() => window.open(`/library/${id}/read`, '_blank')}
-                    >
-                      📖 Tam oxu
-                    </button>
-                  </div>
+              {/* Sidebar */}
+              <aside className={styles.aside}>
+                <div className={styles.infoCard}>
+                  <h4>Məlumat</h4>
+                  {[
+                    { l: 'Başlıq',    v: pdf.title },
+                    { l: 'Kateqoriya', v: pdf.category?.name },
+                    { l: 'Müəllif',   v: pdf.author },
+                    { l: 'Dil',       v: pdf.language },
+                    { l: 'Nəşr ili',  v: pdf.publication_year },
+                    { l: 'Nəşr yeri', v: pdf.publisher_location },
+                    { l: 'Qiymət',    v: pdf.price > 0 ? `${pdf.price} AZN` : 'Pulsuz' },
+                    { l: 'Tarix',     v: formatDate(pdf.created_at) },
+                    { l: 'Yüklənmə', v: pdf.downloads || 0 },
+                    { l: 'Kitabxana', v: pdf.institution?.name },
+                  ].filter(item => item.v != null && item.v !== '').map(({ l, v }) => (
+                    <div key={l} className={styles.infoRow}>
+                      <span className={styles.infoKey}>{l}</span>
+                      <span className={styles.infoVal}>{v}</span>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            )}
+              </aside>
+            </div>
           </div>
+        </section>
+      </main>
 
-          {/* Sağ tərəf: PDF məlumatları + Yüklə düyməsi */}
-          <div className={styles.sidebar}>
-            <AdSpace position="detail-sidebar" />
-            <div className={styles.pdfInfo}>
-              <h3>PDF Məlumatları</h3>
-              <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Başlıq:</span>
-                <span className={styles.infoValue}>{pdf.title}</span>
-              </div>
-              {pdf.category?.name && (
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Kateqoriya:</span>
-                  <span className={styles.infoValue}>{pdf.category.name}</span>
-                </div>
-              )}
-              {pdf.language && (
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Dil:</span>
-                  <span className={styles.infoValue}>{pdf.language}</span>
-                </div>
-              )}
-              {pdf.author && (
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Müəllif:</span>
-                  <span className={styles.infoValue}>{pdf.author}</span>
-                </div>
-              )}
-              {pdf.publication_year && (
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Nəşr tarixi:</span>
-                  <span className={styles.infoValue}>{pdf.publication_year}</span>
-                </div>
-              )}
-              {pdf.publisher_location && (
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Nəşriyyat yeri:</span>
-                  <span className={styles.infoValue}>{pdf.publisher_location}</span>
-                </div>
-              )}
-              <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Qiymət:</span>
-                <span className={styles.infoValue}>
-                  {pdf.price > 0 ? `${pdf.price} AZN` : "Pulsuz"}
-                </span>
-              </div>
-              <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Tarix:</span>
-                <span className={styles.infoValue}>{formatDate(pdf.created_at)}</span>
-              </div>
-              <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Yüklənmə sayı:</span>
-                <span className={styles.infoValue}>{pdf.downloads || 0}</span>
-              </div>
-              {pdf.institution?.name && (
-                <div className={styles.infoItem}>
-                  <span className={styles.infoLabel}>Kitabxana:</span>
-                  <span className={styles.infoValue}>{pdf.institution.name}</span>
-                </div>
-              )}
-            </div>
-
-            <div className={styles.actions}>
-              {!isFiziki && (
-                <button
-                  className={styles.downloadButton}
-                  onClick={() => window.open(`/library/${pdf.id}/read`, '_blank')}
-                  style={{ marginBottom: '8px' }}
-                >
-                  📖 Oxu
-                </button>
-              )}
-              {!isFiziki && pdf.allow_download !== 0 && (
-                <button
-                  className={styles.buyButton}
-                  onClick={handleDownload}
-                  disabled={downloading}
-                  style={{ marginBottom: '8px' }}
-                >
-                  {downloading ? <CircularProgress size={20} style={{ color: '#fff' }} /> : '📥 Yüklə'}
-                </button>
-              )}
-              {isPhysical && (
-                <button
-                  className={`${styles.rentButton} ${!isLoggedIn ? styles.rentButtonGuest : ''}`}
-                  onClick={() => {
-                    if (!isLoggedIn) {
-                      Swal.fire({
-                        icon: 'info',
-                        title: 'Giriş tələb olunur',
-                        text: 'Kitab kirayələmək üçün hesabınıza daxil olun.',
-                        confirmButtonText: 'Daxil ol',
-                        showCancelButton: true,
-                        cancelButtonText: 'Ləğv et',
-                        confirmButtonColor: '#2c3e50',
-                      }).then(r => { if (r.isConfirmed) navigate('/login'); });
-                      return;
-                    }
-                    setRentalModal(true);
-                  }}
-                >
-                  📚 Kirayələ
-                </button>
-              )}
-            </div>
-
-            {/* Kirayə modal */}
-            {rentalModal && (
-              <div className={styles.rentalOverlay} onClick={() => setRentalModal(false)}>
-                <div className={styles.rentalModal} onClick={e => e.stopPropagation()}>
-                  <h3>Kitab Kirayəsi</h3>
-                  <p className={styles.rentalBook}>{pdf.title}</p>
-                  {pdf.institution?.name && (
-                    <p className={styles.rentalInst}>📍 {pdf.institution.name}</p>
-                  )}
-                  <p className={styles.rentalLabel}>Kirayə müddəti seçin:</p>
-                  <div className={styles.durationBtns}>
-                    {[7, 14, 30].map(d => (
-                      <button
-                        key={d}
-                        className={`${styles.durationBtn} ${rentalDuration === d ? styles.durationActive : ''}`}
-                        onClick={() => setRentalDuration(d)}
-                      >
-                        {d} gün
-                      </button>
-                    ))}
-                  </div>
-                  <div className={styles.rentalActions}>
-                    <button className={styles.rentalCancel} onClick={() => setRentalModal(false)}>Ləğv et</button>
-                    <button className={styles.rentalConfirm} onClick={handleRent} disabled={rentalLoading}>
-                      {rentalLoading ? <CircularProgress size={16} style={{ color: '#fff' }} /> : 'Sorğu Göndər'}
-                    </button>
-                  </div>
-                </div>
-              </div>
+      {/* ── Rental modal ── */}
+      {rentalModal && (
+        <div className={styles.rentalOverlay} onClick={() => setRentalModal(false)}>
+          <div className={styles.rentalModal} onClick={e => e.stopPropagation()}>
+            <h3>Kitab Kirayəsi</h3>
+            <p className={styles.rentalBook}>{pdf.title}</p>
+            {pdf.institution?.name && (
+              <p className={styles.rentalInst}>📍 {pdf.institution.name}</p>
             )}
+            <p className={styles.rentalLabel}>Kirayə müddəti seçin:</p>
+            <div className={styles.durationBtns}>
+              {[7, 14, 30].map(d => (
+                <button
+                  key={d}
+                  className={`${styles.durationBtn} ${rentalDuration === d ? styles.durationActive : ''}`}
+                  onClick={() => setRentalDuration(d)}
+                >
+                  {d} gün
+                </button>
+              ))}
+            </div>
+            <div className={styles.rentalActions}>
+              <button className={styles.rentalCancel} onClick={() => setRentalModal(false)}>Ləğv et</button>
+              <button className={styles.rentalConfirm} onClick={handleRent} disabled={rentalLoading}>
+                {rentalLoading ? <span className={styles.btnSpinnerSm} /> : 'Sorğu Göndər'}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+
+      <Footer />
+    </>
   );
 };
 
