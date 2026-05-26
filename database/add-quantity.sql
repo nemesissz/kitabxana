@@ -1,0 +1,2 @@
+ALTER TABLE pdfs
+  ADD COLUMN IF NOT EXISTS quantity INT NOT NULL DEFAULT 1 AFTER linked_pdf_id;

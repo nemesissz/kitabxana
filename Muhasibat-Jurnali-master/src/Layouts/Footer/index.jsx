@@ -57,7 +57,7 @@ function Footer() {
             <h4>Səhifələr</h4>
             <ul className={styles.linkList}>
               <li><button onClick={() => navigate("/")}>Ana səhifə</button></li>
-              <li><button onClick={() => navigate("/news")}>Elanlar</button></li>
+              <li><button onClick={() => navigate("/announcements")}>Elanlar</button></li>
               <li><button onClick={() => navigate("/profile")}>Profilim</button></li>
               <li><button onClick={() => navigate("/login")}>Daxil ol</button></li>
             </ul>

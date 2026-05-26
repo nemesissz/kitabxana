@@ -1,0 +1,2 @@
+ALTER TABLE pdfs
+  ADD COLUMN IF NOT EXISTS linked_pdf_id INT NULL DEFAULT NULL AFTER institution_id;

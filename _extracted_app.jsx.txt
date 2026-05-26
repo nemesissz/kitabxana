@@ -1,0 +1,119 @@
+// app.jsx — Main app: routing, state, tweaks
+const { useState: useStateA, useEffect: useEffectA } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "sun",
+  "variant": "editorial"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [route, setRoute] = useStateA(() => location.hash.slice(1) || "home");
+  const [favs, setFavs] = useStateA(() => {
+    try { return JSON.parse(localStorage.getItem("mmu_favs") || "[1, 10]"); } catch { return [1, 10]; }
+  });
+
+  // Apply theme + variant to <html>
+  useEffectA(() => {
+    document.documentElement.setAttribute("data-theme", t.theme || "sun");
+    document.documentElement.setAttribute("data-variant", t.variant || "editorial");
+  }, [t.theme, t.variant]);
+
+  // Hash-based routing
+  useEffectA(() => {
+    const onHash = () => setRoute(location.hash.slice(1) || "home");
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const navigate = (r) => {
+    location.hash = r;
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  const toggleFav = (id) => {
+    setFavs(f => {
+      const next = f.includes(id) ? f.filter(x => x !== id) : [...f, id];
+      try { localStorage.setItem("mmu_favs", JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+
+  const setVariant = (v) => setTweak("variant", v);
+
+  // Render route
+  let page;
+  if (route === "home") page = <HomePage navigate={navigate} favs={favs} toggleFav={toggleFav} />;
+  else if (route === "library") page = <LibraryPage navigate={navigate} favs={favs} toggleFav={toggleFav} />;
+  else if (route === "elan") page = <ElanPage navigate={navigate} />;
+  else if (route === "profile") page = <ProfilePage navigate={navigate} favs={favs} toggleFav={toggleFav} />;
+  else if (route === "upload") page = <UploadPage navigate={navigate} />;
+  else if (route.startsWith("pdf-")) page = <DetailPage id={parseInt(route.slice(4), 10)} navigate={navigate} favs={favs} toggleFav={toggleFav} />;
+  else if (route.startsWith("reader-")) page = <ReaderPage id={parseInt(route.slice(7), 10)} navigate={navigate} />;
+  else page = <HomePage navigate={navigate} favs={favs} toggleFav={toggleFav} />;
+
+  return (
+    <div>
+      <Header route={route} navigate={navigate} variant={t.variant} setVariant={setVariant} user={window.DATA.user} />
+      <main>{page}</main>
+      <Footer navigate={navigate} />
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Tema rəngi" />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+          {[
+            { id: "sun",    name: "Günəş",  swatch: ["#FCD34D", "#0B1F3D", "#FAF7EE"] },
+            { id: "sea",    name: "Dəniz",  swatch: ["#1E3A8A", "#FCD34D", "#FAF7EE"] },
+            { id: "forest", name: "Meşə",   swatch: ["#15803D", "#FCD34D", "#FAF7EE"] },
+            { id: "cream",  name: "Krem",   swatch: ["#E4C97A", "#1B1410", "#F7F2E6"] },
+          ].map(th => (
+            <button key={th.id} onClick={() => setTweak("theme", th.id)} style={{
+              padding: 8, borderRadius: 10,
+              border: t.theme === th.id ? "2px solid #29261b" : "1px solid rgba(41,38,27,.15)",
+              background: "transparent",
+              cursor: "pointer", fontFamily: "inherit",
+              display: "flex", flexDirection: "column", gap: 6,
+            }}>
+              <div style={{ display: "flex", gap: 3, height: 24, borderRadius: 5, overflow: "hidden" }}>
+                <div style={{ flex: 2, background: th.swatch[0] }} />
+                <div style={{ flex: 1, background: th.swatch[1] }} />
+                <div style={{ flex: 1, background: th.swatch[2] }} />
+              </div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#29261b", textAlign: "left" }}>{th.name}</div>
+            </button>
+          ))}
+        </div>
+
+        <TweakSection label="Vizual variant" />
+        <TweakRadio
+          label="Üslub"
+          value={t.variant}
+          options={["editorial", "modern"]}
+          onChange={(v) => setTweak("variant", v)}
+        />
+        <div style={{ fontSize: 11, color: "rgba(41,38,27,.6)", marginTop: -4 }}>
+          Header-dən də keçə bilərsiniz.
+        </div>
+
+        <TweakSection label="Naviqasiya" />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+          {[
+            ["home", "Ana"], ["library", "Kitabxana"],
+            ["elan", "Elan"], ["profile", "Profil"],
+            ["upload", "Yüklə"], ["pdf-1", "Detal"],
+          ].map(([r, l]) => (
+            <button key={r} onClick={() => navigate(r)} style={{
+              padding: "8px 10px", fontSize: 11, fontWeight: 600,
+              borderRadius: 8, border: "1px solid rgba(41,38,27,.15)",
+              background: route === r || (r === "pdf-1" && route.startsWith("pdf-")) ? "#29261b" : "transparent",
+              color: route === r || (r === "pdf-1" && route.startsWith("pdf-")) ? "#fff" : "#29261b",
+              cursor: "pointer", fontFamily: "inherit",
+            }}>{l}</button>
+          ))}
+        </div>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);

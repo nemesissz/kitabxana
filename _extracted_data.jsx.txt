@@ -1,0 +1,155 @@
+// data.js — sample content for the prototype
+window.DATA = {
+  user: {
+    name: "Vüsal Seyidli",
+    handle: "vusal.seyidli2019",
+    initials: "VS",
+    role: "İstifadəçi",
+    institution: "Milli Müdafiə Universiteti",
+    joined: "2024-09-12",
+  },
+
+  categories: [
+    { id: "all", label: "Hamısı" },
+    { id: "kitab-fiziki", label: "Fiziki kitab" },
+    { id: "kitab-elektron", label: "Elektron kitab" },
+    { id: "kitab-her-ikisi", label: "Hər ikisi" },
+    { id: "emr", label: "Əmrlər" },
+    { id: "serencam", label: "Sərəncamlar" },
+    { id: "jurnal", label: "Jurnal" },
+  ],
+
+  books: [
+    {
+      id: 1, title: "Achtung Panzer", author: "Heinz Guderian",
+      cat: "kitab-fiziki", year: 1937, lang: "DE", pages: 384,
+      desc: "Tank taktikası və zirehli müharibə doktrinası üzərinə klassik əsər. Müasir manevr müharibəsinin nəzəri bünövrəsi.",
+      colors: ["#3D2914", "#7A4A26"], downloads: 248, rating: 4.7, featured: true,
+    },
+    {
+      id: 2, title: "Armed Misəl", author: "Robert Greene",
+      cat: "kitab-elektron", year: 2021, lang: "EN", pages: 320,
+      desc: "Strateji düşüncə və qərar qəbulu üzərinə müasir təlim. Liderlik və müharibə sənətinin sintezi.",
+      colors: ["#1F3A2E", "#3A6B53"], downloads: 412, rating: 4.5,
+    },
+    {
+      id: 3, title: "History of Europe", author: "Alagappa University",
+      cat: "kitab-her-ikisi", year: 2018, lang: "EN", pages: 612,
+      desc: "1789-1945 illərini əhatə edən modern Avropa tarixinə dair akademik mənbə. M.A. proqramı üçün metodiki vəsait.",
+      colors: ["#8B1A1A", "#C0392B"], downloads: 156, rating: 4.8, featured: true,
+    },
+    {
+      id: 4, title: "Hərbi Strategiya",
+      author: "Suen-Tszı",
+      cat: "kitab-fiziki", year: 2019, lang: "AZ", pages: 196,
+      desc: "Müharibə sənətinin qədim Çin klassikası. Azərbaycan dilinə tərcümə, akademik şərhlərlə.",
+      colors: ["#1A2B4A", "#3E5B8B"], downloads: 589, rating: 4.9, featured: true,
+    },
+    {
+      id: 5, title: "Kibertəhlükəsizlik Əsasları",
+      author: "Nail Quliyev",
+      cat: "kitab-elektron", year: 2024, lang: "AZ", pages: 248,
+      desc: "Müasir kiber müdafiə, şəbəkə təhlükəsizliyi və informasiya mühafizəsi üzrə əsas vəsait.",
+      colors: ["#0B4F6C", "#0F7895"], downloads: 327, rating: 4.4,
+    },
+    {
+      id: 6, title: "Liderlik və Komandanlıq",
+      author: "John Maxwell",
+      cat: "kitab-her-ikisi", year: 2022, lang: "AZ", pages: 412,
+      desc: "21 qanun, real misallar və hərbi konteksdə tətbiq edilmiş liderlik prinsipləri.",
+      colors: ["#5B3A1F", "#8E6840"], downloads: 234, rating: 4.6,
+    },
+    {
+      id: 7, title: "Klasik Hərb Tarixi", author: "Hans Delbrück",
+      cat: "kitab-fiziki", year: 2015, lang: "EN", pages: 528,
+      desc: "Yunan-Roma dövründən XX əsrin başlanğıcına qədər hərb sənətinin təkamülü.",
+      colors: ["#4A1A1A", "#7A3030"], downloads: 142, rating: 4.5,
+    },
+    {
+      id: 8, title: "İqtisadiyyat və Müdafiə", author: "Paul Kennedy",
+      cat: "jurnal", year: 2023, lang: "EN", pages: 84,
+      desc: "Müdafiə xərcləri və böyük dövlətlərin yüksəlişi/süqutu haqqında analitik jurnal.",
+      colors: ["#1F4A4A", "#3A7373"], downloads: 89, rating: 4.3,
+    },
+    {
+      id: 9, title: "Hərbi Etika",
+      author: "Michael Walzer",
+      cat: "kitab-elektron", year: 2020, lang: "EN", pages: 280,
+      desc: "Ədalətli müharibə nəzəriyyəsi və müasir konfliktlərdə etik məsələlərin təhlili.",
+      colors: ["#3A1F4A", "#603A7A"], downloads: 178, rating: 4.7,
+    },
+    {
+      id: 10, title: "Azərbaycan Ordusu Tarixi",
+      author: "Tofiq Cəfərli",
+      cat: "kitab-fiziki", year: 2023, lang: "AZ", pages: 524,
+      desc: "Milli ordumuzun yaranma və inkişaf mərhələləri, fərqlənmiş şəxsiyyətlər haqqında.",
+      colors: ["#0B2D5C", "#1E5BAF"], downloads: 893, rating: 4.9, featured: true,
+    },
+    {
+      id: 11, title: "Geosiyasət və Region",
+      author: "Zbigniew Brzezinski",
+      cat: "kitab-her-ikisi", year: 2019, lang: "EN", pages: 432,
+      desc: "Mərkəzi Asiya, Qafqaz və Yaxın Şərqin geosiyasi mənzərəsinə dair klassik tədqiqat.",
+      colors: ["#2D1B0E", "#5C3A1E"], downloads: 267, rating: 4.6,
+    },
+    {
+      id: 12, title: "Süni İntellekt və Müdafiə",
+      author: "Paul Scharre",
+      cat: "kitab-elektron", year: 2024, lang: "EN", pages: 368,
+      desc: "Avtonom silahlar, etika və gələcəyin müharibələri üzərinə tədqiqat.",
+      colors: ["#0F1B2D", "#243A5C"], downloads: 415, rating: 4.8,
+    },
+  ],
+
+  announcements: [
+    {
+      id: 1, title: "Yeni elektron kitablar əlavə edildi",
+      cat: "Kitabxana", date: "2026-05-18", urgent: false, pinned: true,
+      author: "Kitabxana rəhbərliyi",
+      summary: "Mayın 18-i etibarilə 24 yeni elektron kitab fondumuza əlavə olundu. Hərb tarixi, strategiya və kibertəhlükəsizlik bölmələri yeniləndi.",
+      tags: ["yeni", "elektron"],
+    },
+    {
+      id: 2, title: "Yay tətili dövründə iş cədvəli",
+      cat: "Bildiriş", date: "2026-05-15", urgent: false, pinned: true,
+      author: "Akademik şöbə",
+      summary: "İyun 15 — avqust 31 tarixləri arasında oxu zalı saat 9:00 – 17:00 fasiləsiz işləyəcək. Şənbə günləri qısaldılmış cədvəl.",
+      tags: ["cədvəl"],
+    },
+    {
+      id: 3, title: "Hərbi tarix oxu konfransı",
+      cat: "Tədbir", date: "2026-05-22", urgent: true, pinned: false,
+      author: "Tədris şöbəsi",
+      summary: "Mayın 25-də saat 14:00-da konfrans zalında 'XX əsr hərb tarixində Azərbaycan' mövzusunda oxu konfransı keçiriləcək.",
+      tags: ["konfrans", "tarix"],
+    },
+    {
+      id: 4, title: "Kitab kirayəsi qaydalarına dəyişiklik",
+      cat: "Qayda", date: "2026-05-10", urgent: false, pinned: false,
+      author: "Kitabxana müdiriyyəti",
+      summary: "Maksimal kirayə müddəti 14 gündən 21 günə qaldırılıb. Bir vaxtda 5 kitaba qədər götürmək mümkündür.",
+      tags: ["qayda"],
+    },
+    {
+      id: 5, title: "Diplomant işləri üçün resurs paketi",
+      cat: "Akademik", date: "2026-05-05", urgent: false, pinned: false,
+      author: "Magistratura şöbəsi",
+      summary: "Diplomant və magistr işləri üzərində çalışan tələbələr üçün tövsiyə edilən mənbələr siyahısı yenilədik.",
+      tags: ["magistr", "resurs"],
+    },
+    {
+      id: 6, title: "ScienceDirect abunəliyi açıldı",
+      cat: "Kitabxana", date: "2026-04-28", urgent: false, pinned: false,
+      author: "İT şöbəsi",
+      summary: "Universitet daxilindən ScienceDirect bazasına çıxış aktiv edildi. Profilinizdə alındığınız jurnallara baxa bilərsiniz.",
+      tags: ["baza", "online"],
+    },
+  ],
+
+  recentActivity: [
+    { type: "download", bookId: 3, when: "2 saat əvvəl" },
+    { type: "read",     bookId: 1, when: "Dünən" },
+    { type: "favorite", bookId: 10, when: "3 gün əvvəl" },
+    { type: "rent",     bookId: 4, when: "Bir həftə əvvəl" },
+  ],
+};

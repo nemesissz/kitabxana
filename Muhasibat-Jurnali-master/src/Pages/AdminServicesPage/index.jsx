@@ -39,6 +39,13 @@ function AdminServicesPage() {
   const [permLoading, setPermLoading] = useState(false);
   const [permSaving, setPermSaving] = useState({});
 
+  const [collageBooks, setCollageBooks] = useState([]);
+  const [collageIds, setCollageIds]     = useState([]);
+  const [collageSearch, setCollageSearch] = useState('');
+  const [collageSuggestions, setCollageSuggestions] = useState([]);
+  const [collageSaving, setCollageSaving] = useState(false);
+  const [collageIsCustom, setCollageIsCustom] = useState(false);
+
   const token = localStorage.getItem("tokenAdmin");
 
   useEffect(() => {
@@ -80,25 +87,42 @@ function AdminServicesPage() {
 
   useEffect(() => { fetchLimits(); }, [fetchLimits]);
 
-  // Fetch non-main institutions for permission management
+  useEffect(() => {
+    if (!token) return;
+    axios.get(`${Base_Url_Server}settings/homepage-collage`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(res => {
+      const pdfs = res.data.data.pdfs || [];
+      setCollageBooks(pdfs);
+      setCollageIds(pdfs.map(p => p.id));
+      setCollageIsCustom(res.data.data.isCustom);
+    }).catch(() => {});
+  }, [token]);
+
+  // Fetch all institutions (main + non-main) for permission management
   useEffect(() => {
     if (!token) return;
     axios.get(`${Base_Url_Server}institutions`, {
       headers: { Authorization: `Bearer ${token}` },
     }).then((r) => {
       const all = r.data.data?.institutions || r.data.data || [];
-      setPermInstitutions(all.filter((i) => !i.is_main));
+      // Sort: main institutions first
+      setPermInstitutions(all.sort((a, b) => (b.is_main ? 1 : 0) - (a.is_main ? 1 : 0)));
     }).catch(() => {});
   }, [token]);
 
   // Fetch users when institution changes
   useEffect(() => {
     if (!selectedPermInstId) { setPermUsers([]); return; }
+    const selectedInst = permInstitutions.find((i) => i.id === Number(selectedPermInstId));
+    const isMain = !!selectedInst?.is_main;
     setPermLoading(true);
     axios.get(`${Base_Url_Server}users?institutionId=${selectedPermInstId}`, {
       headers: { Authorization: `Bearer ${token}` },
     }).then((r) => {
-      const users = (r.data.data?.users || []).filter((u) => u.role >= 2 && u.role <= 3);
+      const users = (r.data.data?.users || []).filter((u) =>
+        isMain ? u.role === 2 : u.role >= 2 && u.role <= 3
+      );
       setPermUsers(users);
     }).catch(() => {
       Swal.fire("Xəta", "İstifadəçilər yüklənə bilmədi", "error");
@@ -110,6 +134,7 @@ function AdminServicesPage() {
     language_permission: "languagePermission",
     pdf_review_permission: "pdfReviewPermission",
     upload_permission: "uploadPermission",
+    worker_type: "workerType",
   };
 
   const updatePerm = async (userId, permKey, value) => {
@@ -237,6 +262,60 @@ function AdminServicesPage() {
       Swal.fire({ icon: "success", title: "Sıfırlandı!", timer: 1200, showConfirmButton: false });
     } catch { Swal.fire("Xəta", "Sıfırlana bilmədi", "error"); }
     finally { setUserSaving(prev => ({ ...prev, [userId]: false })); }
+  };
+
+  const searchCollageBook = async (q) => {
+    if (!q || q.trim().length < 2) { setCollageSuggestions([]); return; }
+    try {
+      const res = await axios.get(`${Base_Url_Server}pdfs`, {
+        params: { search: q.trim(), limit: 8, status: 'approved' },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCollageSuggestions(res.data.data.pdfs || []);
+    } catch { setCollageSuggestions([]); }
+  };
+
+  const addCollageBook = (book) => {
+    if (collageIds.length >= 8 || collageIds.includes(book.id)) return;
+    setCollageBooks(p => [...p, book]);
+    setCollageIds(p => [...p, book.id]);
+    setCollageSearch('');
+    setCollageSuggestions([]);
+  };
+
+  const removeCollageBook = (id) => {
+    setCollageBooks(p => p.filter(b => b.id !== id));
+    setCollageIds(p => p.filter(i => i !== id));
+  };
+
+  const saveCollage = async () => {
+    setCollageSaving(true);
+    try {
+      await axios.put(`${Base_Url_Server}settings/homepage-collage`,
+        { ids: collageIds },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setCollageIsCustom(collageIds.length > 0);
+      Swal.fire({ icon: 'success', title: 'Saxlandı', timer: 1500, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire('Xəta!', err.response?.data?.message || 'Saxlanmadı', 'error');
+    } finally { setCollageSaving(false); }
+  };
+
+  const resetCollage = async () => {
+    setCollageBooks([]);
+    setCollageIds([]);
+    setCollageSaving(true);
+    try {
+      await axios.put(`${Base_Url_Server}settings/homepage-collage`,
+        { ids: [] },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setCollageIsCustom(false);
+      Swal.fire({ icon: 'success', title: 'Avtomatik rejimə keçildi', timer: 1500, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire('Xəta!', err.response?.data?.message || 'Sıfırlanmadı', 'error');
+    } finally { setCollageSaving(false); }
   };
 
   if (loading) {
@@ -403,7 +482,9 @@ function AdminServicesPage() {
           >
             <option value="">Seçin...</option>
             {permInstitutions.map((inst) => (
-              <option key={inst.id} value={inst.id}>{inst.name}</option>
+              <option key={inst.id} value={inst.id}>
+                {inst.is_main ? `★ ${inst.name} (Əsas)` : inst.name}
+              </option>
             ))}
           </select>
         </div>
@@ -413,7 +494,11 @@ function AdminServicesPage() {
         )}
 
         {!permLoading && selectedPermInstId && permUsers.length === 0 && (
-          <div className={styles.empty}>Bu müəssisədə işçi tapılmadı.</div>
+          <div className={styles.empty}>
+            {permInstitutions.find((i) => i.id === Number(selectedPermInstId))?.is_main
+              ? "Bu müəssisədə işçi (role=2) tapılmadı."
+              : "Bu müəssisədə işçi tapılmadı."}
+          </div>
         )}
 
         {!permLoading && permUsers.map((u) => (
@@ -495,6 +580,25 @@ function AdminServicesPage() {
                 ))}
               </div>
             </div>
+
+            {u.role === 2 && (
+              <div className={styles.permRow}>
+                <span className={styles.permLabel}>İşçi növü:</span>
+                <div className={styles.permBtnGroup}>
+                  {[
+                    { val: "elektron", label: "Elektron" },
+                    { val: "fiziki",   label: "Fiziki"   },
+                  ].map(({ val, label }) => (
+                    <button
+                      key={val}
+                      className={`${styles.permBtn} ${u.workerType === val ? styles.permBtnActive_direct : ""}`}
+                      onClick={() => updatePerm(u.id, "worker_type", val)}
+                      disabled={permSaving[u.id]}
+                    >{label}</button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -574,6 +678,83 @@ function AdminServicesPage() {
             </tbody>
           </table>
         )}
+      </div>
+
+      {/* ── Ana Səhifə Kollajı ── */}
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>
+          <TuneIcon fontSize="small" style={{ marginRight: 8 }} />
+          Ana Səhifə Kollajı
+        </h2>
+        <p className={styles.sectionDesc}>
+          {collageIsCustom
+            ? 'Xüsusi seçilmiş kitablar göstərilir. Dəyişmək üçün kitabları silib yenisini əlavə edin.'
+            : 'Avtomatik rejim: ən populyar 8 kitab göstərilir.'}
+        </p>
+
+        <div className={styles.collageGrid}>
+          {collageBooks.map((book) => (
+            <div key={book.id} className={styles.collageCard}>
+              <div className={styles.collageCardInfo}>
+                <span className={styles.collageCardTitle} title={book.title}>{book.title}</span>
+                {book.category?.name && (
+                  <span className={styles.collageCardCat}>{book.category.name}</span>
+                )}
+              </div>
+              <button
+                className={styles.collageRemoveBtn}
+                onClick={() => removeCollageBook(book.id)}
+                title="Sil"
+              >✕</button>
+            </div>
+          ))}
+          {collageBooks.length < 8 && (
+            <div className={styles.collageAddSlot}>
+              <input
+                className={styles.collageSearchInput}
+                placeholder="Kitab axtar və əlavə et..."
+                value={collageSearch}
+                onChange={e => { setCollageSearch(e.target.value); searchCollageBook(e.target.value); }}
+                onBlur={() => setTimeout(() => setCollageSuggestions([]), 200)}
+              />
+              {collageSuggestions.length > 0 && (
+                <ul className={styles.collageSuggestions}>
+                  {collageSuggestions
+                    .filter(b => !collageIds.includes(b.id))
+                    .slice(0, 6)
+                    .map(b => (
+                      <li key={b.id} onMouseDown={() => addCollageBook(b)}>
+                        <span>{b.title}</span>
+                        {b.category?.name && <span className={styles.suggCatLabel}>{b.category.name}</span>}
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
+          <button
+            className={styles.saveBtn}
+            onClick={saveCollage}
+            disabled={collageSaving}
+          >
+            {collageSaving ? <CircularProgress size={14} style={{ color: '#fff' }} /> : <SaveIcon fontSize="small" />}
+            Saxla ({collageIds.length}/8)
+          </button>
+          {collageIsCustom && (
+            <button
+              className={styles.resetBtn}
+              onClick={resetCollage}
+              disabled={collageSaving}
+              title="Avtomatik rejimə qayıt"
+            >
+              <RestartAltIcon fontSize="small" />
+              Avtomatik
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

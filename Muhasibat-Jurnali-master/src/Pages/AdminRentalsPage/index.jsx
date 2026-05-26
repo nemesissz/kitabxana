@@ -27,6 +27,14 @@ function AdminRentalsPage() {
     fetchRentals();
   }, [tokenAdmin]);
 
+  const refreshNotifications = () => {
+    const token = localStorage.getItem("tokenAdmin");
+    if (!token) return;
+    axios.get(`${Base_Url_Server}admin/pending-counts`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(r => store.adminNotifications.setData(r.data.data)).catch(() => {});
+  };
+
   const fetchRentals = () => {
     setLoading(true);
     axios.get(Base_Url_Server + "rentals", {
@@ -46,6 +54,7 @@ function AdminRentalsPage() {
         headers: { Authorization: `Bearer ${tokenAdmin}` },
       });
       fetchRentals();
+      refreshNotifications();
     } catch (err) {
       alert(err.response?.data?.message || "Xəta baş verdi");
     }
@@ -57,6 +66,7 @@ function AdminRentalsPage() {
         headers: { Authorization: `Bearer ${tokenAdmin}` },
       });
       fetchRentals();
+      refreshNotifications();
     } catch (err) {
       alert(err.response?.data?.message || "Xəta baş verdi");
     }
@@ -68,6 +78,7 @@ function AdminRentalsPage() {
         headers: { Authorization: `Bearer ${tokenAdmin}` },
       });
       fetchRentals();
+      refreshNotifications();
     } catch (err) {
       alert(err.response?.data?.message || "Xəta baş verdi");
     }

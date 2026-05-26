@@ -5,6 +5,7 @@ import dataContext from "../../Contexts/GlobalState";
 import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
 import Swal from "sweetalert2";
+import { displayCategoryName } from "../../Constants/categoryDisplay";
 
 const BookIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -32,14 +33,14 @@ function Header() {
   const [categories, setCategories] = useState([]);
   const [showLibraryDropdown, setShowLibraryDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [theme, setTheme] = useState(() => localStorage.getItem("mmu-theme") || "modern");
+  const [variant, setVariant] = useState(() => localStorage.getItem("mmu-variant") || "editorial");
   const libTimer = useRef(null);
   const userTimer = useRef(null);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("mmu-theme", theme);
-  }, [theme]);
+    document.documentElement.setAttribute("data-variant", variant);
+    localStorage.setItem("mmu-variant", variant);
+  }, [variant]);
 
   useEffect(() => {
     axios
@@ -132,7 +133,7 @@ function Header() {
                     className={styles.dropItem}
                     onClick={() => { navigator(`/library?category=${cat.id}`); setShowLibraryDropdown(false); }}
                   >
-                    {cat.name}
+                    {displayCategoryName(cat.name)}
                   </button>
                 ))}
               </div>
@@ -140,8 +141,8 @@ function Header() {
           </div>
 
           <button
-            className={`${styles.navLink} ${isActive("/news") ? styles.navLinkActive : ""}`}
-            onClick={() => navigator("/news")}
+            className={`${styles.navLink} ${isActive("/announcements") ? styles.navLinkActive : ""}`}
+            onClick={() => navigator("/announcements")}
           >
             Elanlar
           </button>
@@ -157,17 +158,17 @@ function Header() {
           )}
         </div>
 
-        {/* ── Theme toggle ── */}
+        {/* ── Variant toggle ── */}
         <div className={styles.themeToggle}>
           <button
-            className={`${styles.themeBtn} ${theme === "editorial" ? styles.themeBtnActive : ""}`}
-            onClick={() => setTheme("editorial")}
+            className={`${styles.themeBtn} ${variant === "editorial" ? styles.themeBtnActive : ""}`}
+            onClick={() => setVariant("editorial")}
           >
             Editorial
           </button>
           <button
-            className={`${styles.themeBtn} ${theme === "modern" ? styles.themeBtnActive : ""}`}
-            onClick={() => setTheme("modern")}
+            className={`${styles.themeBtn} ${variant === "modern" ? styles.themeBtnActive : ""}`}
+            onClick={() => setVariant("modern")}
           >
             Modern
           </button>

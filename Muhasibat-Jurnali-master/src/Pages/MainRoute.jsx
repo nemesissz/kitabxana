@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Header from "../Layouts/Header";
 import Sidebar from "../Layouts/Sidebar";
 import AnnouncementPopup from "../Components/AnnouncementPopup";
@@ -10,7 +10,9 @@ import Base_Url_Server from "../Constants/baseUrl";
 
 function MainRoute() {
   const navigate = useNavigate();
+  const location = useLocation();
   const store = useContext(dataContext);
+  const hideChrome = ["/login", "/register"].includes(location.pathname);
   useSessionTracker();
 
   // Page reload-dan sonra user vəziyyətini bərpa et
@@ -48,9 +50,9 @@ function MainRoute() {
   }, []);
   return (
     <>
-      <AnnouncementPopup />
-      <Sidebar />
-      <Header />
+      {!hideChrome && <AnnouncementPopup />}
+      {!hideChrome && <Sidebar />}
+      {!hideChrome && <Header />}
       <Outlet />
     </>
   );

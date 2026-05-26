@@ -8,6 +8,8 @@ export const DataProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [admin, setAdmin] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [adminNotifications, setAdminNotifications] = useState({ rentals: 0, categoryRequests: 0 });
+
   const store = {
     loader: {
       data: loader,
@@ -28,6 +30,10 @@ export const DataProvider = ({ children }) => {
     user: {
       data: user,
       setData: setUser,
+    },
+    adminNotifications: {
+      data: adminNotifications,
+      setData: setAdminNotifications,
     },
   };
 

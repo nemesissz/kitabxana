@@ -1,0 +1,313 @@
+// detail.jsx — PDF detail page + reader
+const { useState: useStateD } = React;
+
+function DetailPage({ id, navigate, favs, toggleFav }) {
+  const book = window.DATA.books.find(b => b.id === id) || window.DATA.books[0];
+  const isFav = favs.includes(book.id);
+  const similar = window.DATA.books.filter(b => b.id !== book.id && b.cat === book.cat).slice(0, 3);
+
+  return (
+    <div className="page-enter">
+      {/* HERO with cover banner */}
+      <section style={{
+        padding: "56px 0 64px",
+        background: `linear-gradient(135deg, ${book.colors[0]} 0%, ${book.colors[1]} 100%)`,
+        color: "#fff",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 80% 0%, rgba(255,255,255,.18), transparent 50%)" }} />
+        <div className="container" style={{ position: "relative" }}>
+          {/* Breadcrumb */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, opacity: 0.8, marginBottom: 28 }}>
+            <a onClick={() => navigate("home")} style={{ cursor: "pointer" }}>Ana səhifə</a>
+            <I.chevR width="12" height="12" />
+            <a onClick={() => navigate("library")} style={{ cursor: "pointer" }}>Kitabxana</a>
+            <I.chevR width="12" height="12" />
+            <span style={{ opacity: 0.7 }}>{book.title}</span>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 56, alignItems: "flex-start" }}>
+            {/* Cover */}
+            <div style={{
+              aspectRatio: "3/4",
+              borderRadius: 8,
+              overflow: "hidden",
+              transform: "rotate(-2deg)",
+              boxShadow: "0 30px 60px -20px rgba(0,0,0,.5), 0 12px 24px -8px rgba(0,0,0,.3)",
+            }}>
+              <BookCover book={book} />
+            </div>
+
+            {/* Title + meta */}
+            <div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
+                <span className="badge" style={{ background: "rgba(255,255,255,.18)", color: "#fff", border: 0 }}>{book.cat.replace("kitab-", "").replace("-", " ")}</span>
+                <span className="badge" style={{ background: "rgba(255,255,255,.18)", color: "#fff", border: 0 }}>{book.lang}</span>
+                <span className="badge" style={{ background: "rgba(255,255,255,.18)", color: "#fff", border: 0 }}>{book.year}</span>
+                <span className="badge" style={{ background: "var(--accent)", color: "var(--navy)", border: 0, fontWeight: 700 }}>Pulsuz</span>
+              </div>
+
+              <h1 style={{ fontSize: "clamp(36px, 5vw, 64px)", color: "#fff", marginBottom: 12 }}>{book.title}</h1>
+              <div style={{ fontSize: 18, opacity: 0.85, marginBottom: 32, fontWeight: 500 }}>{book.author}</div>
+
+              {/* Meta strip */}
+              <div style={{ display: "flex", gap: 36, marginBottom: 32, flexWrap: "wrap" }}>
+                {[
+                  { l: "Reytinq", v: <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}><I.star width="16" height="16" style={{ color: "var(--accent)" }} />{book.rating}</span> },
+                  { l: "Səhifə", v: book.pages },
+                  { l: "Yüklənmə", v: book.downloads.toLocaleString("az-AZ") },
+                  { l: "Dil", v: book.lang },
+                  { l: "Nəşr", v: book.year },
+                ].map((m, i) => (
+                  <div key={i}>
+                    <div style={{ fontSize: 11, letterSpacing: 0.12, textTransform: "uppercase", opacity: 0.6, fontWeight: 700, marginBottom: 4 }}>{m.l}</div>
+                    <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 500 }}>{m.v}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Actions */}
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <button className="btn btn-accent btn-lg" onClick={() => navigate("reader-" + book.id)}>
+                  <I.open width="18" height="18" />
+                  Oxu
+                </button>
+                <button className="btn btn-lg" style={{ background: "#fff", color: "var(--navy)" }}>
+                  <I.download width="18" height="18" />
+                  Yüklə (PDF)
+                </button>
+                <button className="btn btn-lg" style={{ background: "rgba(255,255,255,.18)", color: "#fff", border: "1px solid rgba(255,255,255,.3)" }}>
+                  <I.rent width="18" height="18" />
+                  Kirayələ
+                </button>
+                <button className="btn btn-icon" onClick={() => toggleFav(book.id)} style={{ background: isFav ? "var(--bad)" : "rgba(255,255,255,.18)", color: "#fff", borderColor: "transparent", padding: 16, borderRadius: 999 }} title="Favoriyə əlavə et">
+                  {isFav ? <I.heart width="18" height="18" /> : <I.heartOutline width="18" height="18" />}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Body */}
+      <section style={{ paddingTop: 64 }}>
+        <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 48, alignItems: "flex-start" }}>
+          {/* Main */}
+          <div>
+            <h2 style={{ fontSize: 32, marginBottom: 16 }}>Təsvir</h2>
+            <p style={{ fontSize: 17, lineHeight: 1.7, color: "var(--ink-2)", marginBottom: 24 }}>
+              {book.desc}
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.7, color: "var(--ink-2)" }}>
+              Bu resurs MMU Kitabxana fondunda yer alır və universitet daxilindən pulsuz əldə edilə bilər. Yükləmə üçün hesabınıza giriş etmiş olmalısınız. Kirayə xidməti vasitəsilə fiziki nüsxə də sifariş vermək mümkündür.
+            </p>
+
+            {/* Highlights */}
+            <div style={{ marginTop: 48 }}>
+              <h3 style={{ fontSize: 20, marginBottom: 18 }}>Kitabın əsas xüsusiyyətləri</h3>
+              <div className="grid-2">
+                {[
+                  ["Akademik mənbə", "Universitet kurikulumunda istifadə olunan"],
+                  ["Tam mətn axtarış", "Bütün məzmun axtarış edilə bilər"],
+                  ["Sitat dəstəyi", "APA, MLA, Chicago formatında"],
+                  ["Çoxformatlı", "PDF, EPUB və online oxu"],
+                ].map((it, i) => (
+                  <div key={i} className="card" style={{ padding: 18, display: "flex", gap: 14 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: "var(--accent-soft)", color: "var(--navy)", display: "grid", placeItems: "center", flexShrink: 0 }}>
+                      <I.check width="18" height="18" />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 700, marginBottom: 4 }}>{it[0]}</div>
+                      <div style={{ fontSize: 13, color: "var(--muted)" }}>{it[1]}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Mündəricat */}
+            <div style={{ marginTop: 48 }}>
+              <h3 style={{ fontSize: 20, marginBottom: 18 }}>Mündəricat</h3>
+              <div className="card" style={{ padding: 8 }}>
+                {[
+                  "Giriş və konseptual çərçivə",
+                  "Tarixi kontekst və arxa plan",
+                  "Əsas prinsiplər və metodologiya",
+                  "Praktik tətbiq və nümunələr",
+                  "Müasir trendlər və gələcək perspektivləri",
+                  "Nəticə və tövsiyələr",
+                ].map((ch, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", padding: "14px 16px", borderBottom: i < 5 ? "1px solid var(--line)" : 0, gap: 16 }}>
+                    <span style={{ width: 28, height: 28, borderRadius: 8, background: "var(--paper-2)", display: "grid", placeItems: "center", fontSize: 12, fontWeight: 700, color: "var(--muted)" }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span style={{ flex: 1, fontWeight: 500 }}>{ch}</span>
+                    <span style={{ fontSize: 13, color: "var(--muted)" }}>səh. {(i + 1) * 47}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Similar */}
+            <div style={{ marginTop: 64 }}>
+              <h3 style={{ fontSize: 24, marginBottom: 18 }}>Oxşar resurslar</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+                {similar.map(b => <BookCard key={b.id} book={b} onOpen={() => navigate("pdf-" + b.id)} onFav={toggleFav} isFav={favs.includes(b.id)} />)}
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <aside>
+            <div className="card" style={{ padding: 24, position: "sticky", top: 96 }}>
+              <h3 style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 700, letterSpacing: 0.12, textTransform: "uppercase", color: "var(--muted)", marginBottom: 16 }}>PDF məlumatları</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14, fontSize: 14 }}>
+                {[
+                  ["Başlıq", book.title],
+                  ["Müəllif", book.author],
+                  ["Kateqoriya", book.cat.replace("kitab-", "").replace("-", " ")],
+                  ["Dil", book.lang],
+                  ["Nəşr ili", book.year],
+                  ["Səhifə sayı", book.pages],
+                  ["Qiymət", <b style={{ color: "var(--ok)" }}>Pulsuz</b>],
+                  ["Kitabxana", "MMU"],
+                  ["Yüklənmə sayı", book.downloads.toLocaleString("az-AZ")],
+                ].map(([l, v], i) => (
+                  <div key={i} style={{ display: "flex", justifyContent: "space-between", gap: 16, borderBottom: i < 8 ? "1px solid var(--line-2)" : 0, paddingBottom: 14 }}>
+                    <span style={{ color: "var(--muted)" }}>{l}</span>
+                    <span style={{ fontWeight: 600, textAlign: "right" }}>{v}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ marginTop: 8 }}>
+                <button className="btn btn-primary" onClick={() => navigate("reader-" + book.id)} style={{ width: "100%", justifyContent: "center" }}>
+                  <I.open width="16" height="16" />
+                  Oxu
+                </button>
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                  <button className="btn btn-accent" style={{ flex: 1, justifyContent: "center" }}>
+                    <I.download width="16" height="16" />
+                    Yüklə
+                  </button>
+                  <button className="btn btn-outline" style={{ flex: 1, justifyContent: "center" }}>
+                    <I.rent width="16" height="16" />
+                    Kirayələ
+                  </button>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 20, padding: 14, background: "var(--paper-2)", borderRadius: "var(--r-md)", display: "flex", gap: 10, alignItems: "center" }}>
+                <div style={{ width: 32, height: 32, borderRadius: 8, background: "var(--ok)", color: "#fff", display: "grid", placeItems: "center" }}>
+                  <I.check width="16" height="16" />
+                </div>
+                <div style={{ fontSize: 12.5, lineHeight: 1.5 }}>
+                  Mövcuddur — universitet daxilindən pulsuz çıxış
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ── Reader page ── */
+function ReaderPage({ id, navigate }) {
+  const book = window.DATA.books.find(b => b.id === id) || window.DATA.books[0];
+  const [page, setPage] = useStateD(1);
+  const total = 12;
+
+  return (
+    <div className="page-enter" style={{ background: "var(--paper-2)", minHeight: "calc(100vh - 72px)" }}>
+      {/* Toolbar */}
+      <div style={{ background: "var(--navy)", color: "#fff", padding: "12px 0" }}>
+        <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <button className="btn btn-ghost btn-sm" onClick={() => navigate("pdf-" + book.id)} style={{ color: "#fff" }}>
+              <I.chevR width="16" height="16" style={{ transform: "rotate(180deg)" }} />
+              Geri
+            </button>
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
+              <small style={{ opacity: 0.6, fontSize: 11, letterSpacing: 0.06, textTransform: "uppercase", fontWeight: 600 }}>Oxuyursunuz</small>
+              <b style={{ fontSize: 14 }}>{book.title}</b>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,.08)", padding: "4px 4px 4px 14px", borderRadius: 999 }}>
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} style={{ background: "transparent", border: 0, color: "#fff", cursor: "pointer", padding: 6 }}>
+              <I.chevR width="16" height="16" style={{ transform: "rotate(180deg)" }} />
+            </button>
+            <span style={{ fontSize: 13, fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>{page} / {total}</span>
+            <button onClick={() => setPage(p => Math.min(total, p + 1))} style={{ background: "transparent", border: 0, color: "#fff", cursor: "pointer", padding: 6 }}>
+              <I.chevR width="16" height="16" />
+            </button>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button className="btn-icon" style={{ background: "rgba(255,255,255,.08)", borderColor: "transparent", color: "#fff" }}><I.bookmark width="16" height="16" /></button>
+            <button className="btn-icon" style={{ background: "rgba(255,255,255,.08)", borderColor: "transparent", color: "#fff" }}><I.search width="16" height="16" /></button>
+            <button className="btn btn-accent btn-sm">
+              <I.download width="14" height="14" />
+              Yüklə
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Pages */}
+      <div className="container" style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 24, padding: "32px 32px" }}>
+        {/* Thumbs */}
+        <aside style={{ position: "sticky", top: 130, alignSelf: "flex-start", maxHeight: "calc(100vh - 160px)", overflowY: "auto" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {Array.from({ length: total }).map((_, i) => (
+              <button key={i} onClick={() => setPage(i + 1)} style={{
+                border: page === i + 1 ? "2px solid var(--accent)" : "2px solid transparent",
+                borderRadius: 6, padding: 0, background: "var(--card)", cursor: "pointer",
+                aspectRatio: "3/4",
+                boxShadow: "var(--shadow-sm)",
+                position: "relative",
+              }}>
+                <div style={{ width: "100%", height: "100%", background: "linear-gradient(180deg, #fff 0%, #f5f5f5 100%)", borderRadius: 4, padding: 8, fontSize: 5, color: "#666", overflow: "hidden", display: "flex", flexDirection: "column", gap: 2 }}>
+                  <div style={{ height: 4, background: "#ddd", borderRadius: 1, width: "80%" }} />
+                  <div style={{ height: 2, background: "#eee", borderRadius: 1, marginTop: 4 }} />
+                  <div style={{ height: 2, background: "#eee", borderRadius: 1 }} />
+                  <div style={{ height: 2, background: "#eee", borderRadius: 1, width: "70%" }} />
+                </div>
+                <div style={{ position: "absolute", bottom: -18, left: 0, right: 0, fontSize: 11, color: "var(--muted)", fontWeight: page === i + 1 ? 700 : 500 }}>{i + 1}</div>
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        {/* Page */}
+        <div style={{ display: "grid", placeItems: "center" }}>
+          <div style={{
+            width: "min(720px, 100%)",
+            aspectRatio: "3/4",
+            background: "#fff",
+            borderRadius: 4,
+            boxShadow: "var(--shadow-lg)",
+            padding: "64px 80px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 16,
+          }}>
+            <div style={{ fontSize: 11, color: "#999", letterSpacing: 0.08, textTransform: "uppercase", fontWeight: 600 }}>{book.title} · Fəsil {Math.ceil(page / 2)}</div>
+            <h2 style={{ fontSize: 28, marginBottom: 12, marginTop: 4 }}>Səhifə {page}</h2>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#333", textAlign: "justify" }}>{book.desc} {book.desc.repeat(2)}</p>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#333", textAlign: "justify" }}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eu mauris vitae nibh tincidunt aliquam. Nam vel sapien sit amet quam dictum scelerisque. Sed in dolor non dui ultrices porttitor.
+            </p>
+            <p style={{ fontSize: 14, lineHeight: 1.85, color: "#333", textAlign: "justify" }}>
+              Curabitur ut lectus dignissim, fringilla nulla ut, vehicula libero. Aenean a feugiat felis. Donec gravida, augue ut consequat finibus, lorem ligula commodo lectus, vel imperdiet quam erat in libero.
+            </p>
+            <div style={{ marginTop: "auto", textAlign: "center", fontSize: 12, color: "#aaa" }}>— {page} —</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { DetailPage, ReaderPage });

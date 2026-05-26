@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
 import dataContext from "../../Contexts/GlobalState";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +27,7 @@ function UserSubmitPdfPage() {
   const [loader, setLoader] = useState(false);
   const [step, setStep] = useState(1);
   const [categories, setCategories] = useState([]);
+  const [pdfsTypes, setPdfsTypes] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -40,8 +41,10 @@ function UserSubmitPdfPage() {
     price: "",
     allow_download: "1",
     language: "az",
+    pdf_type_id: "",
     category_id: "",
     institution_id: "",
+    quantity: "1",
     file: null,
     coverImage: null,
   });
@@ -50,6 +53,16 @@ function UserSubmitPdfPage() {
   const [uploadLimitMb, setUploadLimitMb] = useState(20);
   const [institutions, setInstitutions] = useState([]);
   const [coverPreviewUrl, setCoverPreviewUrl] = useState(null);
+  const [allCategories, setAllCategories] = useState([]);
+  const [titleSuggestions, setTitleSuggestions] = useState([]);
+  const [linkedBookId, setLinkedBookId] = useState(null);
+  const [linkedDirection, setLinkedDirection] = useState(null); // 'fiziki' | 'elektron' | 'qty'
+  const [linkedBookQuantity, setLinkedBookQuantity] = useState(null);
+  const [warnSuggestions, setWarnSuggestions] = useState([]);
+  const [warnSelected, setWarnSelected] = useState(false);
+  const [warnPhysicalBook, setWarnPhysicalBook] = useState(null);
+  const debounceRef = useRef(null);
+  const warnDebounceRef = useRef(null);
   const { languages } = useLanguages();
 
   useEffect(() => {
@@ -86,22 +99,58 @@ function UserSubmitPdfPage() {
   }, []);
 
   useEffect(() => {
+    axios.get(Base_Url_Server + "pdfs-types")
+      .then((res) => {
+        const types = res.data.data.types || [];
+        setPdfsTypes(types);
+        const defaultType = types.find(t => {
+          const n = (t.name || '').toLowerCase();
+          return n.includes('elektron') && !n.includes('ikisi');
+        });
+        if (defaultType) {
+          setFormData(prev => ({ ...prev, pdf_type_id: String(defaultType.id) }));
+        }
+      })
+      .catch(() => {});
     axios.get(Base_Url_Server + "categories/pdfs")
-      .then((res) => setCategories(res.data.data.categories || []))
+      .then((res) => {
+        const all = res.data.data.categories || [];
+        setAllCategories(all);
+        setCategories(all);
+      })
       .catch(() => {});
   }, []);
 
-  const selectedCatName = categories.find((c) => String(c.id) === String(formData.category_id))?.name || "";
-  const catNameLower = selectedCatName.toLowerCase();
-  const isBookElektron = catNameLower.includes("kitab-elektron");
-  const isBookFiziki   = catNameLower.includes("kitab-fiziki");
-  const isBookHerIkisi = catNameLower.includes("kitab-hər ikisi") || catNameLower.includes("kitab-her ikisi");
+  const selectedType = pdfsTypes.find(t => String(t.id) === String(formData.pdf_type_id));
+  const typeName = (selectedType?.name || '').toLowerCase();
+  const isBookHerIkisi = typeName.includes('ikisi');
+  const isBookFiziki   = typeName.includes('fiziki')   && !isBookHerIkisi;
+  const isBookElektron = typeName.includes('elektron') && !isBookHerIkisi;
   const isBookCategory = isBookElektron || isBookFiziki || isBookHerIkisi;
+  const selectedCatName = categories.find((c) => String(c.id) === String(formData.category_id))?.name || "";
+  const wt = store.user.data?.workerType || null;
+  const userRole = store.user.data?.role ?? 0;
+  const visibleTypes = (userRole === 2 && wt)
+    ? pdfsTypes.filter(t => {
+        const n = (t.name || '').toLowerCase();
+        if (n.includes('ikisi')) return false;
+        if (wt === 'elektron') return n.includes('elektron');
+        if (wt === 'fiziki') return n.includes('fiziki');
+        return true;
+      })
+    : pdfsTypes;
 
   useEffect(() => {
     if (isBookFiziki || isBookHerIkisi) {
+      const userInstId = store.user.data?.institutionId;
       axios.get(Base_Url_Server + "institutions/public")
-        .then((res) => setInstitutions(res.data.data?.institutions || res.data.data || []))
+        .then((res) => {
+          const list = res.data.data?.institutions || res.data.data || [];
+          setInstitutions(list);
+          if (userInstId && list.some((i) => i.id === userInstId)) {
+            setFormData((prev) => ({ ...prev, institution_id: String(userInstId) }));
+          }
+        })
         .catch(() => {});
     }
   }, [isBookFiziki, isBookHerIkisi]);
@@ -117,7 +166,236 @@ function UserSubmitPdfPage() {
   }, [formData.coverImage]);
 
   const handleChange = (e) => {
+    if (e.target.name === 'pdf_type_id') {
+      setLinkedBookId(null);
+      setLinkedDirection(null);
+      setTitleSuggestions([]);
+      setWarnSuggestions([]);
+      setWarnSelected(false);
+      const selectedT = pdfsTypes.find(t => String(t.id) === String(e.target.value));
+      const newTypeName = (selectedT?.name || '').toLowerCase();
+      const needsInst = newTypeName.includes('fiziki') || newTypeName.includes('ikisi');
+      const userInstId = store.user.data?.institutionId || null;
+      setFormData((prev) => ({
+        ...prev,
+        pdf_type_id: e.target.value,
+        institution_id: needsInst && userInstId ? String(userInstId) : prev.institution_id,
+      }));
+      const q = formData.title.trim();
+      const newIsBookFiziki   = newTypeName.includes('fiziki') && !newTypeName.includes('ikisi');
+      const newIsBookElektron = newTypeName.includes('elektron') && !newTypeName.includes('ikisi');
+      const newIsBookHerIkisi = newTypeName.includes('ikisi');
+      if (q.length >= 2 && (newIsBookFiziki || newIsBookElektron || newIsBookHerIkisi)) {
+        clearTimeout(debounceRef.current);
+        clearTimeout(warnDebounceRef.current);
+        if (newIsBookFiziki) {
+          const instId = formData.institution_id || userInstId || null;
+          debounceRef.current = setTimeout(() => searchSimilarBooks(q, 'elektron', null, true), 350);
+          warnDebounceRef.current = setTimeout(() => searchFizikiDuplicates(q, instId), 350);
+        } else if (newIsBookElektron) {
+          debounceRef.current = setTimeout(() => searchSimilarBooks(q, 'fiziki', null, true), 350);
+          warnDebounceRef.current = setTimeout(() => searchElektronDuplicates(q), 350);
+        } else {
+          const instId = formData.institution_id || userInstId || null;
+          debounceRef.current = setTimeout(() => searchSimilarBooks(q, null, instId), 350);
+          warnDebounceRef.current = setTimeout(() => searchFizikiDuplicates(q, instId), 350);
+        }
+      }
+      return;
+    }
+    // Institution dəyişdikdə hər iki siyahını yenilə
+    if (e.target.name === 'institution_id' && (isBookFiziki || isBookHerIkisi)) {
+      const q = formData.title.trim();
+      if (q.length >= 2) {
+        clearTimeout(debounceRef.current);
+        clearTimeout(warnDebounceRef.current);
+        const newInstId = e.target.value || null;
+        if (isBookFiziki) {
+          debounceRef.current = setTimeout(() => searchSimilarBooks(q, 'elektron', null, true), 350);
+        } else {
+          debounceRef.current = setTimeout(() => searchSimilarBooks(q, null, newInstId), 350);
+        }
+        warnDebounceRef.current = setTimeout(() => searchFizikiDuplicates(q, newInstId), 350);
+      }
+    }
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const searchSimilarBooks = async (q, lookInType, instId, globalSearch = false) => {
+    const token = localStorage.getItem("token");
+    const userInstId = store.user.data?.institutionId || null;
+    try {
+      const params = { search: q, limit: 8, status: 'approved' };
+      if (lookInType) {
+        const targetType = pdfsTypes.find(t => (t.name || '').toLowerCase().includes(lookInType));
+        if (targetType) params.pdfTypeId = targetType.id;
+      }
+      if (!globalSearch) {
+        if (instId) params.anyInstId = instId;
+        if (!userInstId) params.includeNoInst = 1;
+      }
+      const res = await axios.get(`${Base_Url_Server}pdfs`, {
+        params,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      setTitleSuggestions(res.data.data.pdfs || []);
+    } catch {
+      setTitleSuggestions([]);
+    }
+  };
+
+  const searchElektronDuplicates = async (q) => {
+    const token = localStorage.getItem("token");
+    const userInstId = store.user.data?.institutionId || null;
+    try {
+      const elektronType = pdfsTypes.find(t => {
+        const n = (t.name || '').toLowerCase();
+        return n.includes('elektron') && !n.includes('ikisi');
+      });
+      if (!elektronType) return;
+      const params = { search: q, limit: 5, status: 'approved', pdfTypeId: elektronType.id };
+      if (userInstId) {
+        params.anyInstId = userInstId;
+      } else {
+        params.uploaderNoInst = 1;
+      }
+      const res = await axios.get(`${Base_Url_Server}pdfs`, {
+        params,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      setWarnSuggestions(res.data.data.pdfs || []);
+    } catch {
+      setWarnSuggestions([]);
+    }
+  };
+
+  const searchFizikiDuplicates = async (q, instId) => {
+    const token = localStorage.getItem("token");
+    try {
+      const params = { search: q, limit: 5, status: 'approved' };
+      if (instId) params.anyInstId = instId;
+      const res = await axios.get(`${Base_Url_Server}pdfs`, {
+        params,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      const books = (res.data.data.pdfs || []).filter(b => {
+        const n = (b.pdf_type?.name || '').toLowerCase();
+        return n.includes('fiziki') || n.includes('ikisi');
+      });
+      setWarnSuggestions(books);
+    } catch {
+      setWarnSuggestions([]);
+    }
+  };
+
+  const hasChangedFromWarning = () => {
+    if (!warnPhysicalBook) return true;
+    const norm = (v) => (v === null || v === undefined) ? '' : String(v).trim();
+    const simpleFields = ['title', 'author', 'isbn', 'publication_year', 'publisher_location', 'language', 'description'];
+    for (const f of simpleFields) {
+      if (norm(formData[f]) !== norm(warnPhysicalBook[f])) return true;
+    }
+    const fInst = formData.institution_id ? String(formData.institution_id) : '';
+    const bInst = warnPhysicalBook.institution_id ? String(warnPhysicalBook.institution_id) : '';
+    if (fInst !== bInst) return true;
+    const fPrice = formData.price !== '' ? String(parseFloat(formData.price) || 0) : '0';
+    const bPrice = warnPhysicalBook.price !== null && warnPhysicalBook.price !== undefined
+      ? String(parseFloat(warnPhysicalBook.price) || 0) : '0';
+    if (fPrice !== bPrice) return true;
+    return false;
+  };
+
+  const selectWarnBook = (book) => {
+    const isFizikiWarn = isBookFiziki || isBookHerIkisi;
+    setFormData(prev => ({
+      ...prev,
+      title: book.title || '',
+      description: book.description || '',
+      author: book.author || '',
+      isbn: book.isbn || '',
+      publication_year: book.publication_year ? String(book.publication_year) : '',
+      publisher_location: book.publisher_location || '',
+      language: book.language || 'az',
+      price: book.price !== undefined ? String(book.price) : '0',
+      allow_download: book.allow_download !== undefined ? String(book.allow_download) : '1',
+      institution_id: isFizikiWarn && book.institution_id ? String(book.institution_id) : prev.institution_id,
+    }));
+    setWarnSelected(true);
+    setWarnSuggestions([]);
+    setWarnPhysicalBook(isFizikiWarn ? book : null);
+  };
+
+  const selectSuggestion = (book) => {
+    const bookTypeName = (book.pdf_type?.name || '').toLowerCase();
+    const herIkisiType = pdfsTypes.find(t => (t.name || '').toLowerCase().includes('ikisi'));
+    let direction, newPdfTypeId, newQuantity;
+
+    if (isBookHerIkisi) {
+      if (bookTypeName.includes('ikisi')) {
+        direction = 'qty';
+        newPdfTypeId = String(formData.pdf_type_id);
+        newQuantity = "1";
+      } else if (bookTypeName.includes('fiziki')) {
+        direction = 'ikisi-fiziki';
+        newPdfTypeId = herIkisiType ? String(herIkisiType.id) : String(formData.pdf_type_id);
+        newQuantity = "1";
+      } else {
+        direction = 'ikisi-elektron';
+        newPdfTypeId = herIkisiType ? String(herIkisiType.id) : String(formData.pdf_type_id);
+        newQuantity = "1";
+      }
+    } else if (isBookFiziki && bookTypeName.includes('fiziki')) {
+      direction = 'qty';
+      newPdfTypeId = String(formData.pdf_type_id);
+      newQuantity = "1";
+    } else if (isBookFiziki && bookTypeName.includes('elektron')) {
+      direction = 'fiziki';
+      newPdfTypeId = herIkisiType ? String(herIkisiType.id) : String(formData.pdf_type_id);
+      newQuantity = "1";
+    } else {
+      direction = 'elektron';
+      newPdfTypeId = herIkisiType ? String(herIkisiType.id) : String(formData.pdf_type_id);
+      newQuantity = "1";
+    }
+
+    const useBookInstId = (direction === 'elektron' || direction === 'ikisi-fiziki') && book.institution_id;
+    const newInstId = useBookInstId
+      ? String(book.institution_id)
+      : (store.user.data?.institutionId ? String(store.user.data.institutionId) : null);
+
+    setLinkedBookId(book.id);
+    setLinkedDirection(direction);
+    setLinkedBookQuantity(book.quantity || 1);
+    setWarnSelected(false);
+    setWarnSuggestions([]);
+    setWarnPhysicalBook(null);
+    setFormData(prev => ({
+      ...prev,
+      title: book.title || '',
+      description: book.description || '',
+      author: book.author || '',
+      isbn: book.isbn || '',
+      publication_year: book.publication_year ? String(book.publication_year) : '',
+      publisher_location: book.publisher_location || '',
+      language: book.language || 'az',
+      price: book.price !== undefined ? String(book.price) : '0',
+      allow_download: book.allow_download !== undefined ? String(book.allow_download) : '1',
+      quantity: newQuantity,
+      pdf_type_id: newPdfTypeId,
+      category_id: book.category_id ? String(book.category_id) : prev.category_id,
+      coverImage: null,
+      institution_id: newInstId || prev.institution_id,
+    }));
+    setTitleSuggestions([]);
+  };
+
+  const unlinkBook = () => {
+    setLinkedBookId(null);
+    setLinkedDirection(null);
+    setLinkedBookQuantity(null);
+    setWarnSelected(false);
+    setWarnPhysicalBook(null);
+    setFormData(prev => ({ ...prev, title: '', pdf_type_id: '', category_id: '', quantity: '1' }));
   };
 
   const validateAndSetFile = (f) => {
@@ -137,6 +415,7 @@ function UserSubmitPdfPage() {
   const validateStep = (s) => {
     if (s === 1) {
       if (!formData.title.trim()) { Swal.fire({ icon: "warning", title: "Xəta", text: "PDF adı tələb olunur", confirmButtonColor: "#0B1F3D" }); return false; }
+      if (!formData.pdf_type_id) { Swal.fire({ icon: "warning", title: "Xəta", text: "PDF tipi seçilməlidir", confirmButtonColor: "#0B1F3D" }); return false; }
       if (!formData.category_id) { Swal.fire({ icon: "warning", title: "Xəta", text: "Kateqoriya seçilməlidir", confirmButtonColor: "#0B1F3D" }); return false; }
     }
     if (s === 2) {
@@ -146,7 +425,7 @@ function UserSubmitPdfPage() {
       }
     }
     if (s === 3) {
-      if (!formData.file && !isBookFiziki) {
+      if (!formData.file && !isBookFiziki && !(linkedBookId && (linkedDirection === 'fiziki' || linkedDirection === 'qty' || linkedDirection === 'ikisi-elektron'))) {
         Swal.fire({ icon: "warning", title: "Xəta", text: "PDF faylı seçin", confirmButtonColor: "#0B1F3D" });
         return false;
       }
@@ -165,6 +444,7 @@ function UserSubmitPdfPage() {
     const data = new FormData();
     data.append("title", formData.title.trim());
     data.append("language", formData.language);
+    data.append("pdf_type_id", formData.pdf_type_id);
     data.append("category_id", formData.category_id);
     data.append("allow_download", isBookFiziki ? "0" : formData.allow_download);
     if ((isBookFiziki || isBookHerIkisi) && formData.institution_id) data.append("institution_id", formData.institution_id);
@@ -177,23 +457,62 @@ function UserSubmitPdfPage() {
     if (isBookCategory && formData.foreword.trim()) data.append("foreword", formData.foreword.trim());
     if (!isBookElektron && formData.price !== "") data.append("price", formData.price);
     if (!isBookCategory && formData.order_number.trim()) data.append("order_number", formData.order_number.trim());
+    if ((isBookFiziki || isBookHerIkisi || linkedDirection === 'qty') && formData.quantity)
+      data.append("quantity", formData.quantity);
     if (formData.file) data.append("file", formData.file);
     if (formData.coverImage) data.append("coverImage", formData.coverImage);
+    if (linkedBookId) data.append("linked_pdf_id", linkedBookId);
 
     try {
       setLoader(true);
-      const res = await axios.post(Base_Url_Server + "pdfs/submit", data, {
+
+      // Fiziki/hər-ikisi warning: heç dəyişiklik yoxdursa — say artırma sorğusu
+      if (warnPhysicalBook && !hasChangedFromWarning()) {
+        const qtyData = new FormData();
+        qtyData.append("title", warnPhysicalBook.title || '');
+        qtyData.append("pdf_type_id", formData.pdf_type_id);
+        qtyData.append("category_id", formData.category_id);
+        qtyData.append("language", formData.language);
+        qtyData.append("linked_pdf_id", warnPhysicalBook.id);
+        qtyData.append("quantity", formData.quantity || '1');
+        if (formData.institution_id) qtyData.append("institution_id", formData.institution_id);
+        await axios.post(Base_Url_Server + "pdfs/submit", qtyData, {
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
+        });
+        const isPending = store.user.data?.uploadPermission === "pending";
+        await Swal.fire({
+          icon: "success", title: "Uğurlu!",
+          text: isPending
+            ? `Sorğunuz göndərildi. Admin təsdiq etdikdən sonra kitab sayı ${formData.quantity} vahid artırılacaq.`
+            : `Kitab sayı ${formData.quantity} vahid artırıldı.`,
+          confirmButtonColor: "#0B1F3D",
+        });
+        navigate("/library/all");
+        return;
+      }
+
+      await axios.post(Base_Url_Server + "pdfs/submit", data, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
       });
 
-      const isPending = res.data?.data?.pdf?.status === "pending" ||
-        store.user.data?.uploadPermission === "pending";
+      const linkMsg = linkedDirection === 'qty'
+        ? `Sorğunuz göndərildi. Admin təsdiq etdikdən sonra kitab sayı ${formData.quantity} vahid artırılacaq.`
+        : linkedDirection === 'fiziki'
+        ? "Sorğunuz göndərildi. Admin təsdiq etdikdən sonra mövcud elektron kitab fiziki nüsxə ilə əlaqələndiriləcək."
+        : linkedDirection === 'elektron'
+        ? "Sorğunuz göndərildi. Admin təsdiq etdikdən sonra mövcud fiziki kitaba elektron versiya əlavə ediləcək."
+        : linkedDirection === 'ikisi-fiziki'
+        ? "Sorğunuz göndərildi. Admin təsdiq etdikdən sonra fiziki kitab elektron faylı ilə birləşdiriləcək."
+        : linkedDirection === 'ikisi-elektron'
+        ? "Sorğunuz göndərildi. Admin təsdiq etdikdən sonra elektron kitab kitab-hər ikisi kateqoriyasına keçiriləcək."
+        : null;
 
+      const isPending = store.user.data?.uploadPermission === "pending";
       await Swal.fire({
         icon: "success", title: "Uğurlu!",
-        text: isPending
+        text: linkMsg || (isPending
           ? "PDF uğurla yükləndi. Admin təsdiqlədikdən sonra kitabxanada görünəcək."
-          : "PDF uğurla yükləndi və kitabxanaya əlavə edildi.",
+          : "PDF uğurla yükləndi və kitabxanaya əlavə edildi."),
         confirmButtonColor: "#0B1F3D",
       });
       navigate("/library/all");
@@ -261,15 +580,126 @@ function UserSubmitPdfPage() {
                       <label className={styles.label}>
                         PDF Adı <span className={styles.req}>*</span>
                       </label>
-                      <input
-                        className="mmu-input"
-                        name="title" type="text"
-                        placeholder="PDF-in adını daxil edin"
-                        value={formData.title} onChange={handleChange}
-                      />
+                      <div className={styles.titleWrap}>
+                        <input
+                          className="mmu-input"
+                          name="title" type="text"
+                          placeholder="PDF-in adını daxil edin"
+                          value={formData.title}
+                          autoComplete="off"
+                          readOnly={!!linkedBookId}
+                          style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
+                          onChange={(e) => {
+                            if (linkedBookId) return;
+                            handleChange(e);
+                            setWarnSelected(false);
+                            setWarnPhysicalBook(null);
+                            if (isBookFiziki || isBookElektron || isBookHerIkisi) {
+                              setLinkedBookId(null);
+                              setLinkedDirection(null);
+                              clearTimeout(debounceRef.current);
+                              clearTimeout(warnDebounceRef.current);
+                              const q = e.target.value.trim();
+                              if (q.length >= 2) {
+                                const userInstId = store.user.data?.institutionId || null;
+                                if (isBookFiziki) {
+                                  const instId = formData.institution_id || userInstId || null;
+                                  debounceRef.current = setTimeout(() => searchSimilarBooks(q, 'elektron', null, true), 350);
+                                  warnDebounceRef.current = setTimeout(() => searchFizikiDuplicates(q, instId), 350);
+                                } else if (isBookElektron) {
+                                  debounceRef.current = setTimeout(() => searchSimilarBooks(q, 'fiziki', null, true), 350);
+                                  warnDebounceRef.current = setTimeout(() => searchElektronDuplicates(q), 350);
+                                } else {
+                                  const instId = formData.institution_id || userInstId || null;
+                                  debounceRef.current = setTimeout(() => searchSimilarBooks(q, null, instId), 350);
+                                  warnDebounceRef.current = setTimeout(() => searchFizikiDuplicates(q, instId), 350);
+                                }
+                              } else {
+                                setTitleSuggestions([]);
+                                setWarnSuggestions([]);
+                              }
+                            }
+                          }}
+                          onBlur={() => setTimeout(() => setTitleSuggestions([]), 200)}
+                        />
+                        {titleSuggestions && titleSuggestions.length > 0 && (
+                          <ul className={styles.suggestions}>
+                            {titleSuggestions.map(book => (
+                              <li key={book.id} onMouseDown={() => selectSuggestion(book)}>
+                                <span className={styles.suggTitle}>{book.title}</span>
+                                <span className={styles.suggMeta}>
+                                  {(book.pdf_type?.name || book.category?.name) && <span className={styles.suggCat}>{book.pdf_type?.name || book.category?.name}</span>}
+                                  {book.institution_name && <span className={styles.suggInst}>{book.institution_name}</span>}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                      {warnSuggestions.length > 0 && (
+                        <div className={styles.warnSection}>
+                          <div className={styles.warnSectionHeader}>
+                            ⚠️ Bu adda kitab artıq mövcuddur. Seçib məlumatlarına baxa bilərsiniz:
+                          </div>
+                          {warnSuggestions.map(book => (
+                            <div key={book.id} className={styles.warnCard} onClick={() => selectWarnBook(book)}>
+                              <span className={styles.warnTitle}>{book.title}</span>
+                              <span className={styles.warnCardMeta}>
+                                {book.author && <span>{book.author}</span>}
+                                {book.institution_name && <span>{book.institution_name}</span>}
+                                <span>{book.pdf_type?.name || book.category?.name} · Say: {book.quantity || 1}</span>
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {warnSelected && !linkedBookId && (
+                        <div className={styles.warnBadge}>
+                          {warnPhysicalBook
+                            ? "⚠️ Mövcud kitab seçildi. Dəyişiklik etmədən göndərərsinizsə, say artırılacaq; dəyişiklik etsəniz, yeni kitab olaraq əlavə ediləcək."
+                            : "⚠️ Bu adda kitab artıq mövcuddur. Məlumatları dəyişdirib yeni kitab kimi göndərə bilərsiniz."
+                          }
+                          <button type="button" style={{ marginLeft: 8, background: 'none', border: 'none', cursor: 'pointer', color: '#b45309' }}
+                            onClick={() => { setWarnSelected(false); setWarnPhysicalBook(null); }}>✕</button>
+                        </div>
+                      )}
+                      {linkedBookId && (
+                        <div className={styles.linkedBadge}>
+                          {linkedDirection === 'qty'
+                            ? `Mövcud kitab seçildi — cari say: ${linkedBookQuantity}`
+                            : linkedDirection === 'elektron'
+                            ? "Mövcud fiziki kitabla əlaqələndirildi — kateqoriya kitab-hər ikisi"
+                            : linkedDirection === 'ikisi-fiziki'
+                            ? "Mövcud fiziki kitabla əlaqələndirildi — elektron faylı yükləyin, kateqoriya kitab-hər ikisi olacaq"
+                            : linkedDirection === 'ikisi-elektron'
+                            ? "Mövcud elektron kitabla əlaqələndirildi — kateqoriya kitab-hər ikisi olacaq, fayl tələb olunmur"
+                            : "Mövcud elektron kitabla əlaqələndirildi — kateqoriya kitab-hər ikisi"
+                          }
+                          <button type="button" onClick={unlinkBook}>✕</button>
+                        </div>
+                      )}
                     </div>
 
                     <div className={styles.row}>
+                      <div className={styles.field}>
+                        <label className={styles.label}>
+                          PDF Tipi <span className={styles.req}>*</span>
+                        </label>
+                        <select
+                          className="mmu-input mmu-select"
+                          name="pdf_type_id"
+                          value={formData.pdf_type_id}
+                          onChange={handleChange}
+                          required
+                          disabled={!!linkedBookId}
+                          style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
+                        >
+                          <option value="">— Seçin —</option>
+                          {visibleTypes.map((t) => (
+                            <option key={t.id} value={t.id}>{t.name}</option>
+                          ))}
+                        </select>
+                      </div>
                       <div className={styles.field}>
                         <label className={styles.label}>
                           Kateqoriya <span className={styles.req}>*</span>
@@ -279,6 +709,8 @@ function UserSubmitPdfPage() {
                           name="category_id"
                           value={formData.category_id}
                           onChange={handleChange}
+                          disabled={!!linkedBookId}
+                          style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                         >
                           <option value="">— Seçin —</option>
                           {categories.map((cat) => (
@@ -286,12 +718,16 @@ function UserSubmitPdfPage() {
                           ))}
                         </select>
                       </div>
+                    </div>
+                    <div className={styles.row}>
                       <div className={styles.field}>
                         <label className={styles.label}>Dil <span className={styles.req}>*</span></label>
                         <select
                           className="mmu-input mmu-select"
                           name="language"
                           value={formData.language} onChange={handleChange}
+                          disabled={!!linkedBookId}
+                          style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                         >
                           {languages.map((l) => (
                             <option key={l.code} value={l.code}>{l.flag} {l.name}</option>
@@ -308,6 +744,8 @@ function UserSubmitPdfPage() {
                           name="author" type="text"
                           placeholder="Müəllifin adı"
                           value={formData.author} onChange={handleChange}
+                          readOnly={!!linkedBookId}
+                          style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                         />
                       </div>
                       {!isBookCategory && (
@@ -322,6 +760,26 @@ function UserSubmitPdfPage() {
                         </div>
                       )}
                     </div>
+
+                    {(isBookFiziki || isBookHerIkisi) && linkedDirection !== 'fiziki' && linkedDirection !== 'elektron' && linkedDirection !== 'ikisi-elektron' && (
+                      <div className={styles.field} style={{ maxWidth: 200 }}>
+                        <label className={styles.label}>
+                          {linkedDirection === 'qty' ? 'Əlavə ediləcək say' : 'Say (nüsxə)'}
+                        </label>
+                        <input
+                          className="mmu-input"
+                          name="quantity"
+                          type="number"
+                          min={1}
+                          value={formData.quantity}
+                          onChange={handleChange}
+                          placeholder="1"
+                        />
+                        {linkedDirection === 'qty' && linkedBookQuantity !== null && (
+                          <span className={styles.hint}>Cari: {linkedBookQuantity} → yeni: {linkedBookQuantity + (parseInt(formData.quantity) || 1)}</span>
+                        )}
+                      </div>
+                    )}
 
                     {(isBookFiziki || isBookHerIkisi) && (
                       <div className={styles.field}>
@@ -355,7 +813,8 @@ function UserSubmitPdfPage() {
                         name="description"
                         placeholder="PDF haqqında qısa məlumat"
                         value={formData.description} onChange={handleChange} rows={4}
-                        style={{ resize: "vertical" }}
+                        readOnly={!!linkedBookId}
+                        style={{ resize: "vertical", ...(linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : {}) }}
                       />
                     </div>
 
@@ -381,6 +840,8 @@ function UserSubmitPdfPage() {
                               name="isbn" type="text"
                               placeholder="978-9952-8283-0-1"
                               value={formData.isbn} onChange={handleChange} maxLength={20}
+                              readOnly={!!linkedBookId}
+                              style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                             />
                           </div>
                           <div className={styles.field}>
@@ -391,6 +852,8 @@ function UserSubmitPdfPage() {
                               placeholder="Məs: 2023"
                               value={formData.publication_year} onChange={handleChange}
                               min={1900} max={new Date().getFullYear()}
+                              readOnly={!!linkedBookId}
+                              style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                             />
                           </div>
                         </div>
@@ -403,6 +866,8 @@ function UserSubmitPdfPage() {
                               name="publisher_location" type="text"
                               placeholder="Məs: Bakı"
                               value={formData.publisher_location} onChange={handleChange}
+                              readOnly={!!linkedBookId}
+                              style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                             />
                           </div>
                           {!isBookElektron && (
@@ -414,6 +879,8 @@ function UserSubmitPdfPage() {
                                 placeholder="0 — pulsuz"
                                 value={formData.price} onChange={handleChange}
                                 min={0} step="0.01"
+                                readOnly={!!linkedBookId}
+                                style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                               />
                             </div>
                           )}
@@ -426,6 +893,8 @@ function UserSubmitPdfPage() {
                               className="mmu-input mmu-select"
                               name="allow_download"
                               value={formData.allow_download} onChange={handleChange}
+                              disabled={!!linkedBookId}
+                              style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                             >
                               <option value="1">İcazə var</option>
                               <option value="0">İcazə yoxdur</option>
@@ -457,6 +926,8 @@ function UserSubmitPdfPage() {
                             placeholder="0 — pulsuz"
                             value={formData.price} onChange={handleChange}
                             min={0} step="0.01"
+                            readOnly={!!linkedBookId}
+                            style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                           />
                         </div>
                         <div className={styles.field}>
@@ -465,6 +936,8 @@ function UserSubmitPdfPage() {
                             className="mmu-input mmu-select"
                             name="allow_download"
                             value={formData.allow_download} onChange={handleChange}
+                            disabled={!!linkedBookId}
+                            style={linkedBookId ? { background: '#f0f2f5', cursor: 'not-allowed' } : undefined}
                           >
                             <option value="1">İcazə var</option>
                             <option value="0">İcazə yoxdur</option>
@@ -480,7 +953,7 @@ function UserSubmitPdfPage() {
                   <div className={styles.formCard}>
                     <h2 className={styles.stepTitle}>Fayllar</h2>
 
-                    {!isBookFiziki && (
+                    {!isBookFiziki && !(linkedBookId && (linkedDirection === 'fiziki' || linkedDirection === 'qty' || linkedDirection === 'ikisi-elektron')) && (
                       <div className={styles.field}>
                         <label className={styles.label}>
                           PDF Faylı <span className={styles.req}>*</span>
@@ -551,9 +1024,26 @@ function UserSubmitPdfPage() {
                 {step === 4 && (
                   <div className={styles.formCard}>
                     <h2 className={styles.stepTitle}>Yoxla &amp; Göndər</h2>
+                    {linkedBookId && (
+                      <div style={{ background: '#e8f8ee', border: '1px solid #a3d9b1', borderRadius: 8, padding: '10px 14px', marginBottom: 16, fontSize: 13, color: '#1a7a3a' }}>
+                        {linkedDirection === 'qty'
+                          ? `Bu sorğu kitab sayını ${formData.quantity} vahid artıracaq.`
+                          : linkedDirection === 'elektron'
+                          ? "Bu sorğu mövcud fiziki kitaba elektron versiya əlavə edəcək."
+                          : linkedDirection === 'fiziki'
+                          ? "Bu sorğu mövcud elektron kitabı fiziki nüsxə ilə əlaqələndirəcək."
+                          : linkedDirection === 'ikisi-fiziki'
+                          ? "Bu sorğu fiziki kitabı elektron faylı ilə birləşdirərək kitab-hər ikisi kateqoriyasına keçirəcək."
+                          : linkedDirection === 'ikisi-elektron'
+                          ? "Bu sorğu elektron kitabı kitab-hər ikisi kateqoriyasına keçirəcək."
+                          : "Bu sorğu mövcud kitabla əlaqələndiriləcək."
+                        } Admin təsdiq etdikdən sonra aktiv olacaq.
+                      </div>
+                    )}
                     <div className={styles.reviewGrid}>
                       {[
                         { l: "Başlıq",       v: formData.title },
+                        { l: "PDF Tipi",     v: selectedType?.name },
                         { l: "Kateqoriya",   v: categories.find(c => String(c.id) === String(formData.category_id))?.name },
                         { l: "Dil",          v: formData.language },
                         { l: "Müəllif",      v: formData.author },

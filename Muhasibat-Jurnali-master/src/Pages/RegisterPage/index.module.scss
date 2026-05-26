@@ -1,215 +1,89 @@
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: #ffde20;
+/* RegisterPage — LoginPage ilə eyni dizayn sistemi */
+@use "../LoginPage/index.module.scss" as login;
 
-  img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-  }
-}
+.page          { composes: page from "../LoginPage/index.module.scss"; }
+.left          { composes: left from "../LoginPage/index.module.scss"; }
+.right         { composes: right from "../LoginPage/index.module.scss"; }
+.brand         { composes: brand from "../LoginPage/index.module.scss"; }
+.brandMark     { composes: brandMark from "../LoginPage/index.module.scss"; }
+.brandName     { composes: brandName from "../LoginPage/index.module.scss"; }
+.brandSub      { composes: brandSub from "../LoginPage/index.module.scss"; }
+.formWrap      { composes: formWrap from "../LoginPage/index.module.scss"; }
+.tabRow        { composes: tabRow from "../LoginPage/index.module.scss"; }
+.tabs          { composes: tabs from "../LoginPage/index.module.scss"; }
+.tab           { composes: tab from "../LoginPage/index.module.scss"; }
+.tabActive     { composes: tabActive from "../LoginPage/index.module.scss"; }
+.tabNote       { composes: tabNote from "../LoginPage/index.module.scss"; }
+.heading       { composes: heading from "../LoginPage/index.module.scss"; }
+.accent        { composes: accent from "../LoginPage/index.module.scss"; }
+.subtext       { composes: subtext from "../LoginPage/index.module.scss"; }
+.form          { composes: form from "../LoginPage/index.module.scss"; }
+.field         { composes: field from "../LoginPage/index.module.scss"; }
+.label         { composes: label from "../LoginPage/index.module.scss"; }
+.inputWrap     { composes: inputWrap from "../LoginPage/index.module.scss"; }
+.inputIcon     { composes: inputIcon from "../LoginPage/index.module.scss"; }
+.eyeBtn        { composes: eyeBtn from "../LoginPage/index.module.scss"; }
+.error         { composes: error from "../LoginPage/index.module.scss"; }
+.fieldError    { composes: fieldError from "../LoginPage/index.module.scss"; }
+.submitBtn     { composes: submitBtn from "../LoginPage/index.module.scss"; }
+.arrow         { composes: arrow from "../LoginPage/index.module.scss"; }
+.switchText    { composes: switchText from "../LoginPage/index.module.scss"; }
+.switchBtn     { composes: switchBtn from "../LoginPage/index.module.scss"; }
+.terms         { composes: terms from "../LoginPage/index.module.scss"; }
+.collage       { composes: collage from "../LoginPage/index.module.scss"; }
+.tile          { composes: tile from "../LoginPage/index.module.scss"; }
+.tileInner     { composes: tileInner from "../LoginPage/index.module.scss"; }
+.panelBottom   { composes: panelBottom from "../LoginPage/index.module.scss"; }
+.panelEyebrow  { composes: panelEyebrow from "../LoginPage/index.module.scss"; }
+.panelHeading  { composes: panelHeading from "../LoginPage/index.module.scss"; }
+.panelStats    { composes: panelStats from "../LoginPage/index.module.scss"; }
+.statN         { composes: statN from "../LoginPage/index.module.scss"; }
+.statL         { composes: statL from "../LoginPage/index.module.scss"; }
 
-.form {
-  z-index: 10;
-  background: #fff;
-  padding: 2rem 2.5rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.formHeader {
-  text-align: center;
-  margin-bottom: 0.4rem;
-
-  h2 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #032062;
-    margin-bottom: 4px;
-  }
-
-  p {
-    font-size: 0.85rem;
-    color: #888;
-  }
-}
-
-.fieldGroup {
+/* Institution select */
+.instSection {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 7px;
 }
 
-.inputGroup {
-  position: relative;
-  display: flex;
-  align-items: center;
-  border: 1.5px solid #dfe6e9;
-  border-radius: 8px;
-  background: #fafafa;
-  transition: border-color 0.2s, background 0.2s;
-
-  &:focus-within {
-    border-color: #032062;
-    background: #fff;
-  }
-
-  &.hasError {
-    border-color: #d63031;
-  }
-}
-
-.fieldIcon {
-  position: absolute;
-  left: 12px;
-  color: #aaa;
-  font-size: 20px !important;
-  pointer-events: none;
-}
-
-.input {
-  width: 100%;
-  padding: 0.75rem 2.6rem 0.75rem 2.6rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  outline: none;
-  background: transparent;
-  color: #222;
-
-  &::placeholder {
-    color: #aaa;
-  }
-}
-
-.eyeIcon {
-  position: absolute;
-  right: 12px;
-  cursor: pointer;
-  color: #aaa;
-  font-size: 20px !important;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #032062;
-  }
-}
-
-.fieldError {
-  font-size: 0.78rem;
-  color: #d63031;
-  padding-left: 4px;
-}
-
-.error {
-  color: #d63031;
-  font-size: 0.9rem;
-  text-align: center;
-  background: #fff5f5;
-  border: 1px solid #ffcccc;
-  border-radius: 6px;
-  padding: 8px 12px;
-}
-
-.button {
-  background: #032062;
-  color: #fff;
-  padding: 0.85rem 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+.instLabel {
+  font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-  margin-top: 4px;
-
-  &:hover:not(:disabled) {
-    background: #021540;
-    transform: translateY(-1px);
-  }
-
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-}
-
-.registerText {
-  font-size: 13px;
-  color: #666;
-  text-align: center;
-  margin-top: 4px;
-}
-
-.registerBtn {
-  background: none;
-  border: none;
-  color: #032062;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 13px;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #021540;
-    text-decoration: underline;
-  }
-}
-
-.institutionSection {
+  color: var(--ink-2, #1F2A44);
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 6px;
-  padding: 12px;
-  background: #f9f5ff;
-  border: 1.5px dashed #ce93d8;
-  border-radius: 8px;
 }
 
-.institutionLabel {
-  font-size: 13px;
-  font-weight: 600;
-  color: #6a1b9a;
-  display: flex;
-  align-items: center;
-}
-
-.optionalTag {
-  margin-left: auto;
+.instOpt {
   font-size: 11px;
   font-weight: 500;
-  color: #9e9e9e;
-  background: #ede7f6;
-  padding: 1px 8px;
-  border-radius: 10px;
+  color: var(--muted, #6B7390);
+  background: var(--paper-2, #F4EFDF);
+  padding: 2px 8px;
+  border-radius: var(--r-pill, 999px);
 }
 
-.institutionSelect {
+.instSelect {
   width: 100%;
-  padding: 0.7rem 0.9rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border: 1.5px solid var(--line, #E6E2D6);
+  border-radius: var(--r-md, 12px);
+  padding: 12px 14px;
+  font-family: var(--font-sans, "Manrope", sans-serif);
+  font-size: 14px;
+  color: var(--ink, #0A1428);
+  background: var(--card, #fff);
   outline: none;
-  background: #fff;
-  color: #333;
   cursor: pointer;
+  transition: border-color .15s;
+
+  &:focus { border-color: var(--navy, #0B1F3D); }
 }
 
-.institutionHint {
-  font-size: 11px;
-  color: #7b1fa2;
+.instHint {
+  font-size: 12px;
+  color: var(--muted, #6B7390);
+  line-height: 1.5;
   margin: 0;
-  font-style: italic;
 }

@@ -1,5 +1,38 @@
 import adminService from './admin.service.js';
 import { resolveAdminScope } from '../middlewares/resolveScope.js';
+import { getOne } from '../config/database.js';
+
+export const getPendingCounts = async (req, res, next) => {
+  try {
+    const scope = await resolveAdminScope(req.user);
+    const { role, institutionId } = req.user;
+
+    // Rental pending count
+    let rentalRow;
+    if (role >= 4) {
+      rentalRow = await getOne("SELECT COUNT(*) as cnt FROM book_rentals WHERE status = 'pending'");
+    } else if (institutionId) {
+      rentalRow = await getOne(
+        "SELECT COUNT(*) as cnt FROM book_rentals WHERE status = 'pending' AND institution_id = ?",
+        [institutionId]
+      );
+    }
+
+    // Category request pending count — only global scope admins approve them
+    let categoryRow;
+    if (scope.type === 'global') {
+      categoryRow = await getOne("SELECT COUNT(*) as cnt FROM category_requests WHERE status = 'pending'");
+    }
+
+    res.json({
+      status: 'success',
+      data: {
+        rentals: Number(rentalRow?.cnt ?? 0),
+        categoryRequests: Number(categoryRow?.cnt ?? 0),
+      },
+    });
+  } catch (err) { next(err); }
+};
 
 export const getStats = async (req, res, next) => {
   try {
@@ -68,12 +101,25 @@ export const updateUserRole = async (req, res, next) => {
 export const getDashboardData = async (req, res, next) => {
   try {
     const scope = await resolveAdminScope(req.user);
-    let institutionId = scope.type === 'institution' ? scope.institutionId : null;
-    // Global-scope adminlər isteğe bağlı müəssisə filteri tətbiq edə bilər
-    if (scope.type !== 'institution' && req.query.institutionId) {
-      institutionId = Number(req.query.institutionId) || null;
+    let institutionId = null;
+    let userId = null;
+
+    if (scope.type === 'institution') {
+      const inst = await getOne('SELECT is_main FROM institutions WHERE id = ?', [scope.institutionId]);
+      if (!inst?.is_main) {
+        institutionId = scope.institutionId;
+      } else if (req.user.role === 2) {
+        // Main institution worker — own stats only
+        userId = req.user.id;
+      }
+    } else {
+      // Global-scope adminlər isteğe bağlı müəssisə filteri tətbiq edə bilər
+      if (req.query.institutionId) {
+        institutionId = Number(req.query.institutionId) || null;
+      }
     }
-    const dashboardData = await adminService.getDashboardData(institutionId);
+
+    const dashboardData = await adminService.getDashboardData(institutionId, userId);
 
     res.status(200).json({
       status: 'success',

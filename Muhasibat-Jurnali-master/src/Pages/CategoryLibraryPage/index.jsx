@@ -7,6 +7,7 @@ import Base_Url_Server from "../../Constants/baseUrl";
 import { useNavigate, useParams } from "react-router-dom";
 import BookCard from "../../Components/BookCard";
 import BookCover from "../../Components/BookCover";
+import { displayCategoryName } from "../../Constants/categoryDisplay";
 
 const monthNames = [
   "Yanvar", "Fevral", "Mart", "Aprel",
@@ -68,7 +69,7 @@ function CategoryLibraryPage() {
           return;
         }
         setCategory(cat);
-        document.title = cat.name || "Kitabxana";
+        document.title = displayCategoryName(cat.name) || "Kitabxana";
       })
       .catch(() => navigate("/"));
   }, [categoryId, navigate]);
@@ -176,7 +177,7 @@ function CategoryLibraryPage() {
           <div className="mmu-container">
             <span className="mmu-eyebrow">Kateqoriya</span>
             <div className={styles.heroRow}>
-              <h1 className={styles.heroTitle}>{category.name}</h1>
+              <h1 className={styles.heroTitle}>{displayCategoryName(category.name)}</h1>
             </div>
           </div>
         </section>

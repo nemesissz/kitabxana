@@ -1,0 +1,199 @@
+// library.jsx — Catalog with filter, sort, search, grid/list toggle
+const { useState: useStateL, useMemo: useMemoL } = React;
+
+function LibraryPage({ navigate, favs, toggleFav }) {
+  const books = window.DATA.books;
+  const cats = window.DATA.categories;
+
+  const [view, setView] = useStateL("grid"); // grid | list
+  const [q, setQ] = useStateL("");
+  const [cat, setCat] = useStateL("all");
+  const [lang, setLang] = useStateL("all");
+  const [sort, setSort] = useStateL("recent");
+  const [showFilters, setShowFilters] = useStateL(true);
+  const [favOnly, setFavOnly] = useStateL(false);
+
+  const filtered = useMemoL(() => {
+    let r = books.slice();
+    if (cat !== "all") r = r.filter(b => b.cat === cat);
+    if (lang !== "all") r = r.filter(b => b.lang === lang);
+    if (favOnly) r = r.filter(b => favs.includes(b.id));
+    if (q.trim()) {
+      const s = q.toLowerCase();
+      r = r.filter(b => b.title.toLowerCase().includes(s) || b.author.toLowerCase().includes(s));
+    }
+    if (sort === "title") r.sort((a, b) => a.title.localeCompare(b.title));
+    else if (sort === "popular") r.sort((a, b) => b.downloads - a.downloads);
+    else if (sort === "rating") r.sort((a, b) => b.rating - a.rating);
+    else if (sort === "year") r.sort((a, b) => b.year - a.year);
+    else r.sort((a, b) => b.id - a.id);
+    return r;
+  }, [q, cat, lang, sort, favs, favOnly]);
+
+  return (
+    <div className="page-enter">
+      {/* Hero strip */}
+      <section style={{ padding: "56px 0 32px" }}>
+        <div className="container">
+          <span className="eyebrow"><I.book width="16" height="16" />Kitabxana</span>
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 24, marginTop: 16 }}>
+            <h1 style={{ fontSize: "clamp(36px, 5vw, 56px)", maxWidth: 720, lineHeight: 1.15 }}>
+              Bütün resurslar bir yerdə.
+            </h1>
+            <div style={{ display: "flex", gap: 12 }}>
+              <button className="btn btn-outline" onClick={() => navigate("upload")}>
+                <I.upload width="16" height="16" />
+                PDF Yüklə
+              </button>
+            </div>
+          </div>
+          <p className="lead" style={{ marginTop: 28, maxWidth: "60ch", fontSize: 17 }}>
+            {filtered.length} resurs — {cat === "all" ? "bütün kateqoriyalarda" : cats.find(c => c.id === cat)?.label}.
+          </p>
+
+          {/* Search + toolbar */}
+          <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 32 }}>
+            <div style={{ flex: 1, position: "relative", maxWidth: 560 }}>
+              <I.search width="18" height="18" style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--muted)" }} />
+              <input className="input" value={q} onChange={e => setQ(e.target.value)} placeholder="Başlıq və ya müəllifə görə axtarın…"
+                style={{ paddingLeft: 44, paddingRight: q ? 44 : 14 }} />
+              {q && <button onClick={() => setQ("")} style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", border: 0, background: "var(--paper-2)", color: "var(--ink-2)", width: 26, height: 26, borderRadius: 999, display: "grid", placeItems: "center", cursor: "pointer" }}>
+                <I.close width="14" height="14" />
+              </button>}
+            </div>
+
+            <select className="select" value={sort} onChange={e => setSort(e.target.value)} style={{ width: "auto", paddingRight: 32 }}>
+              <option value="recent">Ən yeni</option>
+              <option value="popular">Ən populyar</option>
+              <option value="rating">Ən yüksək reytinq</option>
+              <option value="title">Adına görə</option>
+              <option value="year">İlinə görə</option>
+            </select>
+
+            <button className="btn btn-outline" onClick={() => setShowFilters(s => !s)}>
+              <I.filter width="16" height="16" />
+              Filter {showFilters ? "" : <span className="badge badge-navy" style={{ padding: "1px 7px", marginLeft: 4, fontSize: 10 }}>{[cat !== "all", lang !== "all", favOnly].filter(Boolean).length || ""}</span>}
+            </button>
+
+            <div className="variant-toggle" style={{ padding: 3 }}>
+              <button className={view === "grid" ? "on" : ""} onClick={() => setView("grid")} style={{ padding: 8, borderRadius: 999, display: "grid", placeItems: "center" }} title="Grid view">
+                <I.grid width="16" height="16" />
+              </button>
+              <button className={view === "list" ? "on" : ""} onClick={() => setView("list")} style={{ padding: 8, borderRadius: 999, display: "grid", placeItems: "center" }} title="List view">
+                <I.list width="16" height="16" />
+              </button>
+            </div>
+          </div>
+
+          {/* Active filter pills */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 18, alignItems: "center", minHeight: 32 }}>
+            <span style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600, letterSpacing: 0.04, textTransform: "uppercase" }}>Aktiv:</span>
+            {cat === "all" && lang === "all" && !favOnly && !q && <span style={{ fontSize: 13, color: "var(--muted)" }}>filter yoxdur</span>}
+            {cat !== "all" && <FilterPill onClear={() => setCat("all")}>{cats.find(c => c.id === cat)?.label}</FilterPill>}
+            {lang !== "all" && <FilterPill onClear={() => setLang("all")}>Dil: {lang}</FilterPill>}
+            {favOnly && <FilterPill onClear={() => setFavOnly(false)}>Yalnız favorilər</FilterPill>}
+            {q && <FilterPill onClear={() => setQ("")}>"{q}"</FilterPill>}
+          </div>
+        </div>
+      </section>
+
+      {/* Body: sidebar + grid */}
+      <section style={{ paddingTop: 16 }}>
+        <div className="container" style={{ display: "grid", gridTemplateColumns: showFilters ? "260px 1fr" : "1fr", gap: 32, transition: "grid-template-columns .25s ease" }}>
+          {showFilters && (
+            <aside>
+              <div className="sidebar">
+                <h3>Kateqoriya</h3>
+                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                  {cats.map(c => (
+                    <button key={c.id} onClick={() => setCat(c.id)} style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      padding: "8px 12px", borderRadius: 8, border: 0,
+                      background: cat === c.id ? "var(--accent-soft)" : "transparent",
+                      color: cat === c.id ? "var(--navy)" : "var(--ink-2)",
+                      fontWeight: cat === c.id ? 600 : 500,
+                      fontSize: 14, cursor: "pointer", textAlign: "left",
+                      fontFamily: "inherit",
+                    }}>
+                      <span>{c.label}</span>
+                      <span style={{ fontSize: 12, color: "var(--muted)" }}>
+                        {c.id === "all" ? books.length : books.filter(b => b.cat === c.id).length}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                <h3 style={{ marginTop: 28 }}>Dil</h3>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {[["all","Hamısı"],["AZ","AZ"],["EN","EN"],["DE","DE"]].map(([id, label]) => (
+                    <button key={id} className={`tag ${lang === id ? "on" : ""}`} onClick={() => setLang(id)}>{label}</button>
+                  ))}
+                </div>
+
+                <h3 style={{ marginTop: 28 }}>Mənim</h3>
+                <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, cursor: "pointer" }}>
+                  <input type="checkbox" checked={favOnly} onChange={e => setFavOnly(e.target.checked)} style={{ accentColor: "var(--navy)" }} />
+                  Yalnız favorilərim
+                </label>
+
+                <div className="divider" />
+
+                <div style={{ background: "var(--accent-tint)", padding: 16, borderRadius: "var(--r-md)", border: "1px solid var(--accent-soft)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                    <I.sparkles width="16" height="16" style={{ color: "var(--accent-deep)" }} />
+                    <b style={{ fontSize: 13 }}>Tövsiyə</b>
+                  </div>
+                  <p style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.55, margin: 0 }}>
+                    Favorilərinizə əsasən tövsiyə edirik: <a onClick={() => navigate("pdf-4")} style={{ color: "var(--navy)", fontWeight: 600, textDecoration: "underline" }}>Hərbi Strategiya</a>
+                  </p>
+                </div>
+              </div>
+            </aside>
+          )}
+
+          <div>
+            {filtered.length === 0 ? (
+              <EmptyState onReset={() => { setCat("all"); setLang("all"); setQ(""); setFavOnly(false); }} />
+            ) : view === "grid" ? (
+              <div className="grid-books">
+                {filtered.map(b => <BookCard key={b.id} book={b} onOpen={() => navigate("pdf-" + b.id)} onFav={toggleFav} isFav={favs.includes(b.id)} />)}
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {filtered.map(b => <BookRow key={b.id} book={b} onOpen={() => navigate("pdf-" + b.id)} onFav={toggleFav} isFav={favs.includes(b.id)} />)}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function FilterPill({ children, onClear }) {
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 6px 5px 12px", borderRadius: 999, background: "var(--navy)", color: "#fff", fontSize: 12.5, fontWeight: 600 }}>
+      {children}
+      <button onClick={onClear} style={{ background: "rgba(255,255,255,.15)", border: 0, width: 18, height: 18, borderRadius: "50%", display: "grid", placeItems: "center", color: "#fff", cursor: "pointer" }}>
+        <I.close width="10" height="10" />
+      </button>
+    </span>
+  );
+}
+
+function EmptyState({ onReset }) {
+  return (
+    <div className="card" style={{ padding: 64, textAlign: "center" }}>
+      <div style={{ width: 72, height: 72, borderRadius: "50%", background: "var(--accent-soft)", display: "grid", placeItems: "center", margin: "0 auto 20px", color: "var(--navy)" }}>
+        <I.search width="28" height="28" />
+      </div>
+      <h3 style={{ fontSize: 22, marginBottom: 8 }}>Nəticə tapılmadı</h3>
+      <p style={{ color: "var(--muted)", maxWidth: 420, margin: "0 auto 20px" }}>
+        Axtardığınız parametrlərə uyğun resurs yoxdur. Filtrləri sıfırlamağı sınayın.
+      </p>
+      <button className="btn btn-primary" onClick={onReset}>Filtrləri sıfırla</button>
+    </div>
+  );
+}
+
+Object.assign(window, { LibraryPage });

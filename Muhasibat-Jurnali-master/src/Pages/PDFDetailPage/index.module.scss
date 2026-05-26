@@ -162,6 +162,38 @@
   &:hover { background: rgba(255,255,255,.22); transform: translateY(-1px); }
 }
 
+.btnFav {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.85);
+  border: 1.5px solid rgba(255,255,255,.35);
+  border-radius: var(--r-pill);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s, transform .15s;
+
+  &:hover:not(:disabled) {
+    background: rgba(252,211,77,.18);
+    border-color: rgba(252,211,77,.7);
+    color: #FCD34D;
+    transform: translateY(-1px);
+  }
+
+  &:disabled { opacity: .6; cursor: not-allowed; }
+
+  /* Aktiv (favoridədir) vəziyyəti */
+  &[title="Favorilərdən çıxar"] {
+    background: rgba(252,211,77,.2);
+    border-color: rgba(252,211,77,.8);
+    color: #FCD34D;
+  }
+}
+
 .btnSpinnerSm {
   display: inline-block;
   width: 16px;

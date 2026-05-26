@@ -1,0 +1,331 @@
+// home.jsx — Home page with animated hero collage, stats, recent + recommended
+const { useState: useStateH, useEffect: useEffectH, useMemo: useMemoH } = React;
+
+function HomePage({ navigate, favs, toggleFav }) {
+  const books = window.DATA.books;
+  const recent = useMemoH(() => [...books].sort((a, b) => b.id - a.id).slice(0, 4), []);
+  const recommended = useMemoH(() => books.filter(b => b.featured).slice(0, 4), []);
+  const trending = useMemoH(() => [...books].sort((a, b) => b.downloads - a.downloads).slice(0, 4), []);
+
+  return (
+    <div className="page-enter">
+      <Hero navigate={navigate} />
+      <StatsBand />
+      <FeaturedShelf title="Tövsiyə edilənlər" subtitle="Sizin maraq dairənizə uyğun seçimlər." eyebrow="Sizin üçün"
+                     books={recommended} navigate={navigate} favs={favs} toggleFav={toggleFav}
+                     icon={<I.sparkles width="16" height="16" />} />
+      <CategoryBand navigate={navigate} />
+      <FeaturedShelf title="Son əlavə olunanlar" subtitle="Kitabxana fonduna yenicə əlavə olunmuş PDF və mənbələr." eyebrow="Yeniliklər"
+                     books={recent} navigate={navigate} favs={favs} toggleFav={toggleFav}
+                     icon={<I.clock width="16" height="16" />} />
+      <FeaturedShelf title="Ən çox yüklənənlər" subtitle="Bu ay icma tərəfindən ən populyar olan resurslar." eyebrow="Trend"
+                     books={trending} navigate={navigate} favs={favs} toggleFav={toggleFav}
+                     icon={<I.trending width="16" height="16" />} />
+      <AnnouncementsTeaser navigate={navigate} />
+    </div>
+  );
+}
+
+/* ── Hero with animated book collage ── */
+function Hero({ navigate }) {
+  const [q, setQ] = useStateH("");
+  const books = window.DATA.books;
+
+  // Curated collage tiles
+  const tiles = [
+    { i: 0, x: "8%",  y: "8%",  w: 130, rot: -6, delay: 0,    book: books[3] },
+    { i: 1, x: "32%", y: "2%",  w: 160, rot: 4,  delay: 0.4,  book: books[2] },
+    { i: 2, x: "60%", y: "10%", w: 140, rot: -3, delay: 0.2,  book: books[9] },
+    { i: 3, x: "82%", y: "4%",  w: 120, rot: 8,  delay: 0.6,  book: books[5] },
+    { i: 4, x: "3%",  y: "58%", w: 150, rot: 5,  delay: 0.3,  book: books[0] },
+    { i: 5, x: "26%", y: "68%", w: 130, rot: -7, delay: 0.5,  book: books[11] },
+    { i: 6, x: "55%", y: "62%", w: 170, rot: 6,  delay: 0.1,  book: books[8] },
+    { i: 7, x: "82%", y: "58%", w: 135, rot: -4, delay: 0.7,  book: books[4] },
+  ];
+
+  return (
+    <section style={{ paddingTop: 56, paddingBottom: 80, position: "relative", overflow: "hidden" }}>
+      <div className="container" style={{ position: "relative" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.05fr 1fr", gap: 56, alignItems: "center", minHeight: 540 }}>
+          {/* LEFT: copy + search */}
+          <div style={{ position: "relative", zIndex: 2 }}>
+            <span className="eyebrow">MMU-ya xoş gəldiniz</span>
+            <h1 style={{ fontSize: "clamp(48px, 6vw, 84px)", marginTop: 18, marginBottom: 22 }}>
+              Biliyə açılan<br />
+              <span style={{ position: "relative", display: "inline-block" }}>
+                <span style={{ position: "relative", zIndex: 2 }}>qapınız.</span>
+                <span style={{ position: "absolute", left: -4, right: -4, bottom: 4, height: "32%", background: "var(--accent)", borderRadius: 4, zIndex: 1 }} />
+              </span>
+            </h1>
+            <p style={{ fontSize: 18, color: "var(--muted)", maxWidth: 56, marginBottom: 28, maxInlineSize: "52ch", lineHeight: 1.55 }}>
+              Minlərlə PDF, jurnal və rəqəmsal akademik resurs — hərb tarixindən kibertəhlükəsizliyə qədər. <b style={{ color: "var(--ink-2)" }}>Universitet daxilində pulsuz.</b>
+            </p>
+
+            {/* Search */}
+            <div style={{ display: "flex", gap: 0, background: "var(--card)", border: "1px solid var(--line)", borderRadius: 999, padding: 6, boxShadow: "var(--shadow-md)", maxWidth: 560 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, padding: "8px 18px" }}>
+                <I.search width="18" height="18" style={{ color: "var(--muted)" }} />
+                <input value={q} onChange={e => setQ(e.target.value)} placeholder="Kitab, müəllif və ya açar söz axtarın…"
+                  style={{ border: 0, outline: 0, background: "transparent", flex: 1, font: "inherit", fontSize: 15 }}
+                  onKeyDown={e => e.key === "Enter" && navigate("library")} />
+              </div>
+              <button className="btn btn-primary" onClick={() => navigate("library")} style={{ flexShrink: 0 }}>
+                Axtar
+                <I.arrow width="16" height="16" />
+              </button>
+            </div>
+
+            {/* Quick chips */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 18 }}>
+              <span style={{ fontSize: 13, color: "var(--muted)", alignSelf: "center", marginRight: 4 }}>Populyar:</span>
+              {["Hərbi strategiya", "Tarix", "Kibertəhlükəsizlik", "Liderlik", "Geosiyasət"].map(t => (
+                <button key={t} className="tag" onClick={() => navigate("library")}>{t}</button>
+              ))}
+            </div>
+
+            {/* Quick stats inline */}
+            <div style={{ display: "flex", gap: 32, marginTop: 36 }}>
+              {[
+                { n: "2,840+", l: "PDF resurs" },
+                { n: "12", l: "Kateqoriya" },
+                { n: "98%", l: "Pulsuz çıxış" },
+              ].map((s, i) => (
+                <div key={i}>
+                  <div style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 500, color: "var(--navy)", lineHeight: 1 }}>{s.n}</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 6, letterSpacing: 0.04, textTransform: "uppercase", fontWeight: 600 }}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT: animated book collage */}
+          <div style={{ position: "relative", height: 540 }}>
+            {/* Yellow ambient blob */}
+            <div style={{
+              position: "absolute",
+              top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+              width: 480, height: 480,
+              borderRadius: "50%",
+              background: "var(--accent)",
+              filter: "blur(2px)",
+              opacity: 0.35,
+            }} />
+            <div style={{
+              position: "absolute",
+              top: "20%", left: "30%",
+              width: 360, height: 360,
+              borderRadius: "50%",
+              background: "var(--accent-soft)",
+              filter: "blur(40px)",
+            }} />
+
+            {/* Floating book tiles */}
+            {tiles.map(t => (
+              <div key={t.i} style={{
+                position: "absolute",
+                left: t.x, top: t.y,
+                width: t.w,
+                animation: `float-y 5s ease-in-out ${t.delay}s infinite`,
+                "--rot": `${t.rot}deg`,
+                transform: `rotate(${t.rot}deg)`,
+                filter: "drop-shadow(0 18px 30px rgba(11,31,61,.25))",
+              }}>
+                <div style={{ aspectRatio: "3 / 4", borderRadius: 6, overflow: "hidden", position: "relative" }}>
+                  <BookCover book={t.book} />
+                </div>
+              </div>
+            ))}
+
+            {/* Decorative orbit ring */}
+            <svg viewBox="0 0 400 400" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
+              <circle cx="200" cy="200" r="195" fill="none" stroke="var(--navy)" strokeWidth="1" strokeDasharray="2 6" opacity="0.18" />
+            </svg>
+
+            {/* Floating PDF chip */}
+            <div className="card" style={{
+              position: "absolute", bottom: 24, left: -16,
+              padding: "12px 16px",
+              display: "flex", alignItems: "center", gap: 12,
+              boxShadow: "var(--shadow-lg)",
+              animation: "float-y 7s ease-in-out 1s infinite",
+            }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: "var(--accent)", display: "grid", placeItems: "center", color: "var(--navy)" }}>
+                <I.download width="18" height="18" />
+              </div>
+              <div>
+                <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.06 }}>Bu həftə</div>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>1,247 yükləmə</div>
+              </div>
+            </div>
+
+            {/* Floating online chip */}
+            <div className="card" style={{
+              position: "absolute", top: 8, right: -8,
+              padding: "10px 14px",
+              display: "flex", alignItems: "center", gap: 10,
+              boxShadow: "var(--shadow-lg)",
+              animation: "float-y 6s ease-in-out 2s infinite",
+            }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--ok)", boxShadow: "0 0 0 4px rgba(30,142,90,.15)" }} />
+              <span style={{ fontSize: 12, fontWeight: 600 }}>328 istifadəçi online</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Stats band ── */
+function StatsBand() {
+  const stats = [
+    { i: I.pdf, n: 2840, l: "PDF fondunda" },
+    { i: I.book, n: 12, l: "Kateqoriya" },
+    { i: I.megaphone, n: 6, l: "Aktiv elan" },
+    { i: I.download, n: 14250, l: "Toplam yüklənmə" },
+  ];
+  return (
+    <section className="narrow" style={{ paddingTop: 0 }}>
+      <div className="container">
+        <div className="grid-4">
+          {stats.map((s, i) => (
+            <div key={i} className="stat-card">
+              <div className="stat-icon"><s.i width="20" height="20" /></div>
+              <div className="stat-num"><CountUp end={s.n} /></div>
+              <div className="stat-lbl">{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* Count-up animation */
+function CountUp({ end, duration = 1200 }) {
+  const [v, setV] = useStateH(0);
+  useEffectH(() => {
+    let raf, start;
+    const step = (t) => {
+      if (!start) start = t;
+      const p = Math.min(1, (t - start) / duration);
+      setV(Math.round(end * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [end]);
+  return <>{v.toLocaleString("az-AZ")}</>;
+}
+
+/* ── Featured shelf ── */
+function FeaturedShelf({ title, subtitle, eyebrow, books, navigate, favs, toggleFav, icon }) {
+  return (
+    <section className="narrow">
+      <div className="container">
+        <div className="section-head">
+          <div>
+            <span className="eyebrow">{icon}{eyebrow}</span>
+            <h2 style={{ marginTop: 12 }}>{title}</h2>
+            <p className="lead">{subtitle}</p>
+          </div>
+          <button className="btn btn-outline" onClick={() => navigate("library")}>
+            Hamısını gör
+            <I.arrow width="16" height="16" />
+          </button>
+        </div>
+        <div className="grid-books">
+          {books.map(b => <BookCard key={b.id} book={b} onOpen={() => navigate("pdf-" + b.id)} onFav={toggleFav} isFav={favs.includes(b.id)} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Category band ── */
+function CategoryBand({ navigate }) {
+  const cats = [
+    { id: "kitab-fiziki", label: "Fiziki kitab", icon: I.book, color: "linear-gradient(135deg,#FCD34D,#F5B400)", desc: "Çap edilmiş kitabxana fondu" },
+    { id: "kitab-elektron", label: "Elektron kitab", icon: I.pdf, color: "linear-gradient(135deg,#1E3A8A,#0F2569)", desc: "PDF və EPUB formatında" },
+    { id: "jurnal", label: "Jurnal", icon: I.pages, color: "linear-gradient(135deg,#15803D,#0C5A2A)", desc: "Akademik və hərbi jurnallar" },
+    { id: "emr", label: "Sənədlər", icon: I.bookmark, color: "linear-gradient(135deg,#5B3A1F,#8E6840)", desc: "Əmrlər və sərəncamlar" },
+  ];
+  return (
+    <section className="narrow">
+      <div className="container">
+        <div className="section-head">
+          <div>
+            <span className="eyebrow"><I.grid width="16" height="16" />Kateqoriyalar</span>
+            <h2 style={{ marginTop: 12 }}>Tematik bölmələr</h2>
+          </div>
+        </div>
+        <div className="grid-4">
+          {cats.map((c, i) => (
+            <button key={i} onClick={() => navigate("library")} style={{
+              textAlign: "left", border: 0, padding: 0,
+              background: "transparent", cursor: "pointer",
+            }}>
+              <div style={{ aspectRatio: "5 / 3", borderRadius: "var(--r-lg)", background: c.color, padding: 24, position: "relative", overflow: "hidden", color: "#fff", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                <div style={{
+                  position: "absolute",
+                  right: -40, top: -40,
+                  width: 180, height: 180,
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,.12)",
+                }} />
+                <c.icon width="32" height="32" />
+                <div>
+                  <div style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 500, marginBottom: 4 }}>{c.label}</div>
+                  <div style={{ fontSize: 13, opacity: 0.8 }}>{c.desc}</div>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Announcements teaser ── */
+function AnnouncementsTeaser({ navigate }) {
+  const anns = window.DATA.announcements.slice(0, 3);
+  return (
+    <section className="narrow">
+      <div className="container">
+        <div className="section-head">
+          <div>
+            <span className="eyebrow"><I.megaphone width="16" height="16" />Elanlar</span>
+            <h2 style={{ marginTop: 12 }}>Son bildirişlər</h2>
+            <p className="lead">Universitetin son elanları və duyuruları.</p>
+          </div>
+          <button className="btn btn-outline" onClick={() => navigate("elan")}>
+            Hamısını gör
+            <I.arrow width="16" height="16" />
+          </button>
+        </div>
+        <div className="grid-3">
+          {anns.map(a => (
+            <div key={a.id} className="card" style={{ padding: 24, cursor: "pointer", transition: "transform .15s ease, box-shadow .15s ease" }}
+              onClick={() => navigate("elan")}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "var(--shadow-sm)"; }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                <span className={`badge ${a.urgent ? "badge-navy" : "badge-accent"}`}>{a.cat}</span>
+                {a.pinned && <I.pin width="14" height="14" style={{ color: "var(--accent-deep)" }} />}
+                <span style={{ marginLeft: "auto", fontSize: 12, color: "var(--muted)" }}>{a.date}</span>
+              </div>
+              <h3 style={{ fontSize: 19, marginBottom: 10 }}>{a.title}</h3>
+              <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.55, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{a.summary}</p>
+              <div style={{ marginTop: 18, display: "flex", alignItems: "center", gap: 8, color: "var(--navy)", fontWeight: 600, fontSize: 13 }}>
+                Daha çox <I.arrow width="14" height="14" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { HomePage });

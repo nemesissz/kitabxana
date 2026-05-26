@@ -21,7 +21,9 @@ const EVENT_META = {
   pdf_uploaded:    { label: "PDF yükləndi",          Icon: UploadFileIcon,            cls: "tagBlue"  },
   pdf_approved:    { label: "PDF qəbul edildi",      Icon: CheckCircleOutlineIcon,    cls: "tagGreen" },
   pdf_rejected:    { label: "PDF rədd edildi",       Icon: CancelOutlinedIcon,        cls: "tagRed"   },
-  pdf_deleted:     { label: "PDF silindi",           Icon: CancelOutlinedIcon,        cls: "tagRed"   },
+  pdf_deleted:          { label: "PDF silindi",                Icon: CancelOutlinedIcon,     cls: "tagRed"   },
+  pdf_physical_linked:  { label: "Fiziki variant əlavə edildi", Icon: UploadFileIcon,          cls: "tagGreen" },
+  pdf_qty_added:        { label: "Kitab sayı artırıldı",        Icon: UploadFileIcon,          cls: "tagGreen" },
 };
 
 const TABS = [
@@ -31,11 +33,13 @@ const TABS = [
 ];
 
 function timeAgo(dateStr) {
-  const diff = (Date.now() - new Date(dateStr)) / 1000;
-  if (diff < 60) return `${Math.floor(diff)} san. əvvəl`;
-  if (diff < 3600) return `${Math.floor(diff / 60)} dəq. əvvəl`;
+  const diff = Math.max(0, (Date.now() - new Date(dateStr)) / 1000);
+  if (diff < 60)    return `${Math.floor(diff)} saniyə əvvəl`;
+  if (diff < 3600)  return `${Math.floor(diff / 60)} dəqiqə əvvəl`;
   if (diff < 86400) return `${Math.floor(diff / 3600)} saat əvvəl`;
-  return `${Math.floor(diff / 86400)} gün əvvəl`;
+  const days = Math.floor(diff / 86400);
+  if (days < 30)    return `${days} gün əvvəl`;
+  return new Date(dateStr).toLocaleDateString("az-AZ", { day: "numeric", month: "long", year: "numeric" });
 }
 
 function AdminHistoryPage() {
@@ -53,7 +57,7 @@ function AdminHistoryPage() {
   const adminInstitutionId = store.admin.data?.institutionId ?? null;
   const adminIsMain = institutions.find(i => i.id === adminInstitutionId)?.is_main;
   const isGlobalScope = institutions.length > 0
-    ? (adminRole >= 4 || (adminInstitutionId && adminIsMain))
+    ? (adminRole >= 4 || (adminRole >= 3 && adminInstitutionId && adminIsMain))
     : adminRole >= 4;
 
   useEffect(() => {

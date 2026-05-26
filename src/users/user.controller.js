@@ -153,6 +153,42 @@ export const updatePermissions = async (req, res, next) => {
   }
 };
 
+export const changePassword = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({ status: 'error', message: 'Etibarlı istifadəçi ID-si tələb olunur' });
+    }
+
+    const targetUserId = Number(id);
+    const { userId: currentUserId } = req.user;
+
+    if (targetUserId !== currentUserId) {
+      return res.status(403).json({ status: 'error', message: 'Yalnız öz şifrənizi dəyişə bilərsiniz' });
+    }
+
+    const { currentPassword, oldPassword, newPassword } = req.body;
+    const existingPassword = currentPassword || oldPassword;
+    if (!existingPassword || !newPassword) {
+      return res.status(400).json({ status: 'error', message: 'Cari və yeni şifrə tələb olunur' });
+    }
+    if (newPassword.length < 6) {
+      return res.status(400).json({ status: 'error', message: 'Yeni şifrə ən azı 6 simvol olmalıdır' });
+    }
+
+    await userService.changePassword(targetUserId, existingPassword, newPassword);
+    res.json({ status: 'success', message: 'Şifrə uğurla dəyişdirildi' });
+  } catch (error) {
+    if (error.message === 'User not found') {
+      return res.status(404).json({ status: 'error', message: 'İstifadəçi tapılmadı' });
+    }
+    if (error.message === 'Cari şifrə yanlışdır') {
+      return res.status(400).json({ status: 'error', message: error.message });
+    }
+    next(error);
+  }
+};
+
 export const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;

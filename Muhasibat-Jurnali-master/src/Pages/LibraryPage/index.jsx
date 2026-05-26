@@ -7,6 +7,7 @@ import Base_Url_Server from "../../Constants/baseUrl";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BookCard from "../../Components/BookCard";
 import Swal from "sweetalert2";
+import { displayCategoryName } from "../../Constants/categoryDisplay";
 
 function LibraryPage() {
   const store = useContext(dataContext);
@@ -65,7 +66,7 @@ function LibraryPage() {
 
   const user = store.user.data;
   const activeCatName = selectedCat
-    ? categories.find((c) => String(c.id) === String(selectedCat))?.name || ""
+    ? displayCategoryName(categories.find((c) => String(c.id) === String(selectedCat))?.name || "")
     : "";
 
   const countText = loading
@@ -97,7 +98,7 @@ function LibraryPage() {
                     className={`${styles.catItem} ${String(selectedCat) === String(c.id) ? styles.catItemActive : ""}`}
                     onClick={() => selectCat(c.id)}
                   >
-                    <span>{c.name}</span>
+                    <span>{displayCategoryName(c.name)}</span>
                     {c.count !== undefined && (
                       <span className={styles.catCount}>{c.count}</span>
                     )}

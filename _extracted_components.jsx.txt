@@ -1,0 +1,298 @@
+// components.jsx — shared UI: icons, header, footer, book cards
+const { useState, useEffect, useRef, useMemo } = React;
+
+/* ─────────── Icons ─────────── */
+const I = {
+  home: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 10.5 12 3l9 7.5V20a2 2 0 0 1-2 2h-4v-6h-6v6H5a2 2 0 0 1-2-2v-9.5Z"/></svg>,
+  book: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22.5v-18Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg>,
+  megaphone: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="m3 11 18-8v18l-18-8v-2Z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>,
+  search: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>,
+  user: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>,
+  download: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 3v12m0 0 5-5m-5 5-5-5"/><path d="M5 21h14"/></svg>,
+  upload: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 21V9m0 0 5 5m-5-5-5 5"/><path d="M5 3h14"/></svg>,
+  heart: (p) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M12 21s-7-4.35-9.5-9.04C.6 8.3 2.46 4.5 6 4.5c2 0 3.5 1.2 4.5 3 1-1.8 2.5-3 4.5-3 3.54 0 5.4 3.8 3.5 7.46C19 16.65 12 21 12 21Z"/></svg>,
+  heartOutline: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 21s-7-4.35-9.5-9.04C.6 8.3 2.46 4.5 6 4.5c2 0 3.5 1.2 4.5 3 1-1.8 2.5-3 4.5-3 3.54 0 5.4 3.8 3.5 7.46C19 16.65 12 21 12 21Z"/></svg>,
+  bookmark: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>,
+  eye: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>,
+  filter: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 5h18M6 12h12M10 19h4"/></svg>,
+  grid: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>,
+  list: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>,
+  arrow: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 12h14m-6-6 6 6-6 6"/></svg>,
+  chevR: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="m9 6 6 6-6 6"/></svg>,
+  chevD: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="m6 9 6 6 6-6"/></svg>,
+  close: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M6 6 18 18M6 18 18 6"/></svg>,
+  star: (p) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>,
+  calendar: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>,
+  globe: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>,
+  pages: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M7 4h10v16H7z"/><path d="M4 7v13h10"/></svg>,
+  pdf: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><text x="7" y="17" fontSize="6" fontWeight="700" fill="currentColor" stroke="none">PDF</text></svg>,
+  open: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H12v16H6.5A2.5 2.5 0 0 0 4 22.5z M20 4h-5.5A2.5 2.5 0 0 0 12 6.5V20h5.5A2.5 2.5 0 0 1 20 22.5z"/></svg>,
+  trending: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>,
+  sparkles: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="m12 3 1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8L12 3Z"/><path d="M19 14v6M16 17h6"/></svg>,
+  pin: (p) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M14 2 9 7H5l5 5-5 8 8-5 5 5v-4l5-5-8-1-1-8Z"/></svg>,
+  bell: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9Z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>,
+  edit: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M11 4H4v16h16v-7"/><path d="m18 2 4 4-10 10H8v-4L18 2Z"/></svg>,
+  logout: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M10 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>,
+  lock: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>,
+  building: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h7l3 3v15M9 7h2M9 11h2M9 15h2M14 11h2M14 15h2"/></svg>,
+  phone: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>,
+  mail: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 7 9-7"/></svg>,
+  ig: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...p}><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>,
+  fb: (p) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M13 22v-8h3l1-4h-4V7c0-1.1.4-2 2-2h2V1.2c-.4-.05-1.6-.2-3-.2-3 0-5 1.8-5 5v3H6v4h3v8h4Z"/></svg>,
+  yt: (p) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M21.6 7c-.2-1.3-.9-2-2.2-2.2C17.2 4.5 12 4.5 12 4.5s-5.2 0-7.4.3C3.3 5 2.6 5.7 2.4 7 2 9.2 2 12 2 12s0 2.8.4 5c.2 1.3.9 2 2.2 2.2 2.2.3 7.4.3 7.4.3s5.2 0 7.4-.3c1.3-.2 2-.9 2.2-2.2.4-2.2.4-5 .4-5s0-2.8-.4-5ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg>,
+  lin: (p) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M4.98 3.5c0 1.38-1.12 2.5-2.5 2.5S0 4.88 0 3.5 1.1 1 2.5 1s2.48 1.12 2.48 2.5ZM.22 8h4.56v13H.22V8Zm7.4 0h4.37v1.8h.06c.6-1.1 2.1-2.3 4.32-2.3 4.62 0 5.48 3 5.48 6.95V21h-4.56v-6.2c0-1.5-.03-3.4-2.07-3.4-2.07 0-2.4 1.6-2.4 3.3V21H7.62V8Z"/></svg>,
+  check: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="m4 12 6 6L20 6"/></svg>,
+  plus: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 5v14M5 12h14"/></svg>,
+  clock: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>,
+  rent: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 2v4M8 2v4M3 12h18"/></svg>,
+};
+
+/* Brand mark — open book glyph */
+function BrandMark({ size = 40 }) {
+  return (
+    <div className="brand-mark" style={{ width: size, height: size }}>
+      <svg viewBox="0 0 32 32" width={size * 0.55} height={size * 0.55} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 7v18l12-3 12 3V7l-12 3L4 7Z" />
+        <path d="M16 10v18" />
+      </svg>
+    </div>
+  );
+}
+
+/* ─────────── Header ─────────── */
+function Header({ route, navigate, variant, setVariant, user }) {
+  const tabs = [
+    { id: "home",      label: "Ana səhifə",  icon: I.home },
+    { id: "library",   label: "Kitabxana",   icon: I.book },
+    { id: "elan",      label: "Elan",        icon: I.megaphone },
+  ];
+  const activeTab = route.startsWith("library") || route.startsWith("pdf") || route.startsWith("reader") ? "library"
+                   : route.startsWith("elan") ? "elan"
+                   : route.startsWith("upload") ? "library"
+                   : "home";
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+    <header className="site-header">
+      <div className="container nav">
+        <div className="brand" onClick={() => navigate("home")} style={{ cursor: "pointer" }}>
+          <BrandMark />
+          <div className="brand-name">
+            <b>MMU Kitabxana</b>
+            <small>Ağıllı Kitabxana Sistemi</small>
+          </div>
+        </div>
+
+        <nav className="nav-links">
+          {tabs.map(t => (
+            <button key={t.id} className={`nav-link ${activeTab === t.id ? "active" : ""}`} onClick={() => navigate(t.id)}>
+              <t.icon width="16" height="16" />
+              {t.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="nav-right">
+          <div className="variant-toggle" title="Vizual variant">
+            <button className={variant === "editorial" ? "on" : ""} onClick={() => setVariant("editorial")}>Editorial</button>
+            <button className={variant === "modern" ? "on" : ""} onClick={() => setVariant("modern")}>Modern</button>
+          </div>
+
+          <button className="btn-icon" title="Bildirişlər" style={{ position: "relative" }}>
+            <I.bell width="18" height="18" />
+            <span style={{ position: "absolute", top: 6, right: 6, width: 8, height: 8, borderRadius: "50%", background: "var(--bad)" }} />
+          </button>
+
+          <div style={{ position: "relative" }}>
+            <button className="user-chip" onClick={() => setMenuOpen(o => !o)}>
+              <div className="avatar">{user.initials}</div>
+              <span>{user.handle}</span>
+              <I.chevD width="14" height="14" style={{ color: "var(--muted)" }} />
+            </button>
+            {menuOpen && (
+              <div className="card fade-up" style={{ position: "absolute", right: 0, top: "calc(100% + 8px)", minWidth: 240, padding: 8, zIndex: 100 }}>
+                <div style={{ padding: "10px 12px", borderBottom: "1px solid var(--line)", marginBottom: 6 }}>
+                  <div style={{ fontWeight: 600 }}>{user.name}</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)" }}>@{user.handle}</div>
+                </div>
+                {[
+                  { l: "Profilim", i: I.user, r: "profile" },
+                  { l: "PDF Yüklə", i: I.upload, r: "upload" },
+                  { l: "Favorilərim", i: I.heartOutline, r: "profile" },
+                ].map((it, i) => (
+                  <button key={i} onClick={() => { navigate(it.r); setMenuOpen(false); }} style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 12px", borderRadius: 8, border: 0, background: "transparent", textAlign: "left", fontSize: 14, color: "var(--ink-2)" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "var(--paper-2)"}
+                    onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                    <it.i width="16" height="16" />
+                    {it.l}
+                  </button>
+                ))}
+                <div style={{ height: 1, background: "var(--line)", margin: "6px 0" }} />
+                <button style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 12px", borderRadius: 8, border: 0, background: "transparent", textAlign: "left", fontSize: 14, color: "var(--bad)" }}>
+                  <I.logout width="16" height="16" />
+                  Çıxış
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/* ─────────── Footer ─────────── */
+function Footer({ navigate }) {
+  return (
+    <footer className="site-footer">
+      <div className="container">
+        <div className="ftr-grid">
+          <div>
+            <div className="brand" style={{ marginBottom: 18 }}>
+              <BrandMark size={36} />
+              <div className="brand-name">
+                <b style={{ color: "#fff" }}>MMU Kitabxana</b>
+                <small style={{ color: "rgba(255,255,255,.5)" }}>Ağıllı Kitabxana Sistemi</small>
+              </div>
+            </div>
+            <p style={{ fontSize: 14, color: "#C9D2E5", lineHeight: 1.6, maxWidth: 360 }}>
+              PDF kitablar, jurnallar və akademik resurslarla daim yanınızda. Hərb tarixi, strategiya və müasir tədqiqatlar — bir yerdə.
+            </p>
+            <div className="social-row">
+              <a href="#"><I.ig width="16" height="16" /></a>
+              <a href="#"><I.fb width="16" height="16" /></a>
+              <a href="#"><I.yt width="16" height="16" /></a>
+              <a href="#"><I.lin width="16" height="16" /></a>
+            </div>
+          </div>
+          <div>
+            <h4>Naviqasiya</h4>
+            <ul>
+              <li><a onClick={() => navigate("home")}>Ana səhifə</a></li>
+              <li><a onClick={() => navigate("library")}>Kitabxana</a></li>
+              <li><a onClick={() => navigate("elan")}>Elanlar</a></li>
+              <li><a onClick={() => navigate("upload")}>PDF Yüklə</a></li>
+              <li><a onClick={() => navigate("profile")}>Profilim</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Kateqoriyalar</h4>
+            <ul>
+              <li><a>Fiziki kitab</a></li>
+              <li><a>Elektron kitab</a></li>
+              <li><a>Jurnallar</a></li>
+              <li><a>Əmrlər</a></li>
+              <li><a>Sərəncamlar</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Əlaqə</h4>
+            <ul>
+              <li><a href="tel:+994552108597"><I.phone width="14" height="14" style={{ display: "inline-block", verticalAlign: "middle", marginRight: 8 }} /> +994 55 210 85 97</a></li>
+              <li><a href="mailto:kitabxana@mmu.edu.az"><I.mail width="14" height="14" style={{ display: "inline-block", verticalAlign: "middle", marginRight: 8 }} /> kitabxana@mmu.edu.az</a></li>
+              <li><a><I.building width="14" height="14" style={{ display: "inline-block", verticalAlign: "middle", marginRight: 8 }} /> Bakı, AZ1000</a></li>
+            </ul>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,.45)", marginTop: 18, lineHeight: 1.6 }}>
+              Hər bir saytın məzmunu — məqalələr, dizayn elementləri, şəkillər və proqram təminatı — müəlliflik hüququ ilə qorunur.
+            </p>
+          </div>
+        </div>
+        <div className="ftr-bot">
+          <span>© 2026 MMU Kitabxana. Bütün hüquqlar qorunur.</span>
+          <span>Developed by Rever Digital Lab</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ─────────── Book card (grid) ─────────── */
+function BookCard({ book, onOpen, onFav, isFav }) {
+  return (
+    <div className="book-card" onClick={() => onOpen(book.id)}>
+      <div className="book-cover placeholder" style={{ "--c1": book.colors[0], "--c2": book.colors[1] }}>
+        <BookCover book={book} />
+        <button className={`book-cover-fav ${isFav ? "on" : ""}`} onClick={(e) => { e.stopPropagation(); onFav(book.id); }} title={isFav ? "Favoridən sil" : "Favoriyə əlavə et"}>
+          {isFav ? <I.heart width="16" height="16" /> : <I.heartOutline width="16" height="16" />}
+        </button>
+        <span className="book-cover-cat">{book.cat.replace("kitab-", "").replace("-", " ")}</span>
+      </div>
+      <div className="book-info">
+        <div className="book-title" style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{book.title}</div>
+        <div className="book-author">{book.author}</div>
+        <div className="book-meta">
+          <span>{book.year}</span>
+          <span className="dot" />
+          <span>{book.pages} səh.</span>
+          <span className="dot" />
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+            <I.star width="12" height="12" style={{ color: "var(--accent-deep)" }} /> {book.rating}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Stylised cover — illustrative placeholder using book metadata */
+function BookCover({ book }) {
+  return (
+    <div style={{
+      width: "100%", height: "100%",
+      display: "flex", flexDirection: "column", justifyContent: "space-between",
+      padding: "18px 16px",
+      color: "#fff",
+      background: `linear-gradient(160deg, ${book.colors[0]} 0%, ${book.colors[1]} 100%)`,
+      borderRadius: 4,
+      position: "relative",
+      overflow: "hidden",
+      boxShadow: "inset 6px 0 0 rgba(0,0,0,.18), 0 10px 24px -8px rgba(0,0,0,.35)",
+    }}>
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 80% 10%, rgba(255,255,255,.18), transparent 50%)" }} />
+      <div style={{ fontSize: 9, letterSpacing: 0.18, textTransform: "uppercase", opacity: 0.7, fontWeight: 700, position: "relative" }}>
+        {book.lang === "AZ" ? "Azərbaycan" : book.lang === "EN" ? "English" : book.lang === "DE" ? "Deutsch" : "—"}
+      </div>
+      <div style={{ position: "relative" }}>
+        <div style={{ fontFamily: "Instrument Serif, DM Serif Display, serif", fontSize: 22, fontWeight: 500, lineHeight: 1.1, letterSpacing: -0.01, textShadow: "0 2px 4px rgba(0,0,0,.2)" }}>
+          {book.title}
+        </div>
+        <div style={{ marginTop: 12, fontSize: 11, opacity: 0.8, letterSpacing: 0.05, textTransform: "uppercase", fontWeight: 600 }}>
+          {book.author}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Book row (list view) */
+function BookRow({ book, onOpen, onFav, isFav }) {
+  return (
+    <div className="book-row" onClick={() => onOpen(book.id)}>
+      <div className="row-cover placeholder" style={{ "--c1": book.colors[0], "--c2": book.colors[1] }}>
+        <div style={{ width: "100%", height: "100%", background: `linear-gradient(160deg, ${book.colors[0]}, ${book.colors[1]})`, display: "grid", placeItems: "center", color: "#fff", fontSize: 10, fontWeight: 700, padding: 6, textAlign: "center" }}>
+          {book.title.split(" ").slice(0, 2).join(" ")}
+        </div>
+      </div>
+      <div className="row-main">
+        <div className="row-title">{book.title}</div>
+        <div className="row-author">{book.author} · {book.year}</div>
+        <div className="row-meta">
+          <span><I.pages width="12" height="12" style={{ display: "inline-block", verticalAlign: "-2px", marginRight: 3 }} />{book.pages} səh.</span>
+          <span><I.download width="12" height="12" style={{ display: "inline-block", verticalAlign: "-2px", marginRight: 3 }} />{book.downloads}</span>
+          <span><I.star width="12" height="12" style={{ display: "inline-block", verticalAlign: "-2px", marginRight: 3, color: "var(--accent-deep)" }} />{book.rating}</span>
+        </div>
+      </div>
+      <span className="badge">{book.cat.replace("kitab-", "").replace("-", " ")}</span>
+      <div style={{ display: "flex", gap: 6 }}>
+        <button className="btn-icon" onClick={(e) => { e.stopPropagation(); onFav(book.id); }} style={isFav ? { color: "var(--bad)", borderColor: "var(--bad)" } : null}>
+          {isFav ? <I.heart width="16" height="16" /> : <I.heartOutline width="16" height="16" />}
+        </button>
+        <button className="btn-icon" onClick={(e) => e.stopPropagation()}>
+          <I.download width="16" height="16" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* Expose */
+Object.assign(window, { I, BrandMark, Header, Footer, BookCard, BookRow, BookCover });

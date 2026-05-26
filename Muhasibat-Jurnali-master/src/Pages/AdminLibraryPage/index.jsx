@@ -27,6 +27,7 @@ function AdminLibraryPage() {
   const { languages } = useLanguages();
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [pdfsTypes, setPdfsTypes] = useState([]);
   const [users, setUsers] = useState([]);
   const [institutions, setInstitutions] = useState([]);
   const [pagination, setPagination] = useState(null);
@@ -49,10 +50,29 @@ function AdminLibraryPage() {
   const adminRole = store.admin.data?.role ?? 0;
   const adminInstId = store.admin.data?.institutionId ?? null;
   const adminInst = institutions.find(i => i.id === adminInstId);
+  const adminWorkerType = store.admin.data?.workerType || null;
+  const adminUserId = store.admin.data?.id ?? null;
   const pdfReviewPermission = store.admin.data?.pdfReviewPermission || 'none';
   const canApprovePdfs = adminRole >= 4 || !adminInstId ||
     (institutions.length > 0 && adminInst?.is_main === true) ||
     pdfReviewPermission === 'allowed';
+
+  // Əsas müəssisə işçisi: role=2 + əsas müəssisəyə aiddir
+  const isMainInstWorker = adminRole === 2 && !!adminInstId && !!adminInst?.is_main;
+
+  const workerCanEditPdfType = (pdfTypeName) => {
+    if (!adminWorkerType) return true;
+    const n = (pdfTypeName || '').toLowerCase();
+    if (n.includes('ikisi')) return false;
+    if (adminWorkerType === 'elektron') return n.includes('elektron');
+    if (adminWorkerType === 'fiziki') return n.includes('fiziki');
+    return false;
+  };
+
+  // PDF-i redaktə/silmə icazəsi: pdf tipi + əsas müəssisə işçisi yalnız öz yükləmələri
+  const canEditPdf = (b) =>
+    workerCanEditPdfType(b.pdf_type?.name) &&
+    (!isMainInstWorker || b.uploaded_by === adminUserId);
 
   const fetchAdminUser = () => {
     const tokenAdmin = localStorage.getItem("tokenAdmin");
@@ -74,6 +94,9 @@ function AdminLibraryPage() {
   useEffect(() => {
     axios.get(Base_Url_Server + "categories/pdfs")
       .then((r) => setCategories(r.data.data.categories || []))
+      .catch(() => {});
+    axios.get(Base_Url_Server + "pdfs-types")
+      .then((r) => setPdfsTypes(r.data.data.types || []))
       .catch(() => {});
     const tokenAdmin = localStorage.getItem("tokenAdmin");
     axios.get(Base_Url_Server + "users", { headers: { Authorization: `Bearer ${tokenAdmin}` } })
@@ -99,7 +122,7 @@ function AdminLibraryPage() {
     setLoading(true);
     const tokenAdmin = localStorage.getItem("tokenAdmin");
     try {
-      const params = new URLSearchParams({ page: p, limit: 20 });
+      const params = new URLSearchParams({ page: p, limit: 20, adminView: "1" });
       if (q.trim()) params.append("search", q.trim());
       if (f.category) params.append("categoryId", f.category);
       if (f.language) params.append("language", f.language);
@@ -318,8 +341,9 @@ function AdminLibraryPage() {
     setEditData({
       title: book.title || "",
       description: book.description || "",
+      pdf_type_id: book.pdf_type?.id ? String(book.pdf_type.id) : "",
+      _typeName: book.pdf_type?.name || "",
       category_id: book.category_id || "",
-      _catName: book.category?.name || "",
       language: book.language || "az",
       order_number: book.order_number || "",
       author: book.author || "",
@@ -343,7 +367,7 @@ function AdminLibraryPage() {
     setEditLoading(true);
     try {
       const fd = new FormData();
-      const { newCoverImage, _catName, ...textFields } = editData;
+      const { newCoverImage, _typeName, ...textFields } = editData;
       const submitFields = editIsBookFiziki ? { ...textFields, allow_download: "0" } : textFields;
       Object.entries(submitFields).forEach(([k, v]) => { if (v !== "" && v !== null) fd.append(k, v); });
       if (newCoverImage) fd.append("image", newCoverImage);
@@ -364,11 +388,11 @@ function AdminLibraryPage() {
   const someSelected = selectedIds.size > 0;
   const selectedPendingCount = books.filter(b => selectedIds.has(b.id) && b.status === "pending").length;
 
-  // Edit modalı üçün kateqoriya növü — _catName state ilə saxlanır, find() asılılığı yoxdur
-  const editCatLower = (editData._catName || "").toLowerCase();
-  const editIsBookElektron = editCatLower.includes("kitab-elektron");
-  const editIsBookFiziki   = editCatLower.includes("kitab-fiziki");
-  const editIsBookHerIkisi = editCatLower.includes("kitab-hər ikisi") || editCatLower.includes("kitab-her ikisi");
+  // Edit modalı üçün tip növü — _typeName state ilə saxlanır
+  const editTypeLower = (editData._typeName || "").toLowerCase();
+  const editIsBookElektron = editTypeLower.includes("elektron") && !editTypeLower.includes("ikisi");
+  const editIsBookFiziki   = editTypeLower.includes("fiziki")   && !editTypeLower.includes("ikisi");
+  const editIsBookHerIkisi = editTypeLower.includes("ikisi");
   const editIsBookCategory = editIsBookElektron || editIsBookFiziki || editIsBookHerIkisi;
 
   return (
@@ -520,6 +544,7 @@ function AdminLibraryPage() {
                 <th>Şəkil</th>
                 <th>Ad</th>
                 <th>Kateqoriya</th>
+                <th>Tip</th>
                 <th>Dil</th>
                 <th>Status</th>
                 <th>Yükləyən</th>
@@ -553,6 +578,7 @@ function AdminLibraryPage() {
                   </td>
                   <td className={styles.titleCell} title={b.title}>{b.title}</td>
                   <td>{b.category?.name || <span className={styles.none}>—</span>}</td>
+                  <td>{b.pdf_type?.name || <span className={styles.none}>—</span>}</td>
                   <td>
                     {b.language ? (() => {
                       const flagCode = b.language_flag
@@ -581,27 +607,49 @@ function AdminLibraryPage() {
                   </td>
                   <td className={styles.small}>{b.created_at?.split("T")[0]}</td>
                   <td>
-                    <div className={styles.actions}>
-                      {b.status === "pending" && canApprovePdfs && (
-                        <>
-                          <button className={styles.approveBtn} onClick={() => handleApprove(b.id)} title="Qəbul et">
-                            <CheckCircleOutlineIcon fontSize="small" />
-                          </button>
-                          <button className={styles.rejectBtn} onClick={() => handleReject(b.id)} title="Rədd et">
-                            <CancelOutlinedIcon fontSize="small" />
-                          </button>
-                        </>
-                      )}
-                      <button className={styles.viewBtn} onClick={() => window.open(`/library/${b.id}/read`, "_blank")} title="Bax">
-                        <VisibilityIcon fontSize="small" />
-                      </button>
-                      <button className={styles.editBtn} onClick={() => openEdit(b)} title="Redaktə et">
-                        <EditIcon fontSize="small" />
-                      </button>
-                      <button className={styles.delBtn} onClick={() => handleDelete(b.id)} title="Sil">
-                        <DeleteIcon fontSize="small" />
-                      </button>
-                    </div>
+                    {(() => {
+                      const bType = (b.pdf_type?.name || '').toLowerCase();
+                      const bIsFiziki   = bType.includes('fiziki') && !bType.includes('ikisi');
+                      const bIsHerIkisi = bType.includes('ikisi');
+                      return (
+                        <div className={styles.actions}>
+                          {b.status === "pending" && canApprovePdfs && (
+                            <>
+                              <button className={styles.approveBtn} onClick={() => handleApprove(b.id)} title="Qəbul et">
+                                <CheckCircleOutlineIcon fontSize="small" />
+                              </button>
+                              <button className={styles.rejectBtn} onClick={() => handleReject(b.id)} title="Rədd et">
+                                <CancelOutlinedIcon fontSize="small" />
+                              </button>
+                            </>
+                          )}
+                          {bIsFiziki ? (
+                            <span className={styles.orderBadge} title="Sıra №">
+                              {b.order_number || <span className={styles.none}>—</span>}
+                            </span>
+                          ) : (
+                            <button className={styles.viewBtn} onClick={() => window.open(`/library/${b.id}/read`, "_blank")} title="Bax">
+                              <VisibilityIcon fontSize="small" />
+                            </button>
+                          )}
+                          {bIsHerIkisi && (
+                            <span className={styles.qtyBadge} title="Say">
+                              {b.quantity ?? 1}
+                            </span>
+                          )}
+                          {canEditPdf(b) && (
+                            <button className={styles.editBtn} onClick={() => openEdit(b)} title="Redaktə et">
+                              <EditIcon fontSize="small" />
+                            </button>
+                          )}
+                          {canEditPdf(b) && (
+                            <button className={styles.delBtn} onClick={() => handleDelete(b.id)} title="Sil">
+                              <DeleteIcon fontSize="small" />
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </td>
                 </tr>
               ))}
@@ -634,13 +682,41 @@ function AdminLibraryPage() {
                 onChange={(e) => setEditData(p => ({ ...p, title: e.target.value }))}
               />
 
+              <label>PDF Tipi</label>
+              <select
+                value={editData.pdf_type_id}
+                onChange={(e) => {
+                  const type = pdfsTypes.find(t => String(t.id) === e.target.value);
+                  const newTypeName = (type?.name || "").toLowerCase();
+                  const newIsElektron = newTypeName.includes("elektron") && !newTypeName.includes("ikisi");
+                  const newIsHerIkisi = newTypeName.includes("ikisi");
+                  const newIsFiziki   = newTypeName.includes("fiziki") && !newTypeName.includes("ikisi");
+                  const newIsKitab    = newIsElektron || newIsFiziki || newIsHerIkisi;
+                  setEditData(p => ({
+                    ...p,
+                    pdf_type_id: e.target.value,
+                    _typeName: type?.name || "",
+                    institution_id:     (newIsFiziki || newIsHerIkisi) ? p.institution_id : "",
+                    price:              newIsElektron ? "0" : p.price,
+                    allow_download:     newIsFiziki ? "0" : p.allow_download,
+                    order_number:       (newIsElektron || newIsFiziki) ? "" : p.order_number,
+                    isbn:               newIsKitab ? p.isbn : "",
+                    publication_year:   newIsKitab ? p.publication_year : "",
+                    publisher_location: newIsKitab ? p.publisher_location : "",
+                    foreword:           newIsKitab ? p.foreword : "",
+                  }));
+                }}
+              >
+                <option value="">— Tipsiz —</option>
+                {pdfsTypes.map((t) => (
+                  <option key={t.id} value={t.id}>{t.name}</option>
+                ))}
+              </select>
+
               <label>Kateqoriya</label>
               <select
                 value={editData.category_id}
-                onChange={(e) => {
-                  const cat = categories.find(c => String(c.id) === e.target.value);
-                  setEditData(p => ({ ...p, category_id: e.target.value, _catName: cat?.name || "" }));
-                }}
+                onChange={(e) => setEditData(p => ({ ...p, category_id: e.target.value }))}
               >
                 <option value="">— Kateqoriyasız —</option>
                 {categories.map((c) => (
@@ -687,7 +763,7 @@ function AdminLibraryPage() {
                 </>
               )}
 
-              {!editIsBookCategory && (
+              {(!editIsBookElektron && !editIsBookFiziki) && (
                 <>
                   <label>Nömrə / Sıra № (istəyə bağlı)</label>
                   <input type="text" value={editData.order_number} placeholder="Məs: 45/2025"

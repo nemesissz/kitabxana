@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import BookCover from '../BookCover';
 import styles from './index.module.scss';
+import { displayCategoryName } from '../../Constants/categoryDisplay';
 
 export default function BookCard({ pdf, view = 'grid' }) {
   const navigate = useNavigate();
-  const isFiziki = (pdf?.category?.name || '').toLowerCase().includes('kitab-fiziki');
+  const typeLower = (pdf?.pdf_type?.name || '').toLowerCase();
+  const isHerIkisi = typeLower.includes('ikisi');
+  const isFiziki = typeLower.includes('fiziki') && !isHerIkisi;
 
   const year = pdf?.pdfDate || pdf?.created_at
     ? new Date(pdf.pdfDate || pdf.created_at).getFullYear()
@@ -24,7 +27,7 @@ export default function BookCard({ pdf, view = 'grid' }) {
         <div className={styles.listBody}>
           <div className={styles.listTop}>
             {pdf.category?.name && (
-              <span className="mmu-badge">{pdf.category.name}</span>
+              <span className="mmu-badge">{displayCategoryName(pdf.category.name)}</span>
             )}
           </div>
           <h3 className={styles.listTitle}>{pdf.title}</h3>
@@ -69,7 +72,7 @@ export default function BookCard({ pdf, view = 'grid' }) {
       </div>
       <div className={styles.body}>
         {pdf.category?.name && (
-          <span className="mmu-badge" style={{ fontSize: 11, marginBottom: 6 }}>{pdf.category.name}</span>
+          <span className="mmu-badge" style={{ fontSize: 11, marginBottom: 6 }}>{displayCategoryName(pdf.category.name)}</span>
         )}
         <h3 className={styles.title}>{pdf.title}</h3>
         {pdf.author && <div className={styles.author}>{pdf.author}</div>}

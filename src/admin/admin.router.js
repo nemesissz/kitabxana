@@ -9,7 +9,8 @@ import {
   getAllSubscriptions,
   updatePdfPrice,
   bulkUpdatePdfPrices,
-  createSubscriptionPlan
+  createSubscriptionPlan,
+  getPendingCounts,
 } from './admin.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import roleCheck from '../middlewares/roleCheck.middleware.js';
@@ -30,6 +31,7 @@ const adminMiddleware = roleCheck(2); // Minimum Admin (2) tələb olunur
  * - BearerAuth: []
  */
 router.get('/stats', authMiddleware, adminMiddleware, getStats);
+router.get('/pending-counts', authMiddleware, adminMiddleware, getPendingCounts);
 
 /**
  * @swagger

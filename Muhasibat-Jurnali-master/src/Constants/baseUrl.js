@@ -1,17 +1,7 @@
 // src/Constants/baseUrl.js
 
-// Environment-ə görə URL seçimi
-const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
-// İstehsal (Production) URL-ləri
-const API_BASE_URL = isDevelopment 
-  ? "http://localhost:3000/" 
-  : "https://api.muhasibatjurnal.az/";
-
-// File Base URL də environment-ə görə dəyişir
-const FILE_BASE_URL = isDevelopment 
-  ? "http://localhost:3000/" 
-  : "https://api.muhasibatjurnal.az/"; // Statik faylların (uploads) ünvanı
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/";
+const FILE_BASE_URL = import.meta.env.VITE_FILE_URL || API_BASE_URL;
 
 // Fayl yolunu tam web URL-ə çevirən funksiya
 export const formatServerFilePath = (serverPath) => {

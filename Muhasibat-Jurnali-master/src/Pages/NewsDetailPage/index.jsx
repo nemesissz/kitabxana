@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import Base_Url_Server from "../../Constants/baseUrl";
+import Base_Url_Server, { formatServerFilePath } from "../../Constants/baseUrl";
 import styles from "./index.module.scss";
 import Footer from "../../Layouts/Footer";
 
@@ -97,7 +97,7 @@ function NewsDetailPage() {
                 {news.image && (
                   <div className={styles.imgWrap}>
                     <img
-                      src={news.image}
+                      src={formatServerFilePath(news.image)}
                       alt={news.title}
                       onError={(e) => { e.target.parentElement.style.display = "none"; }}
                     />

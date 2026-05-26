@@ -67,6 +67,15 @@ async function checkRdActivityTable() {
   return _hasRdActivity;
 }
 
+function workerCanEditPdfType(workerType, pdfTypeName) {
+  if (!workerType) return true;
+  const name = (pdfTypeName || '').toLowerCase();
+  if (name.includes('ikisi')) return false;
+  if (workerType === 'elektron') return name.includes('elektron');
+  if (workerType === 'fiziki') return name.includes('fiziki');
+  return false;
+}
+
 class PdfService {
   async getAllPdfs(filters = {}) {
     const {
@@ -74,6 +83,7 @@ class PdfService {
       limit = 24,
       language = null,
       categoryId = null,
+      pdfTypeId = null,
       search = null,
       minPrice = null,
       maxPrice = null,
@@ -82,7 +92,13 @@ class PdfService {
       status = null,
       uploadedBy = null,
       uploaderInstitutionId = null,
-      sortBy = null
+      pInstitutionId = null,
+      uploaderInstId = null,
+      anyInstId = null,
+      includeNoInst = false,
+      uploaderNoInst = false,
+      sortBy = null,
+      ids = null
     } = filters;
 
     // Ensure page and limit are integers
@@ -102,6 +118,16 @@ class PdfService {
     if (categoryId) {
       conditions.push('p.category_id = ?');
       queryParams.push(categoryId);
+    }
+
+    if (pdfTypeId) {
+      conditions.push('p.pdf_type_id = ?');
+      queryParams.push(pdfTypeId);
+    }
+
+    if (ids && ids.length) {
+      conditions.push(`p.id IN (${ids.map(() => '?').join(',')})`);
+      queryParams.push(...ids);
     }
     
     if (search && search.trim() !== '') {
@@ -144,8 +170,34 @@ class PdfService {
     }
 
     if (uploaderInstitutionId) {
+      conditions.push('(p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?) OR p.institution_id = ?)');
+      queryParams.push(uploaderInstitutionId, uploaderInstitutionId);
+    }
+
+    // Public filters (no adminView required)
+    if (pInstitutionId) {
+      conditions.push('p.institution_id = ?');
+      queryParams.push(pInstitutionId);
+    }
+    if (uploaderInstId) {
       conditions.push('p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)');
-      queryParams.push(uploaderInstitutionId);
+      queryParams.push(uploaderInstId);
+    }
+    // Combined: books uploaded by institution users OR stored at institution
+    // includeNoInst: heç bir müəssisəyə aid olmayan kitabları da daxil et
+    if (anyInstId) {
+      if (includeNoInst) {
+        conditions.push('((p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?) OR p.institution_id = ?) OR p.institution_id IS NULL)');
+        queryParams.push(anyInstId, anyInstId);
+      } else {
+        conditions.push('(p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?) OR p.institution_id = ?)');
+        queryParams.push(anyInstId, anyInstId);
+      }
+    } else if (includeNoInst && !pInstitutionId && !uploaderInstId) {
+      conditions.push('p.institution_id IS NULL');
+    }
+    if (uploaderNoInst) {
+      conditions.push('p.uploaded_by IN (SELECT id FROM users WHERE institution_id IS NULL)');
     }
 
     const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
@@ -161,7 +213,7 @@ class PdfService {
     const total = countResult.total;
 
     const downloadsResult = await getOne(
-      `SELECT COALESCE(SUM(downloads), 0) AS totalDownloads FROM pdfs p ${whereClause}`,
+      `SELECT COALESCE(SUM(downloads), 0) AS totalDownloads FROM pdfs p LEFT JOIN languages l ON p.language_id = l.id ${whereClause}`,
       queryParams
     );
 
@@ -177,7 +229,7 @@ class PdfService {
       orderBy = 'p.created_at DESC';
     }
 
-    // Get paginated PDFs with category details
+    // Get paginated PDFs with category and type details
     const query = `
       SELECT
         p.id, p.title, p.description,
@@ -185,17 +237,21 @@ class PdfService {
         p.file_path, p.cover_image_path AS image_path,
         p.price, p.downloads,
         ${hasReads ? 'p.`reads`,' : '0 AS reads,'}
-        p.category_id,
+        p.category_id, p.pdf_type_id,
         p.order_number, p.author, p.isbn, p.status,
         p.publication_year, p.publisher_location, p.allow_download,
         p.uploaded_by, p.created_at, p.updated_at,
-        ${hasInstitutionId ? 'p.institution_id,' : ''}
+        p.quantity,
+        ${hasInstitutionId ? 'p.institution_id, inst2.name AS institution_name,' : ''}
         c.name as category_name,
+        pt.name as pdf_type_name,
         u.login as uploader_email
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
+      LEFT JOIN pdfs_types pt ON p.pdf_type_id = pt.id
       LEFT JOIN languages l ON p.language_id = l.id
       LEFT JOIN users u ON p.uploaded_by = u.id
+      ${hasInstitutionId ? 'LEFT JOIN institutions inst2 ON p.institution_id = inst2.id' : ''}
       ${whereClause}
       ORDER BY ${orderBy}
       LIMIT ${validLimit} OFFSET ${offset}
@@ -232,6 +288,7 @@ class PdfService {
 
   async getPdfById(id) {
     const hasInstitutionId = await checkInstitutionIdColumn();
+    const hasRentals = await checkRentalsTable();
 
     const query = `
       SELECT
@@ -242,10 +299,14 @@ class PdfService {
         p.author, p.isbn, p.order_number, p.publication_year,
         p.publisher_location, p.allow_download, p.foreword,
         p.uploaded_by, p.status, p.created_at, p.updated_at,
+        p.linked_pdf_id, p.quantity,
         ${hasInstitutionId ? 'p.institution_id, inst.name as institution_name,' : ''}
-        c.name as category_name
+        ${hasRentals ? "(SELECT COUNT(*) FROM book_rentals WHERE pdf_id = p.id AND status IN ('pending','approved')) AS active_rentals_count," : ''}
+        c.name as category_name,
+        p.pdf_type_id, pt.name AS pdf_type_name
       FROM pdfs p
       LEFT JOIN category_pdfs c ON p.category_id = c.id
+      LEFT JOIN pdfs_types pt ON p.pdf_type_id = pt.id
       LEFT JOIN languages l ON p.language_id = l.id
       ${hasInstitutionId ? 'LEFT JOIN institutions inst ON p.institution_id = inst.id' : ''}
       WHERE p.id = ?
@@ -351,7 +412,7 @@ class PdfService {
     const optionalFields = [
       'author', 'isbn', 'publication_year', 'publisher_location',
       'table_of_contents', 'order_number', 'allow_download',
-      'uploaded_by', 'foreword', 'institution_id',
+      'uploaded_by', 'foreword', 'institution_id', 'quantity', 'pdf_type_id',
     ];
     for (const field of optionalFields) {
       if (data[field] !== undefined && data[field] !== '') {
@@ -590,7 +651,8 @@ class PdfService {
 
   async submitPdf(data, file, coverImage = null) {
     const { title, description, table_of_contents, order_number, author, isbn, language, category_id,
-            publication_year, publisher_location, price, allow_download, uploaded_by, foreword, institution_id } = data;
+            publication_year, publisher_location, price, allow_download, uploaded_by, foreword, institution_id,
+            linked_pdf_id, quantity, pdf_type_id } = data;
 
     if (!title || !title.trim()) throw new Error('PDF adı tələb olunur');
 
@@ -598,13 +660,22 @@ class PdfService {
 
     if (uploaded_by) {
       const user = await getOne(
-        `SELECT upload_permission, institution_id, role FROM users WHERE id = ?`,
+        `SELECT upload_permission, institution_id, role, worker_type FROM users WHERE id = ?`,
         [uploaded_by]
       );
       if (!user || user.upload_permission === 'none') {
         throw new Error('PDF yükləmə icazəniz yoxdur');
       }
       userPermission = user.upload_permission;
+
+      if (user.worker_type && pdf_type_id) {
+        const pdfType = await getOne('SELECT name FROM pdfs_types WHERE id = ?', [pdf_type_id]);
+        if (!workerCanEditPdfType(user.worker_type, pdfType?.name)) {
+          const err = new Error('Bu PDF tipində yükləmə icazəniz yoxdur');
+          err.statusCode = 403;
+          throw err;
+        }
+      }
 
       if (file) {
         const limitMb = await settingsService.getEffectiveLimitForUser(uploaded_by);
@@ -652,11 +723,25 @@ class PdfService {
     if (publisher_location && publisher_location.trim()) pdfData.publisher_location = publisher_location.trim();
     if (foreword && foreword.trim()) pdfData.foreword = foreword.trim();
     if (category_id) pdfData.category_id = category_id;
+    if (pdf_type_id) pdfData.pdf_type_id = parseInt(pdf_type_id);
     if (uploaded_by) pdfData.uploaded_by = uploaded_by;
     if (institution_id) pdfData.institution_id = institution_id;
+    if (linked_pdf_id) pdfData.linked_pdf_id = parseInt(linked_pdf_id);
+    if (quantity) pdfData.quantity = parseInt(quantity) || 1;
     if (coverImage && coverImage.path) pdfData.cover_image_path = coverImage.path;
 
     const pdfId = await insert('pdfs', pdfData);
+
+    // Free icazəli istifadəçi linked_pdf_id ilə yükləyibsə → dərhal birləşdir
+    if (linked_pdf_id && userPermission === 'free') {
+      let uploaderLogin = null;
+      if (uploaded_by) {
+        const uploader = await getOne('SELECT login FROM users WHERE id = ?', [uploaded_by]);
+        uploaderLogin = uploader?.login || null;
+      }
+      return await this.approvePdf(pdfId, uploaderLogin);
+    }
+
     const created = await this.getPdfById(pdfId);
 
     // PDF yükləmə hadisəsini qeyd et
@@ -677,6 +762,88 @@ class PdfService {
   async approvePdf(id, adminEmail = null) {
     const existing = await this.getPdfById(id);
     if (!existing) throw new Error('PDF not found');
+
+    // Əgər pending submission bir mövcud kitabla əlaqəlidirsə → merge et
+    if (existing.linked_pdf_id) {
+      const linkedBook = await this.getPdfById(existing.linked_pdf_id);
+      if (!linkedBook) throw new Error('Linked PDF not found');
+
+      const herIkisiType = await getOne("SELECT id FROM pdfs_types WHERE LOWER(name) LIKE '%ikisi%' LIMIT 1");
+      const isHerIkisiConversion = herIkisiType && String(existing.pdf_type_id) === String(herIkisiType.id);
+
+      if (!isHerIkisiConversion) {
+        // Say artırma: eyni tipli kitaba yeni nüsxə əlavə edilir
+        const delta = Math.max(parseInt(existing.quantity) || 1, 1);
+        await executeQuery('UPDATE pdfs SET quantity = quantity + ? WHERE id = ?', [delta, existing.linked_pdf_id]);
+        await deleteRecord('pdfs', id);
+        await activityLog.log({
+          eventType: 'pdf_qty_added',
+          actorEmail: adminEmail,
+          targetType: 'pdf',
+          targetId: existing.linked_pdf_id,
+          details: { title: linkedBook.title, delta, pdf_type_name: linkedBook.pdf_type_name },
+        });
+        return await this.getPdfById(existing.linked_pdf_id);
+      }
+
+      // Hər-ikisi çevirməsi — əlaqəli kitabın tipinə görə davranış
+      const linkedTypeName = (linkedBook.pdf_type_name || '').toLowerCase();
+      const linkedIsHerIkisi = linkedTypeName.includes('ikisi');
+      const linkedIsFiziki = linkedTypeName.includes('fiziki') && !linkedIsHerIkisi;
+
+      if (linkedIsHerIkisi) {
+        // Əlaqəli kitab artıq hər-ikisidir → yalnız say artırma
+        const delta = Math.max(parseInt(existing.quantity) || 1, 1);
+        await executeQuery('UPDATE pdfs SET quantity = quantity + ? WHERE id = ?', [delta, existing.linked_pdf_id]);
+        await deleteRecord('pdfs', id);
+        await activityLog.log({
+          eventType: 'pdf_qty_added',
+          actorEmail: adminEmail,
+          targetType: 'pdf',
+          targetId: existing.linked_pdf_id,
+          details: { title: linkedBook.title, delta, pdf_type_name: linkedBook.pdf_type_name },
+        });
+        return await this.getPdfById(existing.linked_pdf_id);
+      }
+
+      if (linkedIsFiziki) {
+        // Əlaqəli kitab fizikidir → tip dəyiş + say +1 + elektron faylı əlavə et
+        const delta = Math.max(parseInt(existing.quantity) || 1, 1);
+        const mergeData = { pdf_type_id: herIkisiType.id };
+        if (existing.institution_id) mergeData.institution_id = existing.institution_id;
+        if (existing.file_path) mergeData.file_path = existing.file_path;
+        if (existing.cover_image_path) mergeData.cover_image_path = existing.cover_image_path;
+        await update('pdfs', existing.linked_pdf_id, mergeData);
+        await executeQuery('UPDATE pdfs SET quantity = quantity + ? WHERE id = ?', [delta, existing.linked_pdf_id]);
+        await deleteRecord('pdfs', id);
+        await activityLog.log({
+          eventType: 'pdf_physical_linked',
+          actorEmail: adminEmail,
+          targetType: 'pdf',
+          targetId: existing.linked_pdf_id,
+          details: { title: linkedBook.title, pdf_type_name: 'kitab-hər ikisi' },
+        });
+        return await this.getPdfById(existing.linked_pdf_id);
+      }
+
+      // Əlaqəli kitab elektrondur → yalnız tip dəyiş
+      {
+        const mergeData = { pdf_type_id: herIkisiType.id };
+        if (existing.institution_id) mergeData.institution_id = existing.institution_id;
+        if (existing.cover_image_path) mergeData.cover_image_path = existing.cover_image_path;
+        await update('pdfs', existing.linked_pdf_id, mergeData);
+        await deleteRecord('pdfs', id);
+        await activityLog.log({
+          eventType: 'pdf_physical_linked',
+          actorEmail: adminEmail,
+          targetType: 'pdf',
+          targetId: existing.linked_pdf_id,
+          details: { title: linkedBook.title, pdf_type_name: 'kitab-hər ikisi' },
+        });
+        return await this.getPdfById(existing.linked_pdf_id);
+      }
+    }
+
     let approveUploaderInstId = null;
     if (existing.uploaded_by) {
       const uploader = await getOne('SELECT institution_id FROM users WHERE id = ?', [existing.uploaded_by]);

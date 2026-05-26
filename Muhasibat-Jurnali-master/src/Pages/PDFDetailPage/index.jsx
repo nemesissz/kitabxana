@@ -11,6 +11,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import BookCover from '../../Components/BookCover';
 import Footer from '../../Layouts/Footer';
+import { displayCategoryName } from '../../Constants/categoryDisplay';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -41,6 +42,8 @@ const PDFDetailPage = () => {
   const [rentalDuration, setRentalDuration] = useState(14);
   const [rentalLoading, setRentalLoading] = useState(false);
   const [previewNumPages, setPreviewNumPages] = useState(null);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [favLoading, setFavLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
   const store = useContext(dataContext);
@@ -69,6 +72,7 @@ const PDFDetailPage = () => {
         const pdfData = response.data?.data?.pdf;
         if (pdfData) {
           setPdf(pdfData);
+          setIsFavorited(!!pdfData.is_favorited);
           document.title = pdfData.title + ' — MMU Kitabxana';
         } else {
           setError('PDF məlumatları tapılmadı');
@@ -93,12 +97,17 @@ const PDFDetailPage = () => {
     if (distance < -minSwipeDistance) setCurrentImageIndex(p => p === 0 ? len - 1 : p - 1);
   };
 
-  const catName = (pdf?.category?.name || '').toLowerCase();
-  const isFiziki   = catName.includes('kitab-fiziki');
-  const isElektron = catName.includes('kitab-elektron');
-  const isHerIkisi = catName.includes('kitab-hər ikisi') || catName.includes('kitab-her ikisi');
+  const typeName = (pdf?.pdf_type?.name || '').toLowerCase();
+  const isHerIkisi = typeName.includes('ikisi');
+  const isFiziki   = typeName.includes('fiziki') && !isHerIkisi;
+  const isElektron = typeName.includes('elektron') && !isHerIkisi;
   const isPhysical = isFiziki || isHerIkisi;
   const showPreview = (isElektron || isHerIkisi) && !!pdf?.file_path;
+
+  const totalCopies    = parseInt(pdf?.quantity) || 1;
+  const activeRentals  = parseInt(pdf?.active_rentals_count) || 0;
+  const availableCopies = isPhysical ? Math.max(0, totalCopies - activeRentals) : null;
+  const fullyRented    = isPhysical && availableCopies === 0;
 
   const handleRent = async () => {
     const token = localStorage.getItem('token');
@@ -147,6 +156,32 @@ const PDFDetailPage = () => {
     }
   };
 
+  const handleToggleFavorite = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      Swal.fire({
+        icon: 'info', title: 'Giriş tələb olunur',
+        text: 'Favorilərə əlavə etmək üçün hesabınıza daxil olun.',
+        confirmButtonText: 'Daxil ol', showCancelButton: true,
+        cancelButtonText: 'Ləğv et', confirmButtonColor: '#0B1F3D',
+      }).then(r => { if (r.isConfirmed) navigate('/login'); });
+      return;
+    }
+    setFavLoading(true);
+    try {
+      const res = await axios.post(
+        Base_Url_Server + `pdfs/${id}/favorite`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setIsFavorited(res.data.favorited);
+    } catch (err) {
+      Swal.fire({ icon: 'error', title: 'Xəta', text: err.response?.data?.message || 'Xəta baş verdi', confirmButtonColor: '#0B1F3D' });
+    } finally {
+      setFavLoading(false);
+    }
+  };
+
   if (loading) return (
     <div className={styles.stateWrap}>
       <div className={styles.spinner} />
@@ -186,7 +221,7 @@ const PDFDetailPage = () => {
               <div className={styles.heroInfo}>
                 <div className={styles.heroBadges}>
                   {pdf.category?.name && (
-                    <span className="mmu-badge mmu-badge-accent">{pdf.category.name}</span>
+                    <span className="mmu-badge mmu-badge-accent">{displayCategoryName(pdf.category.name)}</span>
                   )}
                   {pdf.language && (
                     <span className={styles.langBadge}>{pdf.language}</span>
@@ -196,9 +231,24 @@ const PDFDetailPage = () => {
                 {pdf.author && <p className={styles.heroAuthor}>{pdf.author}</p>}
                 <div className={styles.heroMeta}>
                   {pdf.publication_year && <span>{pdf.publication_year}</span>}
-                  <span>↓ {pdf.downloads || 0} yüklənmə</span>
+                  {!isFiziki && <span>↓ {pdf.downloads || 0} yüklənmə</span>}
                   <span>{formatDate(pdf.created_at)}</span>
                 </div>
+                {isPhysical && (
+                  <div className={styles.availabilityBadge} style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    marginTop: 8, padding: '4px 10px', borderRadius: 20,
+                    fontSize: 13, fontWeight: 600,
+                    background: fullyRented ? 'rgba(220,38,38,0.15)' : 'rgba(22,163,74,0.15)',
+                    color: fullyRented ? '#fca5a5' : '#86efac',
+                    border: `1px solid ${fullyRented ? 'rgba(220,38,38,0.35)' : 'rgba(22,163,74,0.35)'}`,
+                  }}>
+                    {fullyRented
+                      ? `Bütün nüsxələr kirayədədir (0/${totalCopies})`
+                      : `${availableCopies}/${totalCopies} nüsxə mövcuddur`
+                    }
+                  </div>
+                )}
 
                 <div className={styles.heroActions}>
                   {!isFiziki && (
@@ -227,7 +277,10 @@ const PDFDetailPage = () => {
                   {isPhysical && (
                     <button
                       className={styles.btnOutlineWhite}
+                      disabled={fullyRented}
+                      style={fullyRented ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
                       onClick={() => {
+                        if (fullyRented) return;
                         if (!isLoggedIn) {
                           Swal.fire({
                             icon: 'info', title: 'Giriş tələb olunur',
@@ -241,9 +294,25 @@ const PDFDetailPage = () => {
                       }}
                     >
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22.5v-18Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg>
-                      Kirayələ
+                      {fullyRented ? 'Kirayədədir' : 'Kirayələ'}
                     </button>
                   )}
+                  <button
+                    className={styles.btnFav}
+                    onClick={handleToggleFavorite}
+                    disabled={favLoading}
+                    title={isFavorited ? 'Favorilərdən çıxar' : 'Favorilərə əlavə et'}
+                  >
+                    <svg
+                      width="16" height="16" viewBox="0 0 24 24"
+                      fill={isFavorited ? 'currentColor' : 'none'}
+                      stroke="currentColor" strokeWidth="2"
+                      strokeLinecap="round" strokeLinejoin="round"
+                    >
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    {isFavorited ? 'Favoridədir' : 'Favorilərə əlavə et'}
+                  </button>
                 </div>
               </div>
             </div>
@@ -371,7 +440,9 @@ const PDFDetailPage = () => {
                     { l: 'Nəşr yeri', v: pdf.publisher_location },
                     { l: 'Qiymət',    v: pdf.price > 0 ? `${pdf.price} AZN` : 'Pulsuz' },
                     { l: 'Tarix',     v: formatDate(pdf.created_at) },
-                    { l: 'Yüklənmə', v: pdf.downloads || 0 },
+                    { l: 'Yüklənmə', v: !isFiziki ? (pdf.downloads || 0) : null },
+                    { l: 'Ümumi nüsxə', v: isPhysical ? totalCopies : null },
+                    { l: 'Mövcud nüsxə', v: isPhysical ? availableCopies : null },
                     { l: 'Kitabxana', v: pdf.institution?.name },
                   ].filter(item => item.v != null && item.v !== '').map(({ l, v }) => (
                     <div key={l} className={styles.infoRow}>

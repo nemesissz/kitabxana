@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import styles from "./index.module.scss";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
@@ -14,12 +14,41 @@ import CampaignIcon from "@mui/icons-material/Campaign";
 import BusinessIcon from "@mui/icons-material/Business";
 import TranslateIcon from "@mui/icons-material/Translate";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import axios from "axios";
+import Base_Url_Server from "../../Constants/baseUrl";
+
+const POLL_INTERVAL = 30000;
+
+function Badge({ count, expanded }) {
+  if (!count) return null;
+  if (!expanded) return <span className={styles.badgeDot} />;
+  return <span className={styles.badge}>{count > 99 ? "99+" : count}</span>;
+}
 
 function AdminSidebar() {
   const store = useContext(dataContext);
   const navigate = useNavigate();
   const isSuperAdmin = (store.admin.data?.role || 0) >= 4;
   const isWorker = (store.admin.data?.role || 0) === 2;
+  const notif = store.adminNotifications.data;
+  const timerRef = useRef(null);
+
+  const fetchCounts = () => {
+    const token = localStorage.getItem("tokenAdmin");
+    if (!token) return;
+    axios
+      .get(`${Base_Url_Server}admin/pending-counts`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((r) => store.adminNotifications.setData(r.data.data))
+      .catch(() => {});
+  };
+
+  useEffect(() => {
+    fetchCounts();
+    timerRef.current = setInterval(fetchCounts, POLL_INTERVAL);
+    return () => clearInterval(timerRef.current);
+  }, []);
 
 
   return (
@@ -149,9 +178,11 @@ function AdminSidebar() {
                     ? { color: "#2c3e50", backgroundColor: "white" }
                     : {}
                 }
+                className={styles.navItem}
               >
                 <CategoryIcon className={styles.icon} />
                 {store.adminSideBar.data && <span>Kateqoriyalar</span>}
+                <Badge count={notif.categoryRequests} expanded={store.adminSideBar.data} />
               </li>
 
               <li
@@ -196,9 +227,11 @@ function AdminSidebar() {
                     ? { color: "#2c3e50", backgroundColor: "white" }
                     : {}
                 }
+                className={styles.navItem}
               >
                 <BookmarkIcon className={styles.icon} />
                 {store.adminSideBar.data && <span>Kirayə Sorğuları</span>}
+                <Badge count={notif.rentals} expanded={store.adminSideBar.data} />
               </li>
             </ul>
           </div>

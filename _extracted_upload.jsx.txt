@@ -1,0 +1,353 @@
+// upload.jsx — Modern PDF upload form with stepper
+const { useState: useStateU } = React;
+
+function UploadPage({ navigate }) {
+  const [step, setStep] = useStateU(0);
+  const [form, setForm] = useStateU({
+    title: "", category: "", language: "az", author: "", number: "",
+    description: "", contents: "", file: null, cover: null,
+    free: true, price: "", tags: [],
+  });
+  const upd = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const steps = [
+    { id: 0, label: "Əsas məlumat", icon: I.book },
+    { id: 1, label: "Təsvir", icon: I.edit },
+    { id: 2, label: "Fayllar", icon: I.upload },
+    { id: 3, label: "Yoxla & göndər", icon: I.check },
+  ];
+
+  return (
+    <div className="page-enter">
+      <section style={{ padding: "56px 0 24px", background: "linear-gradient(180deg, var(--accent-tint), transparent)" }}>
+        <div className="container">
+          <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 13, color: "var(--muted)", marginBottom: 18 }}>
+            <a onClick={() => navigate("home")} style={{ cursor: "pointer" }}>Ana səhifə</a>
+            <I.chevR width="12" height="12" />
+            <a onClick={() => navigate("library")} style={{ cursor: "pointer" }}>Kitabxana</a>
+            <I.chevR width="12" height="12" />
+            <span>PDF Yüklə</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 32, flexWrap: "wrap" }}>
+            <div>
+              <span className="eyebrow"><I.upload width="14" height="14" />Yeni resurs</span>
+              <h1 style={{ fontSize: "clamp(32px, 4.5vw, 52px)", marginTop: 12 }}>PDF kitabxanaya əlavə et</h1>
+              <p className="lead" style={{ maxWidth: "56ch", marginTop: 12 }}>
+                Resursunuzu bölüşün — başqaları bilik xəzinəsindən faydalansın. Qaynaq doğrulanması üçün moderasiya komandamız 24 saat ərzində baxacaq.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ paddingTop: 32 }}>
+        <div className="container">
+          {/* Stepper */}
+          <div style={{ display: "flex", alignItems: "center", gap: 0, marginBottom: 40, background: "var(--card)", border: "1px solid var(--line)", borderRadius: "var(--r-lg)", padding: 8 }}>
+            {steps.map((s, i) => (
+              <React.Fragment key={s.id}>
+                <button onClick={() => setStep(s.id)} style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  padding: "12px 16px", borderRadius: "var(--r-md)",
+                  border: 0, background: step === s.id ? "var(--navy)" : "transparent",
+                  color: step === s.id ? "#fff" : step > s.id ? "var(--navy)" : "var(--muted)",
+                  cursor: "pointer", flex: 1, justifyContent: "center",
+                  fontFamily: "inherit", fontSize: 13, fontWeight: 600,
+                }}>
+                  <span style={{
+                    width: 24, height: 24, borderRadius: "50%",
+                    background: step === s.id ? "var(--accent)" : step > s.id ? "var(--navy)" : "var(--line)",
+                    color: step >= s.id ? (step === s.id ? "var(--navy)" : "#fff") : "var(--muted)",
+                    display: "grid", placeItems: "center",
+                    fontSize: 12, fontWeight: 700,
+                  }}>{step > s.id ? <I.check width="13" height="13" /> : (s.id + 1)}</span>
+                  {s.label}
+                </button>
+                {i < steps.length - 1 && <div style={{ height: 1, flex: 0.5, background: "var(--line)" }} />}
+              </React.Fragment>
+            ))}
+          </div>
+
+          {/* Body */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: 32, alignItems: "flex-start" }}>
+            <div className="card" style={{ padding: 32 }}>
+              {step === 0 && <Step1 form={form} upd={upd} />}
+              {step === 1 && <Step2 form={form} upd={upd} />}
+              {step === 2 && <Step3 form={form} upd={upd} />}
+              {step === 3 && <Step4 form={form} navigate={navigate} />}
+
+              {/* Footer */}
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 32, paddingTop: 24, borderTop: "1px solid var(--line)" }}>
+                <button className="btn btn-ghost" onClick={() => step > 0 ? setStep(step - 1) : navigate("library")}>
+                  <I.chevR width="16" height="16" style={{ transform: "rotate(180deg)" }} />
+                  {step === 0 ? "Ləğv et" : "Geri"}
+                </button>
+                {step < 3 ? (
+                  <button className="btn btn-primary" onClick={() => setStep(step + 1)}>
+                    Növbəti
+                    <I.arrow width="16" height="16" />
+                  </button>
+                ) : (
+                  <button className="btn btn-accent" onClick={() => alert("PDF yükləmə sorğunuz qəbul edildi!")}>
+                    <I.check width="16" height="16" />
+                    Göndər
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Sidebar — live preview */}
+            <aside>
+              <div className="card" style={{ padding: 22, position: "sticky", top: 96 }}>
+                <h3 style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 700, letterSpacing: 0.12, textTransform: "uppercase", color: "var(--muted)", marginBottom: 14 }}>Önbaxış</h3>
+
+                {form.title || form.category ? (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                    <div style={{ aspectRatio: "3/4", maxWidth: 200, margin: "0 auto", borderRadius: 6, overflow: "hidden", boxShadow: "var(--shadow-md)" }}>
+                      <BookCover book={{ title: form.title || "Yeni resurs", author: form.author || "Müəllif adı", lang: form.language?.toUpperCase() || "AZ", colors: ["#1E3A8A", "#3B5BB8"] }} />
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: "var(--font-display)", fontSize: 19, fontWeight: 500 }}>{form.title || "Başlıqsız"}</div>
+                      <div style={{ fontSize: 13, color: "var(--muted)" }}>{form.author || "Müəllif yoxdur"}</div>
+                    </div>
+                    {form.category && <span className="badge badge-accent">{form.category}</span>}
+                  </div>
+                ) : (
+                  <div style={{ padding: "40px 16px", textAlign: "center", color: "var(--muted)", fontSize: 13 }}>
+                    <I.book width="32" height="32" style={{ opacity: 0.4, margin: "0 auto 12px", display: "block" }} />
+                    Məlumat doldurduqca burada önbaxış görəcəksiniz.
+                  </div>
+                )}
+
+                <div className="divider" style={{ margin: "18px 0" }} />
+
+                <div style={{ fontSize: 12.5, color: "var(--ink-2)", lineHeight: 1.6 }}>
+                  <b style={{ display: "block", marginBottom: 6 }}>💡 İpucu</b>
+                  Mündəricat sahəsi axtarış nəticələrini xeyli yaxşılaşdırır. Mümkün olduqda doldurun.
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function Field({ label, required, hint, children }) {
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <label className="label">{label}{required && <span className="req">*</span>}</label>
+      {children}
+      {hint && <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 6 }}>{hint}</div>}
+    </div>
+  );
+}
+
+function Step1({ form, upd }) {
+  const cats = window.DATA.categories.filter(c => c.id !== "all");
+  return (
+    <div>
+      <h2 style={{ fontSize: 24, marginBottom: 4 }}>Əsas məlumat</h2>
+      <p style={{ color: "var(--muted)", marginBottom: 28 }}>Resursun adı, müəllifi və kateqoriyası.</p>
+
+      <Field label="PDF Adı" required hint="Tam başlığı yazın — qısaltma etməyin.">
+        <input className="input" value={form.title} onChange={e => upd("title", e.target.value)} placeholder="Məsələn: Hərbi Strategiya Əsasları" />
+      </Field>
+
+      <div className="grid-2">
+        <Field label="Kateqoriya" required>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
+            {cats.slice(0, 6).map(c => (
+              <button key={c.id} onClick={() => upd("category", c.label)} style={{
+                padding: "10px 12px", textAlign: "left",
+                border: form.category === c.label ? "2px solid var(--navy)" : "1px solid var(--line)",
+                borderRadius: "var(--r-md)",
+                background: form.category === c.label ? "var(--accent-tint)" : "var(--card)",
+                cursor: "pointer", fontFamily: "inherit", fontSize: 13, fontWeight: 600,
+                color: "var(--ink)",
+              }}>
+                {c.label}
+              </button>
+            ))}
+          </div>
+        </Field>
+
+        <Field label="Dil" required>
+          <select className="select" value={form.language} onChange={e => upd("language", e.target.value)}>
+            <option value="az">🇦🇿 Azərbaycan dili</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="ru">🇷🇺 Русский</option>
+            <option value="tr">🇹🇷 Türkçe</option>
+            <option value="de">🇩🇪 Deutsch</option>
+          </select>
+        </Field>
+      </div>
+
+      <div className="grid-2">
+        <Field label="Müəllif">
+          <input className="input" value={form.author} onChange={e => upd("author", e.target.value)} placeholder="Müəllifin adı və soyadı" />
+        </Field>
+        <Field label="Nömrə / Sıra №" hint="İstəyə bağlı — sənəd nömrəsi varsa">
+          <input className="input" value={form.number} onChange={e => upd("number", e.target.value)} placeholder="Məs: 45/2025" />
+        </Field>
+      </div>
+    </div>
+  );
+}
+
+function Step2({ form, upd }) {
+  const tags = ["hərb", "strategiya", "tarix", "akademik", "magistr", "rəqəmsal", "yenidir"];
+  return (
+    <div>
+      <h2 style={{ fontSize: 24, marginBottom: 4 }}>Təsvir və mündəricat</h2>
+      <p style={{ color: "var(--muted)", marginBottom: 28 }}>Oxucuların bu resursu tapması üçün məzmun haqqında yazın.</p>
+
+      <Field label="Qısa təsvir" hint={`${form.description.length}/500`}>
+        <textarea className="textarea" value={form.description} onChange={e => upd("description", e.target.value.slice(0, 500))}
+          placeholder="Bu PDF haqqında qısa məlumat — kim üçün uyğundur, hansı mövzuları əhatə edir." />
+      </Field>
+
+      <Field label="Mündəricat" hint="Hər fəsil yeni sətirdə. Bu, axtarış nəticələrini yaxşılaşdırır.">
+        <textarea className="textarea" value={form.contents} onChange={e => upd("contents", e.target.value)} style={{ minHeight: 160, fontFamily: "var(--font-mono)", fontSize: 13 }}
+          placeholder="1. Giriş&#10;2. Tarixi kontekst&#10;3. Əsas prinsiplər&#10;..." />
+      </Field>
+
+      <Field label="Etiketlər" hint="Resursun tapılması üçün açar sözlər.">
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {tags.map(t => {
+            const on = form.tags.includes(t);
+            return (
+              <button key={t} className={`tag ${on ? "on" : ""}`} onClick={() => upd("tags", on ? form.tags.filter(x => x !== t) : [...form.tags, t])}>
+                {on && <I.check width="12" height="12" style={{ marginRight: 4 }} />}{t}
+              </button>
+            );
+          })}
+        </div>
+      </Field>
+    </div>
+  );
+}
+
+function Step3({ form, upd }) {
+  return (
+    <div>
+      <h2 style={{ fontSize: 24, marginBottom: 4 }}>Fayllar</h2>
+      <p style={{ color: "var(--muted)", marginBottom: 28 }}>PDF faylını və üz qabığı şəkilini yükləyin.</p>
+
+      <Field label="PDF Faylı" required hint="Maks. 100 MB. Yalnız .pdf formatı qəbul edilir.">
+        <DropZone
+          file={form.file}
+          onFile={f => upd("file", f)}
+          icon={I.pdf}
+          primary="Faylı sürükləyin və ya seçin"
+          secondary="PDF · Maks. 100 MB"
+          accept=".pdf"
+        />
+      </Field>
+
+      <Field label="Üz qabığı şəkli" hint="İstəyə bağlı — yoxdursa, sistem avtomatik üz qabığı yaradacaq.">
+        <DropZone
+          file={form.cover}
+          onFile={f => upd("cover", f)}
+          icon={I.book}
+          primary="Şəkil seçin"
+          secondary="JPG, PNG · Tövsiyə: 600×800px"
+          accept=".jpg,.jpeg,.png"
+          small
+        />
+      </Field>
+
+      <div className="card" style={{ padding: 18, background: "var(--accent-tint)", border: "1px solid var(--accent-soft)" }}>
+        <div style={{ display: "flex", gap: 14 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: "var(--accent)", color: "var(--navy)", display: "grid", placeItems: "center", flexShrink: 0 }}>
+            <I.check width="18" height="18" />
+          </div>
+          <div style={{ fontSize: 13.5, lineHeight: 1.55 }}>
+            <b style={{ display: "block", marginBottom: 4 }}>Müəlliflik və hüquqlar</b>
+            Yüklədiyiniz materialın müəllif hüquqlarına sahib olmalı və ya açıq lisenziyalı olmalısınız. Pirat məzmun aşkar edilərsə hesab dondurulur.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Step4({ form, navigate }) {
+  const rows = [
+    ["Başlıq", form.title || "—"],
+    ["Müəllif", form.author || "—"],
+    ["Kateqoriya", form.category || "—"],
+    ["Dil", form.language.toUpperCase()],
+    ["Etiketlər", form.tags.length ? form.tags.join(", ") : "—"],
+    ["PDF Faylı", form.file?.name || "Seçilməyib"],
+    ["Üz qabığı", form.cover?.name || "Avtomatik"],
+  ];
+  return (
+    <div>
+      <h2 style={{ fontSize: 24, marginBottom: 4 }}>Yoxla və göndər</h2>
+      <p style={{ color: "var(--muted)", marginBottom: 28 }}>Hər şey düzgündürsə, "Göndər" düyməsinə basın.</p>
+
+      <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+        {rows.map(([l, v], i) => (
+          <div key={i} style={{ display: "grid", gridTemplateColumns: "160px 1fr", padding: "14px 18px", borderBottom: i < rows.length - 1 ? "1px solid var(--line-2)" : 0, gap: 16, alignItems: "center" }}>
+            <span style={{ fontSize: 12, color: "var(--muted)", letterSpacing: 0.06, textTransform: "uppercase", fontWeight: 700 }}>{l}</span>
+            <span style={{ fontWeight: 500, fontSize: 14 }}>{v}</span>
+          </div>
+        ))}
+      </div>
+
+      <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginTop: 20, padding: 16, borderRadius: "var(--r-md)", background: "var(--paper-2)" }}>
+        <input type="checkbox" defaultChecked style={{ accentColor: "var(--navy)", marginTop: 3 }} />
+        <span style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.55 }}>
+          MMU Kitabxana <a style={{ color: "var(--navy)", fontWeight: 600, textDecoration: "underline" }}>istifadə qaydaları</a> və <a style={{ color: "var(--navy)", fontWeight: 600, textDecoration: "underline" }}>məxfilik siyasəti</a> ilə razıyam. Yüklədiyim materialın müəlliflik hüquqlarına sahib olduğumu təsdiq edirəm.
+        </span>
+      </label>
+    </div>
+  );
+}
+
+function DropZone({ file, onFile, icon: Ic, primary, secondary, accept, small }) {
+  const [drag, setDrag] = useStateU(false);
+  return (
+    <label style={{
+      display: "block", cursor: "pointer",
+      border: `2px dashed ${drag ? "var(--navy)" : "var(--line)"}`,
+      borderRadius: "var(--r-md)",
+      background: drag ? "var(--accent-tint)" : (file ? "var(--accent-tint)" : "var(--paper-2)"),
+      padding: small ? "20px" : "32px",
+      textAlign: "center",
+      transition: "all .15s ease",
+    }}
+      onDragOver={e => { e.preventDefault(); setDrag(true); }}
+      onDragLeave={() => setDrag(false)}
+      onDrop={e => { e.preventDefault(); setDrag(false); if (e.dataTransfer.files[0]) onFile(e.dataTransfer.files[0]); }}>
+      <input type="file" accept={accept} style={{ display: "none" }} onChange={e => e.target.files[0] && onFile(e.target.files[0])} />
+      {file ? (
+        <div style={{ display: "flex", alignItems: "center", gap: 14, justifyContent: "center" }}>
+          <div style={{ width: 44, height: 44, borderRadius: 10, background: "var(--accent)", color: "var(--navy)", display: "grid", placeItems: "center" }}>
+            <I.check width="20" height="20" />
+          </div>
+          <div style={{ textAlign: "left" }}>
+            <div style={{ fontWeight: 700 }}>{file.name}</div>
+            <div style={{ fontSize: 12, color: "var(--muted)" }}>{(file.size / 1024 / 1024).toFixed(2)} MB · Hazırdır</div>
+          </div>
+          <button onClick={(e) => { e.preventDefault(); onFile(null); }} className="btn btn-ghost btn-sm">
+            <I.close width="14" height="14" />
+            Sil
+          </button>
+        </div>
+      ) : (
+        <div>
+          <div style={{ width: small ? 44 : 56, height: small ? 44 : 56, borderRadius: "50%", background: "var(--card)", color: "var(--navy)", display: "grid", placeItems: "center", margin: "0 auto 12px", boxShadow: "var(--shadow-sm)" }}>
+            <Ic width={small ? 20 : 24} height={small ? 20 : 24} />
+          </div>
+          <div style={{ fontWeight: 600, fontSize: small ? 14 : 15, marginBottom: 4 }}>{primary}</div>
+          <div style={{ fontSize: 12, color: "var(--muted)" }}>{secondary}</div>
+        </div>
+      )}
+    </label>
+  );
+}
+
+Object.assign(window, { UploadPage });

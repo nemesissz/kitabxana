@@ -14,6 +14,7 @@ class UserService {
         u.institution_id as institutionId,
         u.is_verified as isVerified,
         u.upload_permission as uploadPermission,
+        u.worker_type as workerType,
         u.category_permission as categoryPermission,
         u.language_permission as languagePermission,
         u.pdf_review_permission as pdfReviewPermission,
@@ -198,6 +199,7 @@ class UserService {
         i.name as institutionName,
         u.is_verified as isVerified,
         u.upload_permission as uploadPermission,
+        u.worker_type as workerType,
         u.category_permission as categoryPermission,
         u.language_permission as languagePermission,
         u.pdf_review_permission as pdfReviewPermission,
@@ -411,7 +413,7 @@ class UserService {
   }
 
   // Helper method for auth
-  async updatePermissions(userId, { category_permission, language_permission, pdf_review_permission, upload_permission }) {
+  async updatePermissions(userId, { category_permission, language_permission, pdf_review_permission, upload_permission, worker_type }) {
     const existing = await getOne('SELECT id FROM users WHERE id = ?', [userId]);
     if (!existing) throw new Error('User not found');
     const updates = {};
@@ -419,9 +421,21 @@ class UserService {
     if (language_permission !== undefined) updates.language_permission = language_permission;
     if (pdf_review_permission !== undefined) updates.pdf_review_permission = pdf_review_permission;
     if (upload_permission !== undefined) updates.upload_permission = upload_permission;
+    if (worker_type !== undefined) updates.worker_type = worker_type;
     if (Object.keys(updates).length === 0) return this.findUserById(userId);
     await update('users', userId, updates);
     return this.findUserById(userId);
+  }
+
+  async changePassword(userId, currentPassword, newPassword) {
+    const user = await getOne('SELECT id, password FROM users WHERE id = ?', [userId]);
+    if (!user) throw new Error('User not found');
+
+    const match = await bcrypt.compare(currentPassword, user.password);
+    if (!match) throw new Error('Cari şifrə yanlışdır');
+
+    const hashed = await bcrypt.hash(newPassword, saltRounds);
+    await executeQuery('UPDATE users SET password = ? WHERE id = ?', [hashed, userId]);
   }
 
   async findUserByLogin(login) {

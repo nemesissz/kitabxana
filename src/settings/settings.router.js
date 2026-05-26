@@ -11,6 +11,8 @@ import {
   removeUserLimit,
   getDailyUploadLimit,
   setDailyUploadLimit,
+  getHomepageCollage,
+  setHomepageCollage,
 } from './settings.controller.js';
 
 const router = Router();
@@ -26,5 +28,8 @@ router.delete('/upload-limits/user/:id', ...superAdmin, removeUserLimit);
 
 router.get('/daily-upload-limit', ...superAdmin, getDailyUploadLimit);
 router.put('/daily-upload-limit', ...superAdmin, setDailyUploadLimit);
+
+router.get('/homepage-collage', getHomepageCollage);
+router.put('/homepage-collage', ...superAdmin, setHomepageCollage);
 
 export default router;

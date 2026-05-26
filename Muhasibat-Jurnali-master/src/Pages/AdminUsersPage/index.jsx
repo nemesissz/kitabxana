@@ -186,7 +186,7 @@ function AdminUsersPage() {
     const tokenAdmin = localStorage.getItem("tokenAdmin");
     setEditLoading(true);
     const cr = ROLES[editData.combinedRole];
-    const payload = { role: cr.role, upload_permission: cr.upload_permission };
+    const payload = { role: cr.role, upload_permission: cr.upload_permission, worker_type: cr.worker_type ?? null };
     if (editData.password.trim()) payload.password = editData.password;
     payload.institution_id = editData.institutionId ? Number(editData.institutionId) : null;
     try {

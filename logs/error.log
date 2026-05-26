@@ -9083,3 +9083,79 @@
     "id": 22
   }
 }
+[2026-05-20T13:18:43.052Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "az"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-20T13:18:43.055Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "11ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-20T13:18:47.397Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Unknown column 'l.code' in 'where clause'\n    at PromisePool.execute (C:\\Users\\AO\\Desktop\\e-kitabxana\\node_modules\\mysql2\\lib\\promise\\pool.js:54:22)\n    at executeQuery (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:102:35)\n    at getOne (file:///C:/Users/AO/Desktop/e-kitabxana/src/config/database.js:114:24)\n    at PdfService.getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:163:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getAllPdfs (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:217:20)",
+  "error": "Unknown column 'l.code' in 'where clause'",
+  "method": "GET",
+  "path": "/pdfs",
+  "query": {
+    "status": "approved",
+    "limit": "18",
+    "page": "1",
+    "sortBy": "recent",
+    "categoryId": "8",
+    "language": "en"
+  },
+  "user": null,
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+}
+[2026-05-20T13:18:47.400Z] [ERROR] Server error
+{
+  "method": "GET",
+  "path": "/pdfs",
+  "statusCode": 500,
+  "duration": "6ms",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+  "user": null
+}
+[2026-05-25T11:40:01.282Z] [ERROR] Request error occurred
+{
+  "stack": "Error: Günlük yükləmə limitinizə çatdınız (2 PDF/gün). Sabah yenidən cəhd edin.\n    at PdfService.submitPdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.service.js:699:25)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async submitPdf (file:///C:/Users/AO/Desktop/e-kitabxana/src/pdfs/pdf.controller.js:914:17)",
+  "error": "Günlük yükləmə limitinizə çatdınız (2 PDF/gün). Sabah yenidən cəhd edin.",
+  "method": "POST",
+  "path": "/pdfs/submit",
+  "body": {
+    "title": "dfghjkl",
+    "language": "az",
+    "pdf_type_id": "1",
+    "category_id": "23",
+    "allow_download": "1"
+  },
+  "query": {},
+  "user": {
+    "id": 22
+  },
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+}

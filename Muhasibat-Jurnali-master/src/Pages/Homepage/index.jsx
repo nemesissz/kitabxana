@@ -7,6 +7,7 @@ import Base_Url_Server from "../../Constants/baseUrl";
 import Footer from "../../Layouts/Footer";
 import BookCover from "../../Components/BookCover";
 import FeaturedShelf from "../../Components/FeaturedShelf";
+import { displayCategoryName } from "../../Constants/categoryDisplay";
 
 const COLLAGE_TILES = [
   { x: "6%",  y: "6%",  w: 130, rot: -6, delay: 0   },
@@ -53,18 +54,22 @@ function HomePage() {
     const token = localStorage.getItem("token");
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    // Collage PDFs (most popular = downloads + reads)
+    // Stats (total PDFs, downloads) — popular sorğusundan
     axios
-      .get(Base_Url_Server + "pdfs?limit=8&sortBy=popular&status=approved", { headers })
+      .get(Base_Url_Server + "pdfs?limit=1&sortBy=popular&status=approved", { headers })
       .then((res) => {
-        const pdfs = res.data.data.pdfs || [];
-        setCollagePdfs(pdfs);
         setStats((s) => ({
           ...s,
-          pdfs: res.data.data.pagination?.total || pdfs.length,
+          pdfs: res.data.data.pagination?.total || 0,
           downloads: res.data.data.pagination?.totalDownloads || 0,
         }));
       })
+      .catch(() => {});
+
+    // Collage PDFs — superadmin tərəfindən seçilmiş və ya avtomatik popular
+    axios
+      .get(Base_Url_Server + "settings/homepage-collage", { headers })
+      .then((res) => setCollagePdfs(res.data.data.pdfs || []))
       .catch(() => {});
 
     // Top PDFs for shelf
@@ -148,7 +153,7 @@ function HomePage() {
                       className="mmu-tag"
                       onClick={() => navigator(`/library?category=${cat.id}`)}
                     >
-                      {cat.name}
+                      {displayCategoryName(cat.name)}
                     </button>
                   ))}
                 </div>
@@ -219,7 +224,7 @@ function HomePage() {
                     <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>
                       {(() => {
                         const p = collagePdfs[0];
-                        const cat = (p.category_name || p.category?.name || "").toLowerCase();
+                        const cat = (p.pdf_type?.name || p.category_name || p.category?.name || "").toLowerCase();
                         const dl  = p.downloads || 0;
                         const rd  = p.reads || 0;
                         const rnt = p.rentals || 0;
@@ -294,7 +299,7 @@ function HomePage() {
                     className={styles.catCard}
                     onClick={() => navigator(`/library?category=${cat.id}`)}
                   >
-                    <span className={styles.catLabel}>{cat.name}</span>
+                    <span className={styles.catLabel}>{displayCategoryName(cat.name)}</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 6 6 6-6 6"/></svg>
                   </button>
                 ))}

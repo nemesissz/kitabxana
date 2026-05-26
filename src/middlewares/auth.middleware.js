@@ -36,6 +36,7 @@ export const authMiddleware = async (req, res, next) => {
       languagePermission: user.languagePermission || 'request',
       pdfReviewPermission: user.pdfReviewPermission || 'none',
       uploadPermission: user.uploadPermission || 'pending',
+      workerType: user.workerType || null,
     };
 
     next();

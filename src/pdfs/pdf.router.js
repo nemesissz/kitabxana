@@ -16,6 +16,8 @@ import {
   incrementReads,
   getMyReads,
   getMyDownloads,
+  getMyFavorites,
+  toggleFavorite,
 } from './pdf.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { optionalAuthMiddleware } from '../middlewares/optionalAuth.middleware.js';
@@ -103,8 +105,9 @@ router.get('/preview', optionalAuthMiddleware, getPdfsPreview);
  * description: Giriş olan PDF-lər uğurla əldə edildi
  */
 router.get('/my-accessible', authMiddleware, getMyAccessiblePdfs);
-router.get('/my-reads',     authMiddleware, getMyReads);
-router.get('/my-downloads', authMiddleware, getMyDownloads);
+router.get('/my-reads',      authMiddleware, getMyReads);
+router.get('/my-downloads',  authMiddleware, getMyDownloads);
+router.get('/my-favorites',  authMiddleware, getMyFavorites);
 
 /**
  * @swagger
@@ -125,10 +128,8 @@ router.get('/my-downloads', authMiddleware, getMyDownloads);
  * 200:
  * description: Giriş statusu uğurla yoxlandı
  */
-router.get('/:id/check-access',
-  authMiddleware,
-  checkPdfAccess
-);
+router.get('/:id/check-access', authMiddleware, checkPdfAccess);
+router.post('/:id/favorite',   authMiddleware, toggleFavorite);
 
 /**
  * @swagger

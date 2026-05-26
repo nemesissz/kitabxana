@@ -8,7 +8,7 @@
   border-bottom: 1px solid var(--line);
   transition: background .25s;
 
-  :global([data-theme="editorial"]) & {
+  :global([data-variant="editorial"]) & {
     background: rgba(255, 255, 255, 0.90);
   }
 }

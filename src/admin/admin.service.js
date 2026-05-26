@@ -2,50 +2,54 @@ import { executeQuery, getOne, insert, update, transaction } from '../config/dat
 import sessionService from '../sessions/session.service.js';
 
 class AdminService {
-  async getStats(institutionId = null) {
+  async getStats(institutionId = null, userId = null) {
     const safe = async (fn) => { try { return await fn(); } catch (_) { return null; } };
 
-    const instFilter = institutionId
-      ? 'uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)'
-      : null;
-    const p = institutionId ? [institutionId] : [];
+    const pdfFilter = userId
+      ? 'uploaded_by = ?'
+      : institutionId
+        ? 'uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)'
+        : null;
+    const p = userId ? [userId] : institutionId ? [institutionId] : [];
 
     const [totalUsers, totalPdfs, approvedPdfs, pendingPdfs, rejectedPdfs, totalNews, totalDownloads] =
       await Promise.all([
         safe(() => getOne(
-          institutionId
-            ? 'SELECT COUNT(*) as v FROM users WHERE institution_id = ?'
-            : 'SELECT COUNT(*) as v FROM users',
-          p
+          userId
+            ? 'SELECT 1 as v'
+            : institutionId
+              ? 'SELECT COUNT(*) as v FROM users WHERE institution_id = ?'
+              : 'SELECT COUNT(*) as v FROM users',
+          userId ? [] : p
         )),
         safe(() => getOne(
-          institutionId
-            ? `SELECT COUNT(*) as v FROM pdfs WHERE ${instFilter}`
+          pdfFilter
+            ? `SELECT COUNT(*) as v FROM pdfs WHERE ${pdfFilter}`
             : 'SELECT COUNT(*) as v FROM pdfs',
           p
         )),
         safe(() => getOne(
-          institutionId
-            ? `SELECT COUNT(*) as v FROM pdfs WHERE status = 'approved' AND ${instFilter}`
+          pdfFilter
+            ? `SELECT COUNT(*) as v FROM pdfs WHERE status = 'approved' AND ${pdfFilter}`
             : "SELECT COUNT(*) as v FROM pdfs WHERE status = 'approved'",
           p
         )),
         safe(() => getOne(
-          institutionId
-            ? `SELECT COUNT(*) as v FROM pdfs WHERE status = 'pending' AND ${instFilter}`
+          pdfFilter
+            ? `SELECT COUNT(*) as v FROM pdfs WHERE status = 'pending' AND ${pdfFilter}`
             : "SELECT COUNT(*) as v FROM pdfs WHERE status = 'pending'",
           p
         )),
         safe(() => getOne(
-          institutionId
-            ? "SELECT COUNT(*) as v FROM activity_logs WHERE event_type = 'pdf_rejected' AND JSON_EXTRACT(details, '$.uploader_institution_id') = ?"
+          pdfFilter
+            ? `SELECT COUNT(*) as v FROM pdfs WHERE status = 'rejected' AND ${pdfFilter}`
             : "SELECT COUNT(*) as v FROM activity_logs WHERE event_type = 'pdf_rejected'",
           p
         )),
         safe(() => getOne('SELECT COUNT(*) as v FROM news', [])),
         safe(() => getOne(
-          institutionId
-            ? `SELECT COALESCE(SUM(downloads), 0) as v FROM pdfs WHERE ${instFilter}`
+          pdfFilter
+            ? `SELECT COALESCE(SUM(downloads), 0) as v FROM pdfs WHERE ${pdfFilter}`
             : 'SELECT COALESCE(SUM(downloads), 0) as v FROM pdfs',
           p
         )),
@@ -62,36 +66,31 @@ class AdminService {
     };
   }
 
-  async getDashboardData(institutionId = null) {
-    const stats = await this.getStats(institutionId);
+  async getDashboardData(institutionId = null, userId = null) {
+    const stats = await this.getStats(institutionId, userId);
+
+    const pdfJoinFilter = userId
+      ? 'AND p.uploaded_by = ?'
+      : institutionId
+        ? 'AND p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)'
+        : '';
+    const joinParam = userId ? [userId] : institutionId ? [institutionId] : [];
 
     let categoryStats = [];
     try {
-      if (institutionId) {
-        categoryStats = await executeQuery(`
-          SELECT c.name, COUNT(p.id) as pdfCount,
-            COALESCE(SUM(p.downloads), 0) as totalDownloads,
-            COALESCE(SUM(p.\`reads\`), 0) as totalReads
-          FROM category_pdfs c
-          LEFT JOIN pdfs p ON c.id = p.category_id
-            AND p.uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)
-          GROUP BY c.id, c.name ORDER BY pdfCount DESC
-        `, [institutionId]);
-      } else {
-        categoryStats = await executeQuery(`
-          SELECT c.name, COUNT(p.id) as pdfCount,
-            COALESCE(SUM(p.downloads), 0) as totalDownloads,
-            COALESCE(SUM(p.\`reads\`), 0) as totalReads
-          FROM category_pdfs c
-          LEFT JOIN pdfs p ON c.id = p.category_id
-          GROUP BY c.id, c.name ORDER BY pdfCount DESC
-        `);
-      }
+      categoryStats = await executeQuery(`
+        SELECT c.name, COUNT(p.id) as pdfCount,
+          COALESCE(SUM(p.downloads), 0) as totalDownloads,
+          COALESCE(SUM(p.\`reads\`), 0) as totalReads
+        FROM category_pdfs c
+        LEFT JOIN pdfs p ON c.id = p.category_id ${pdfJoinFilter}
+        GROUP BY c.id, c.name ORDER BY pdfCount DESC
+      `, joinParam);
     } catch (_) {
       categoryStats = [];
     }
 
-    const detailedStats = await this.getDetailedStats(institutionId);
+    const detailedStats = await this.getDetailedStats(institutionId, userId);
 
     return {
       ...stats,
@@ -100,34 +99,56 @@ class AdminService {
     };
   }
 
-  async getDetailedStats(institutionId = null) {
-    const instFilter = institutionId ? 'AND institution_id = ?' : '';
-    const pdfInstFilter = institutionId
-      ? 'AND uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)'
-      : '';
-    const p = institutionId ? [institutionId] : [];
+  async getDetailedStats(institutionId = null, userId = null) {
+    const pdfFilter = userId
+      ? 'AND uploaded_by = ?'
+      : institutionId
+        ? 'AND uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)'
+        : '';
+    const userFilter = userId ? 'AND id = ?' : institutionId ? 'AND institution_id = ?' : '';
+    const p = userId ? [userId] : institutionId ? [institutionId] : [];
 
     const safe = async (fn) => { try { return await fn(); } catch (_) { return null; } };
 
     const newUsersLast30Days = await safe(() => getOne(
-      `SELECT COUNT(*) as count FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${instFilter}`, p
+      `SELECT COUNT(*) as count FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${userFilter}`, p
     ));
 
     const newPdfsLast30Days = await safe(() => getOne(
-      `SELECT COUNT(*) as count FROM pdfs WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${pdfInstFilter}`, p
+      `SELECT COUNT(*) as count FROM pdfs WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ${pdfFilter}`, p
     ));
 
     const newNewsLast30Days = await safe(() => getOne(
       `SELECT COUNT(*) as count FROM news WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)`
     ));
 
-    const activeNewsCount = await safe(() => getOne(`SELECT COUNT(*) as count FROM news`));
+    let annFilter = '';
+    let annParam = [];
+    if (institutionId) {
+      const instRow = await safe(() => getOne('SELECT is_main FROM institutions WHERE id = ?', [institutionId]));
+      if (instRow?.is_main) {
+        annFilter = 'WHERE institution_id IS NULL OR institution_id = ?';
+        annParam = [institutionId];
+      } else {
+        annFilter = 'WHERE institution_id = ?';
+        annParam = [institutionId];
+      }
+    }
+    const activeNewsCount = await safe(() => getOne(
+      `SELECT COUNT(*) as count FROM announcements ${annFilter}`, annParam
+    ));
+
+    const topPdfsWhere = userId
+      ? 'WHERE uploaded_by = ?'
+      : institutionId
+        ? 'WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)'
+        : '';
 
     const topPdfs = await safe(() => executeQuery(
-      `SELECT id, title, downloads FROM pdfs ${institutionId ? 'WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)' : ''} ORDER BY downloads DESC LIMIT 5`, p
+      `SELECT id, title, downloads FROM pdfs ${topPdfsWhere} ORDER BY downloads DESC LIMIT 5`, p
     )) || [];
 
-    const topUploaders = await safe(() => executeQuery(
+    const topUploaders = userId ? [] : await safe(() => executeQuery(
       `SELECT u.login, COUNT(p.id) as pdfCount
        FROM users u JOIN pdfs p ON u.id = p.uploaded_by
        ${institutionId ? 'WHERE u.institution_id = ?' : ''}
@@ -135,7 +156,7 @@ class AdminService {
     )) || [];
 
     const topByReads = await safe(() => executeQuery(
-      `SELECT id, title, \`reads\` FROM pdfs ${institutionId ? 'WHERE uploaded_by IN (SELECT id FROM users WHERE institution_id = ?)' : ''} ORDER BY \`reads\` DESC LIMIT 5`, p
+      `SELECT id, title, \`reads\` FROM pdfs ${topPdfsWhere} ORDER BY \`reads\` DESC LIMIT 5`, p
     )) || [];
 
     const timeStats = await sessionService.getTimeStats();

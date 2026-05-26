@@ -26,7 +26,7 @@ const dbConfig = {
     password: process.env.DATABASE_PASSWORD || '',
     database: process.env.DATABASE_NAME || 'vergi_db',
     charset: 'utf8mb4',
-    timezone: '+00:00',
+    timezone: 'local',
     connectionLimit: 10
 };
 

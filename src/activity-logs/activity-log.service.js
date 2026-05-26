@@ -16,7 +16,7 @@ class ActivityLogService {
     }
   }
 
-  async getLogs({ page = 1, limit = 30, eventType = null, institutionId = null } = {}) {
+  async getLogs({ page = 1, limit = 30, eventType = null, institutionId = null, actorEmail = null } = {}) {
     const validPage = Math.max(parseInt(page) || 1, 1);
     const validLimit = Math.min(parseInt(limit) || 30, 100);
     const offset = (validPage - 1) * validLimit;
@@ -27,7 +27,7 @@ class ActivityLogService {
     if (eventType && eventType !== 'all') {
       const typeMap = {
         users: ['user_registered', 'user_deleted', 'user_login', 'admin_login'],
-        pdfs:  ['pdf_uploaded', 'pdf_approved', 'pdf_rejected', 'pdf_deleted'],
+        pdfs:  ['pdf_uploaded', 'pdf_approved', 'pdf_rejected', 'pdf_deleted', 'pdf_physical_linked', 'pdf_qty_added'],
       };
       const types = typeMap[eventType];
       if (types) {
@@ -36,7 +36,10 @@ class ActivityLogService {
       }
     }
 
-    if (institutionId) {
+    if (actorEmail) {
+      conditions.push('actor_email = ?');
+      params.push(actorEmail);
+    } else if (institutionId) {
       conditions.push(`(
         JSON_EXTRACT(details, '$.uploader_institution_id') = ?
         OR (target_type = 'user'

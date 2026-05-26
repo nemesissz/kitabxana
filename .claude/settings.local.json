@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(git -C \"C:/Users/AO/Desktop/e-kitabxana\" log --oneline -10)",
+      "Bash(git -C \"C:/Users/AO/Desktop/e-kitabxana\" branch -a)",
+      "Bash(git -C \"C:/Users/AO/Desktop/e-kitabxana\" ls-files)",
+      "Bash(mkdir -p \"C:/Users/AO/Desktop/e-kitabxana/.claude\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(cat vite.config.js)",
+      "Bash(cat vite.config.ts)",
+      "Bash(netstat -ano)"
+    ]
+  }
+}

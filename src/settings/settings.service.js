@@ -4,33 +4,37 @@ class SettingsService {
 
   async getEffectiveLimitForUser(userId) {
     const userLimit = await getOne(
-      'SELECT limit_mb FROM upload_limits WHERE scope_type = "user" AND scope_id = ?',
+      "SELECT limit_mb FROM upload_limits WHERE scope_type = 'user' AND scope_id = ?",
       [userId]
     );
-    if (userLimit) return Number(userLimit.limit_mb);
+    if (userLimit) return { limit_mb: Number(userLimit.limit_mb), source: 'user' };
 
     const user = await getOne('SELECT institution_id FROM users WHERE id = ?', [userId]);
     if (user?.institution_id) {
       const instLimit = await getOne(
-        'SELECT limit_mb FROM upload_limits WHERE scope_type = "institution" AND scope_id = ?',
+        "SELECT limit_mb FROM upload_limits WHERE scope_type = 'institution' AND scope_id = ?",
         [user.institution_id]
       );
-      if (instLimit) return Number(instLimit.limit_mb);
+      if (instLimit) return { limit_mb: Number(instLimit.limit_mb), source: 'institution', institution_id: user.institution_id };
     }
 
     const def = await getOne(
-      'SELECT limit_mb FROM upload_limits WHERE scope_type = "default" AND scope_id IS NULL'
+      "SELECT limit_mb FROM upload_limits WHERE scope_type = 'default' AND scope_id IS NULL ORDER BY updated_at DESC LIMIT 1"
     );
-    return Number(def?.limit_mb || 20);
+    return { limit_mb: Number(def?.limit_mb || 20), source: 'default', institution_id: user?.institution_id ?? null };
   }
 
   async setDefaultLimit(limitMb, updatedBy) {
-    await executeQuery(
-      `INSERT INTO upload_limits (scope_type, scope_id, limit_mb, updated_by)
-       VALUES ('default', NULL, ?, ?)
-       ON DUPLICATE KEY UPDATE limit_mb = VALUES(limit_mb), updated_by = VALUES(updated_by)`,
+    const result = await executeQuery(
+      `UPDATE upload_limits SET limit_mb = ?, updated_by = ? WHERE scope_type = 'default' AND scope_id IS NULL`,
       [limitMb, updatedBy]
     );
+    if ((result?.affectedRows ?? 0) === 0) {
+      await executeQuery(
+        `INSERT INTO upload_limits (scope_type, scope_id, limit_mb, updated_by) VALUES ('default', NULL, ?, ?)`,
+        [limitMb, updatedBy]
+      );
+    }
     return { limit_mb: Number(limitMb) };
   }
 
@@ -75,6 +79,24 @@ class SettingsService {
     return row ? (parseInt(row.setting_value) || 0) : 0;
   }
 
+  async getHomepageCollageIds() {
+    const row = await getOne(
+      "SELECT setting_value FROM global_settings WHERE setting_key = 'homepage_collage_pdf_ids'"
+    );
+    if (!row || !row.setting_value) return [];
+    return row.setting_value.split(',').map(Number).filter(Boolean);
+  }
+
+  async setHomepageCollageIds(ids) {
+    const val = (ids || []).slice(0, 8).join(',');
+    await executeQuery(
+      `INSERT INTO global_settings (setting_key, setting_value)
+       VALUES ('homepage_collage_pdf_ids', ?)
+       ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)`,
+      [val]
+    );
+  }
+
   async setDailyCountLimit(count) {
     const val = parseInt(count) || 0;
     await executeQuery(
@@ -88,7 +110,7 @@ class SettingsService {
 
   async getAllLimits() {
     const defaultRow = await getOne(
-      'SELECT limit_mb FROM upload_limits WHERE scope_type = "default" AND scope_id IS NULL'
+      'SELECT limit_mb FROM upload_limits WHERE scope_type = "default" AND scope_id IS NULL ORDER BY updated_at DESC LIMIT 1'
     );
 
     const institutions = await executeQuery(`

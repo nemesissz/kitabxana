@@ -34,7 +34,7 @@ function AdminHomePage() {
   const adminInstitutionId = store.admin.data?.institutionId ?? null;
   const adminIsMain = institutions.find(i => i.id === adminInstitutionId)?.is_main;
   const isGlobalScope = institutions.length > 0
-    ? (adminRole >= 4 || (adminInstitutionId && adminIsMain))
+    ? (adminRole >= 4 || (adminRole >= 3 && adminInstitutionId && adminIsMain))
     : adminRole >= 4;
 
   useEffect(() => {
@@ -146,7 +146,7 @@ function AdminHomePage() {
           <p>{dashboard?.totalDownloads || 0}</p>
         </div>
         <div className={styles.statBox}>
-          <h3>Aktiv xəbər sayı</h3>
+          <h3>Elan sayı</h3>
           <p>{dashboard?.activeNewsCount || 0}</p>
         </div>
       </div>

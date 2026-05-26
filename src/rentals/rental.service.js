@@ -2,7 +2,7 @@ import { executeQuery, getOne, insert } from '../config/database.js';
 
 class RentalService {
   async createRental({ pdf_id, user_id, institution_id, duration_days }) {
-    const pdf = await getOne('SELECT id, institution_id FROM pdfs WHERE id = ?', [pdf_id]);
+    const pdf = await getOne('SELECT id, institution_id, quantity FROM pdfs WHERE id = ?', [pdf_id]);
     if (!pdf) throw Object.assign(new Error('PDF tapılmadı'), { statusCode: 404 });
 
     const existing = await getOne(
@@ -10,6 +10,20 @@ class RentalService {
       [pdf_id, user_id]
     );
     if (existing) throw Object.assign(new Error('Bu kitab üçün artıq gözləyən sorğunuz var'), { statusCode: 409 });
+
+    // Mövcud nüsxə sayını yoxla
+    const quantity = parseInt(pdf.quantity) || 1;
+    const activeRow = await getOne(
+      `SELECT COUNT(*) AS cnt FROM book_rentals WHERE pdf_id = ? AND status IN ('pending', 'approved')`,
+      [pdf_id]
+    );
+    const activeCnt = parseInt(activeRow?.cnt) || 0;
+    if (activeCnt >= quantity) {
+      throw Object.assign(
+        new Error(`Bu kitabın bütün nüsxələri hal-hazırda kirayədədir (${activeCnt}/${quantity})`),
+        { statusCode: 409 }
+      );
+    }
 
     const rentalId = await insert('book_rentals', {
       pdf_id,

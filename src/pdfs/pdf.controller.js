@@ -3,6 +3,16 @@ import upload from '../utils/upload.js';
 import emailService from '../utils/email.js';
 import { executeQuery, getOne, insert } from '../config/database.js';
 import { resolveAdminScope } from '../middlewares/resolveScope.js';
+import activityLog from '../activity-logs/activity-log.service.js';
+
+function workerCanEditPdfType(workerType, pdfTypeName) {
+  if (!workerType) return true;
+  const name = (pdfTypeName || '').toLowerCase();
+  if (name.includes('ikisi')) return false;
+  if (workerType === 'elektron') return name.includes('elektron');
+  if (workerType === 'fiziki') return name.includes('fiziki');
+  return false;
+}
 
 // Helper: server fayl yolunu web yoluna çevir
 const toWebPath = (p) => {
@@ -56,7 +66,7 @@ const calculatePriceWithDiscount = (price, userEmail) => {
 export const createPdf = async (req, res, next) => {
   try {
     // Only superadmin, main institution manager, and main institution worker can directly create PDFs
-    const { role, institutionId } = req.user;
+    const { role, institutionId, workerType } = req.user;
     if (role < 4 && institutionId) {
       const callerInst = await getOne('SELECT is_main FROM institutions WHERE id = ?', [institutionId]);
       if (!callerInst?.is_main) {
@@ -64,6 +74,16 @@ export const createPdf = async (req, res, next) => {
           status: 'error',
           message: 'Birbaşa PDF əlavə etmə icazəniz yoxdur. Sorğu göndərməlisiniz.'
         });
+      }
+    }
+
+    if (role === 2 && workerType) {
+      const typeId = req.body.pdf_type_id;
+      if (typeId) {
+        const pdfType = await getOne('SELECT name FROM pdfs_types WHERE id = ?', [typeId]);
+        if (!workerCanEditPdfType(workerType, pdfType?.name)) {
+          return res.status(403).json({ status: 'error', message: 'Bu tipli PDF-ə əməliyyat etmək icazəniz yoxdur' });
+        }
       }
     }
 
@@ -190,13 +210,14 @@ export const createPdf = async (req, res, next) => {
 export const getAllPdfs = async (req, res, next) => {
   try {
     const {
-      page, limit, categoryId, language, search,
+      page, limit, categoryId, pdfTypeId, language, search,
       minPrice, maxPrice, startDate, endDate,
-      status, uploadedBy, submittedBy, sortBy
+      status, uploadedBy, submittedBy, sortBy,
+      pInstitutionId, uploaderInstId, anyInstId, includeNoInst, uploaderNoInst
     } = req.query;
 
     // submittedBy — istifadəçinin öz PDF-lərini görmək üçün
-    const resolvedUploadedBy = uploadedBy || submittedBy || null;
+    let resolvedUploadedBy = uploadedBy || submittedBy || null;
     const isOwnPdfs = !!submittedBy && req.user && String(submittedBy) === String(req.user.id);
 
     // Admin olmayan istifadəçilərə yalnız qəbul edilmiş PDFlər göstərilir
@@ -204,20 +225,26 @@ export const getAllPdfs = async (req, res, next) => {
     const isAdmin = req.user && req.user.role >= 2;
     const effectiveStatus = status || ((!isAdmin && !isOwnPdfs) ? 'approved' : null);
 
+    // Scope məhdudiyyəti yalnız admin panel sorğuları üçün tətbiq edilir (adminView=1)
+    // Ana səhifə / user-facing kitabxana bütün təsdiqlənmiş PDF-ləri görməlidir
+    const isAdminView = req.query.adminView === '1';
+
     let uploaderInstitutionId = null;
-    if (isAdmin) {
+    if (isAdmin && isAdminView) {
       const scope = await resolveAdminScope(req.user);
       if (scope.type === 'institution') {
-        // Main institution workers have full PDF access — only restrict non-main institutions
-        const inst = await getOne('SELECT is_main FROM institutions WHERE id = ?', [scope.institutionId]);
-        if (!inst?.is_main) uploaderInstitutionId = scope.institutionId;
+        // Həm əsas, həm qeyri-əsas müəssisə işçiləri öz müəssisəsinə aid PDF-ləri görür
+        uploaderInstitutionId = scope.institutionId;
       }
     }
 
     const result = await pdfService.getAllPdfs({
-      page, limit, categoryId, language, search,
+      page, limit, categoryId, pdfTypeId, language, search,
       minPrice, maxPrice, startDate, endDate,
       status: effectiveStatus, uploadedBy: resolvedUploadedBy, uploaderInstitutionId,
+      pInstitutionId, uploaderInstId, anyInstId,
+      includeNoInst: includeNoInst === '1' || includeNoInst === 'true',
+      uploaderNoInst: uploaderNoInst === '1' || uploaderNoInst === 'true',
       sortBy
     });
 
@@ -269,16 +296,22 @@ export const getAllPdfs = async (req, res, next) => {
           order_number: pdf.order_number,
           author: pdf.author,
           isbn: pdf.isbn || null,
+          publication_year: pdf.publication_year || null,
+          publisher_location: pdf.publisher_location || null,
+          allow_download: pdf.allow_download !== undefined ? Number(pdf.allow_download) : 1,
+          quantity: pdf.quantity || 1,
           category_id: pdf.category_id,
           uploaded_by: pdf.uploaded_by,
           uploader_email: pdf.uploader_email,
           created_at: pdf.created_at,
           updated_at: pdf.updated_at,
           institution_id: pdf.institution_id || null,
+          institution_name: pdf.institution_name || null,
           category: pdf.category_id ? {
             id: pdf.category_id,
             name: pdf.category_name
           } : null,
+          pdf_type: pdf.pdf_type_id ? { id: pdf.pdf_type_id, name: pdf.pdf_type_name } : null,
           reads: pdf.reads || 0,
           hasAccess: true,
           accessType: 'subscription',
@@ -339,19 +372,23 @@ export const getAllPdfs = async (req, res, next) => {
         status: pdf.status,
         order_number: pdf.order_number,
         author: pdf.author,
+        isbn: pdf.isbn || null,
         publication_year: pdf.publication_year || null,
         publisher_location: pdf.publisher_location || null,
         allow_download: pdf.allow_download !== undefined ? Number(pdf.allow_download) : 1,
+        quantity: pdf.quantity || 1,
         category_id: pdf.category_id,
         uploaded_by: pdf.uploaded_by,
         uploader_email: pdf.uploader_email,
         created_at: pdf.created_at,
         updated_at: pdf.updated_at,
         institution_id: pdf.institution_id || null,
+        institution_name: pdf.institution_name || null,
         category: pdf.category_id ? {
           id: pdf.category_id,
           name: pdf.category_name
         } : null,
+        pdf_type: pdf.pdf_type_id ? { id: pdf.pdf_type_id, name: pdf.pdf_type_name } : null,
         reads: pdf.reads || 0,
         hasAccess: hasAccess,
         accessType: accessType,
@@ -415,6 +452,15 @@ export const getPdfById = async (req, res, next) => {
     // İndirim hesablaması
     const priceInfo = calculatePriceWithDiscount(pdf.price, userEmail);
 
+    // Favorites yoxlama
+    let isFavorited = false;
+    if (userId) {
+      try {
+        const fav = await getOne('SELECT id FROM user_favorites WHERE user_id = ? AND pdf_id = ?', [userId, id]);
+        isFavorited = !!fav;
+      } catch (_) {}
+    }
+
     // Transform data to include category object
     const transformedPdf = {
       id: pdf.id,
@@ -446,11 +492,15 @@ export const getPdfById = async (req, res, next) => {
         name: pdf.category_name,
         pdf_type: pdf.category_pdf_type
       } : null,
+      pdf_type: pdf.pdf_type_id ? { id: pdf.pdf_type_id, name: pdf.pdf_type_name } : null,
+      quantity: parseInt(pdf.quantity) || 1,
+      active_rentals_count: parseInt(pdf.active_rentals_count) || 0,
       institution_id: pdf.institution_id || null,
       institution: pdf.institution_name ? { id: pdf.institution_id, name: pdf.institution_name } : null,
       hasAccess: hasAccess,
       accessType: accessType,
-      downloadUrl: hasAccess ? `/pdfs/${pdf.id}/download` : null
+      downloadUrl: hasAccess ? `/pdfs/${pdf.id}/download` : null,
+      is_favorited: isFavorited,
     };
 
     res.status(200).json({
@@ -516,9 +566,80 @@ export const getMyDownloads = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+export const getMyFavorites = async (req, res, next) => {
+  try {
+    const rows = await executeQuery(
+      `SELECT f.created_at, p.id, p.title, p.author,
+              p.cover_image_path AS image_path, c.name AS category_name
+       FROM user_favorites f
+       JOIN pdfs p ON f.pdf_id = p.id
+       LEFT JOIN category_pdfs c ON p.category_id = c.id
+       WHERE f.user_id = ?
+       ORDER BY f.created_at DESC`,
+      [req.user.id]
+    );
+    res.json({ status: 'success', data: { pdfs: rows.map(r => ({ ...r, image_path: toWebPath(r.image_path) })) } });
+  } catch (err) { next(err); }
+};
+
+export const toggleFavorite = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const existing = await getOne(
+      'SELECT id FROM user_favorites WHERE user_id = ? AND pdf_id = ?',
+      [userId, id]
+    );
+    if (existing) {
+      await executeQuery('DELETE FROM user_favorites WHERE user_id = ? AND pdf_id = ?', [userId, id]);
+      res.json({ status: 'success', favorited: false });
+    } else {
+      await executeQuery('INSERT IGNORE INTO user_favorites (user_id, pdf_id) VALUES (?, ?)', [userId, id]);
+      res.json({ status: 'success', favorited: true });
+    }
+  } catch (err) { next(err); }
+};
+
 export const updatePdf = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    // Əsas müəssisə işçisi yalnız öz yüklədiyini redaktə edə bilər
+    // İSTİSNA: başqasının kitabını "kitab-hər ikisi"-yə çevirirsə (fiziki link) icazə var
+    let isPhysicalLink = false;
+    if (req.user.role === 2 && req.user.institutionId) {
+      const inst = await getOne('SELECT is_main FROM institutions WHERE id = ?', [req.user.institutionId]);
+      if (inst?.is_main) {
+        const pdfRow = await getOne('SELECT uploaded_by FROM pdfs WHERE id = ?', [id]);
+        if (!pdfRow) {
+          return res.status(404).json({ status: 'error', message: 'PDF tapılmadı' });
+        }
+        if (String(pdfRow.uploaded_by) !== String(req.user.id)) {
+          const newTypeId = req.body.pdf_type_id;
+          const newType = newTypeId
+            ? await getOne('SELECT name FROM pdfs_types WHERE id = ?', [newTypeId])
+            : null;
+          const isHerIkisiConversion = (newType?.name || '').toLowerCase().includes('ikisi');
+          if (!isHerIkisiConversion) {
+            return res.status(403).json({ status: 'error', message: 'Yalnız özünüzün yüklədiyiniz PDF-ləri redaktə edə bilərsiniz' });
+          }
+          isPhysicalLink = true;
+        }
+      }
+    }
+
+    if (req.user.role === 2 && req.user.workerType) {
+      const newTypeId = req.body.pdf_type_id;
+      const currentPdfRow = await getOne('SELECT pdf_type_id FROM pdfs WHERE id = ?', [id]);
+      const typeId = newTypeId || currentPdfRow?.pdf_type_id;
+      const pdfType = typeId ? await getOne('SELECT name FROM pdfs_types WHERE id = ?', [typeId]) : null;
+      const targetIsHerIkisi = (pdfType?.name || '').toLowerCase().includes('ikisi');
+      // "hər ikisi"-yə çevirməyə icazə var (fiziki işçi mövcud elektron kitabı link edir)
+      if (!workerCanEditPdfType(req.user.workerType, pdfType?.name) && !targetIsHerIkisi) {
+        return res.status(403).json({ status: 'error', message: 'Bu tipli PDF-ə əməliyyat etmək icazəniz yoxdur' });
+      }
+    }
+
     const { pdfDate, ...restBody } = req.body;
     
     // Transform categoryId to category_id if present
@@ -558,6 +679,19 @@ export const updatePdf = async (req, res, next) => {
     }
 
     const pdf = await pdfService.updatePdf(Number(id), updateData);
+
+    if (isPhysicalLink) {
+      activityLog.log({
+        eventType: 'pdf_physical_linked',
+        actorEmail: req.user.login || null,
+        targetType: 'pdf',
+        targetId: Number(id),
+        details: {
+          title: pdf?.title || updateData.title || null,
+          category_name: 'kitab-hər ikisi',
+        },
+      });
+    }
 
     res.status(200).json({
       status: 'success',
@@ -627,6 +761,31 @@ export const rejectPdf = async (req, res, next) => {
 export const deletePdf = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    // Əsas müəssisə işçisi yalnız öz yüklədiyini silə bilər
+    if (req.user.role === 2 && req.user.institutionId) {
+      const inst = await getOne('SELECT is_main FROM institutions WHERE id = ?', [req.user.institutionId]);
+      if (inst?.is_main) {
+        const pdfRow = await getOne('SELECT uploaded_by FROM pdfs WHERE id = ?', [id]);
+        if (!pdfRow) {
+          return res.status(404).json({ status: 'error', message: 'PDF tapılmadı' });
+        }
+        if (String(pdfRow.uploaded_by) !== String(req.user.id)) {
+          return res.status(403).json({ status: 'error', message: 'Yalnız özünüzün yüklədiyiniz PDF-ləri silə bilərsiniz' });
+        }
+      }
+    }
+
+    if (req.user.role === 2 && req.user.workerType) {
+      const pdfRow = await getOne('SELECT pdf_type_id FROM pdfs WHERE id = ?', [id]);
+      const pdfType = pdfRow?.pdf_type_id
+        ? await getOne('SELECT name FROM pdfs_types WHERE id = ?', [pdfRow.pdf_type_id])
+        : null;
+      if (!workerCanEditPdfType(req.user.workerType, pdfType?.name)) {
+        return res.status(403).json({ status: 'error', message: 'Bu tipli PDF-ə əməliyyat etmək icazəniz yoxdur' });
+      }
+    }
+
     await pdfService.deletePdf(Number(id), req.user?.login);
 
     res.status(200).json({
@@ -744,7 +903,9 @@ export const submitPdf = async (req, res, next) => {
     const coverImage = req.files?.coverImage?.[0] || null;
 
     const { title, description, table_of_contents, order_number, author, isbn, language, category_id,
-            publication_year, publisher_location, price, allow_download, foreword, institution_id } = req.body;
+            pdf_type_id,
+            publication_year, publisher_location, price, allow_download, foreword, institution_id,
+            linked_pdf_id, quantity } = req.body;
 
     if (!title || !title.trim()) {
       return res.status(400).json({ status: 'error', message: 'PDF adı tələb olunur' });
@@ -752,7 +913,9 @@ export const submitPdf = async (req, res, next) => {
 
     const pdf = await pdfService.submitPdf(
       { title, description, table_of_contents, order_number, author, isbn, language, category_id,
+        pdf_type_id,
         publication_year, publisher_location, price, allow_download, foreword, institution_id,
+        linked_pdf_id, quantity,
         uploaded_by: req.user.id },
       file,
       coverImage

@@ -1,0 +1,280 @@
+// elan.jsx — Structured announcements page
+const { useState: useStateE, useMemo: useMemoE } = React;
+
+function ElanPage({ navigate }) {
+  const all = window.DATA.announcements;
+  const [q, setQ] = useStateE("");
+  const [cat, setCat] = useStateE("all");
+  const [open, setOpen] = useStateE(null);
+
+  const cats = useMemoE(() => {
+    const set = ["all", ...new Set(all.map(a => a.cat))];
+    return set;
+  }, []);
+
+  const pinned = all.filter(a => a.pinned);
+  const filtered = useMemoE(() => {
+    let r = all.slice();
+    if (cat !== "all") r = r.filter(a => a.cat === cat);
+    if (q.trim()) r = r.filter(a => a.title.toLowerCase().includes(q.toLowerCase()) || a.summary.toLowerCase().includes(q.toLowerCase()));
+    return r.sort((a, b) => (b.pinned - a.pinned) || new Date(b.date) - new Date(a.date));
+  }, [q, cat]);
+
+  return (
+    <div className="page-enter">
+      {/* Hero */}
+      <section style={{ padding: "56px 0 32px", background: "linear-gradient(180deg, var(--accent-tint), transparent)" }}>
+        <div className="container">
+          <span className="eyebrow"><I.megaphone width="16" height="16" />Elanlar</span>
+          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 48, alignItems: "center", marginTop: 16 }}>
+            <div>
+              <h1 style={{ fontSize: "clamp(36px, 5vw, 60px)", maxWidth: 600 }}>
+                Universitetin <span style={{ position: "relative", display: "inline-block" }}>
+                  <span style={{ position: "relative", zIndex: 2 }}>son elanları</span>
+                  <span style={{ position: "absolute", left: -4, right: -4, bottom: 4, height: "32%", background: "var(--accent)", borderRadius: 4, zIndex: 1 }} />
+                </span> və duyuruları.
+              </h1>
+              <p className="lead" style={{ marginTop: 18, maxWidth: "54ch" }}>
+                Kitabxana, akademik tədbirlər, qaydalar və yenilikləri burada izləyin.
+              </p>
+            </div>
+
+            {/* Stats card */}
+            <div className="card" style={{ padding: 24, background: "linear-gradient(135deg, var(--navy), var(--navy-2))", color: "#fff", border: 0 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <span style={{ fontSize: 11, letterSpacing: 0.14, textTransform: "uppercase", fontWeight: 700, opacity: 0.7 }}>Aktiv elan</span>
+                  <div style={{ fontFamily: "var(--font-display)", fontSize: 56, color: "var(--accent)", fontWeight: 500, lineHeight: 1 }}>{all.length}</div>
+                </div>
+                <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(252,211,77,.15)", display: "grid", placeItems: "center" }}>
+                  <I.megaphone width="28" height="28" style={{ color: "var(--accent)" }} />
+                </div>
+              </div>
+              <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,.12)", display: "flex", gap: 18 }}>
+                <div>
+                  <div style={{ fontSize: 11, opacity: 0.7, textTransform: "uppercase", letterSpacing: 0.06 }}>Sancılmış</div>
+                  <div style={{ fontWeight: 700, fontSize: 18, marginTop: 2 }}>{pinned.length}</div>
+                </div>
+                <div style={{ width: 1, background: "rgba(255,255,255,.12)" }} />
+                <div>
+                  <div style={{ fontSize: 11, opacity: 0.7, textTransform: "uppercase", letterSpacing: 0.06 }}>Vacib</div>
+                  <div style={{ fontWeight: 700, fontSize: 18, marginTop: 2 }}>{all.filter(a => a.urgent).length}</div>
+                </div>
+                <div style={{ width: 1, background: "rgba(255,255,255,.12)" }} />
+                <div>
+                  <div style={{ fontSize: 11, opacity: 0.7, textTransform: "uppercase", letterSpacing: 0.06 }}>Bu həftə</div>
+                  <div style={{ fontWeight: 700, fontSize: 18, marginTop: 2 }}>4</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Search */}
+          <div style={{ display: "flex", gap: 12, marginTop: 32, flexWrap: "wrap" }}>
+            <div style={{ flex: 1, position: "relative", minWidth: 320 }}>
+              <I.search width="18" height="18" style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--muted)" }} />
+              <input className="input" value={q} onChange={e => setQ(e.target.value)} placeholder="Elanlar arasında axtarın…" style={{ paddingLeft: 44 }} />
+            </div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              {cats.map(c => (
+                <button key={c} className={`tag ${cat === c ? "on" : ""}`} onClick={() => setCat(c)}>
+                  {c === "all" ? "Hamısı" : c}
+                  <span style={{ marginLeft: 6, fontSize: 11, opacity: 0.7, fontWeight: 700 }}>
+                    {c === "all" ? all.length : all.filter(a => a.cat === c).length}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pinned strip */}
+      {pinned.length > 0 && cat === "all" && !q && (
+        <section style={{ paddingTop: 24, paddingBottom: 0 }}>
+          <div className="container">
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, fontSize: 12, fontWeight: 700, color: "var(--accent-deep)", letterSpacing: 0.06, textTransform: "uppercase" }}>
+              <I.pin width="14" height="14" />
+              Sancılmış elanlar
+            </div>
+            <div className="grid-2" style={{ gap: 18 }}>
+              {pinned.map(a => (
+                <div key={a.id} className="card" onClick={() => setOpen(a)} style={{ padding: 22, cursor: "pointer", display: "flex", gap: 18, alignItems: "flex-start", borderLeft: "3px solid var(--accent)" }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 12, background: "var(--accent-soft)", color: "var(--navy)", display: "grid", placeItems: "center", flexShrink: 0 }}>
+                    <I.pin width="20" height="20" />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                      <span className="badge">{a.cat}</span>
+                      <span style={{ fontSize: 12, color: "var(--muted)" }}>{a.date}</span>
+                    </div>
+                    <h3 style={{ fontSize: 18, marginBottom: 8 }}>{a.title}</h3>
+                    <p style={{ fontSize: 13.5, color: "var(--muted)", lineHeight: 1.55, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{a.summary}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* List */}
+      <section style={{ paddingTop: 32 }}>
+        <div className="container">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 32, alignItems: "flex-start" }}>
+            {/* Main list */}
+            <div>
+              {filtered.length === 0 ? (
+                <div className="card" style={{ padding: 60, textAlign: "center" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--paper-2)", color: "var(--muted)", display: "grid", placeItems: "center", margin: "0 auto 16px" }}>
+                    <I.megaphone width="24" height="24" />
+                  </div>
+                  <h3 style={{ fontSize: 20, marginBottom: 8 }}>Elan tapılmadı</h3>
+                  <p style={{ color: "var(--muted)" }}>Axtarış parametrlərini dəyişməyi sınayın.</p>
+                </div>
+              ) : (
+                <div style={{ position: "relative" }}>
+                  {/* Timeline line */}
+                  <div style={{ position: "absolute", left: 22, top: 30, bottom: 30, width: 2, background: "var(--line)", borderRadius: 2 }} />
+                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    {filtered.filter(a => !(a.pinned && cat === "all" && !q)).map(a => (
+                      <div key={a.id} style={{ position: "relative", paddingLeft: 56 }}>
+                        {/* Dot */}
+                        <div style={{
+                          position: "absolute", left: 14, top: 26, width: 18, height: 18, borderRadius: "50%",
+                          background: a.urgent ? "var(--bad)" : "var(--navy)",
+                          border: "3px solid var(--paper)",
+                          boxShadow: "0 0 0 3px " + (a.urgent ? "rgba(192,57,43,.18)" : "rgba(11,31,61,.12)"),
+                        }} />
+                        <div className="card" onClick={() => setOpen(a)} style={{
+                          padding: 22, cursor: "pointer",
+                          transition: "transform .15s ease, box-shadow .15s ease, border-color .15s ease",
+                        }} onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; e.currentTarget.style.borderColor = "var(--navy)"; }}
+                          onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "var(--shadow-sm)"; e.currentTarget.style.borderColor = "var(--line)"; }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
+                            <span className={`badge ${a.urgent ? "badge-navy" : ""}`} style={a.urgent ? { background: "var(--bad)", color: "#fff", border: 0 } : null}>{a.cat}</span>
+                            {a.urgent && <span style={{ fontSize: 11, color: "var(--bad)", fontWeight: 700, letterSpacing: 0.06, textTransform: "uppercase", display: "flex", alignItems: "center", gap: 4 }}>● Vacib</span>}
+                            {a.pinned && <I.pin width="14" height="14" style={{ color: "var(--accent-deep)" }} />}
+                            <span style={{ marginLeft: "auto", fontSize: 13, color: "var(--muted)" }}>{a.date}</span>
+                          </div>
+                          <h3 style={{ fontSize: 21, marginBottom: 10 }}>{a.title}</h3>
+                          <p style={{ fontSize: 14.5, color: "var(--ink-2)", lineHeight: 1.6, marginBottom: 14 }}>{a.summary}</p>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 14, borderTop: "1px solid var(--line-2)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "var(--muted)" }}>
+                              <div style={{ width: 24, height: 24, borderRadius: "50%", background: "var(--accent)", color: "var(--navy)", display: "grid", placeItems: "center", fontSize: 10, fontWeight: 700 }}>
+                                {a.author.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()}
+                              </div>
+                              {a.author}
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 13, fontWeight: 600, color: "var(--navy)" }}>
+                              Ətraflı oxu <I.arrow width="14" height="14" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Side: tags + subscribe */}
+            <aside style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <div className="card" style={{ padding: 22, background: "linear-gradient(135deg, var(--accent), var(--accent-deep))", color: "var(--navy)", border: 0 }}>
+                <I.bell width="24" height="24" style={{ marginBottom: 10 }} />
+                <h3 style={{ fontSize: 18, marginBottom: 6, color: "var(--navy)" }}>Bildirişləri aktiv et</h3>
+                <p style={{ fontSize: 13, marginBottom: 14, opacity: 0.85, lineHeight: 1.55 }}>
+                  Yeni elanlar haqqında e-poçtla məlumatlandırılın.
+                </p>
+                <button className="btn" style={{ background: "var(--navy)", color: "#fff", width: "100%", justifyContent: "center" }}>
+                  Abunə ol
+                </button>
+              </div>
+
+              <div className="card" style={{ padding: 22 }}>
+                <h3 style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 700, letterSpacing: 0.12, textTransform: "uppercase", color: "var(--muted)", marginBottom: 14 }}>Populyar etiketlər</h3>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {["yeni", "konfrans", "tarix", "cədvəl", "qayda", "elektron", "magistr", "online", "tədbir", "akademik"].map(t => (
+                    <button key={t} className="tag" style={{ fontSize: 12, padding: "5px 10px" }}>{t}</button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="card" style={{ padding: 22 }}>
+                <h3 style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 700, letterSpacing: 0.12, textTransform: "uppercase", color: "var(--muted)", marginBottom: 14 }}>Yaxınlaşan tədbir</h3>
+                <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+                  <div style={{ flexShrink: 0, width: 56, textAlign: "center", padding: "8px 0", borderRadius: 10, background: "var(--navy)", color: "#fff" }}>
+                    <div style={{ fontSize: 10, letterSpacing: 0.1, textTransform: "uppercase", fontWeight: 700, opacity: 0.7 }}>May</div>
+                    <div style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 500, lineHeight: 1, color: "var(--accent)" }}>25</div>
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Hərbi tarix oxu konfransı</div>
+                    <div style={{ fontSize: 12, color: "var(--muted)", display: "flex", alignItems: "center", gap: 4 }}>
+                      <I.clock width="12" height="12" /> 14:00 · Konfrans zalı
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      {/* Modal */}
+      {open && <ElanModal a={open} onClose={() => setOpen(null)} />}
+    </div>
+  );
+}
+
+function ElanModal({ a, onClose }) {
+  return (
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 200,
+      background: "rgba(10, 20, 40, .5)", backdropFilter: "blur(4px)",
+      display: "grid", placeItems: "center", padding: 24,
+      animation: "fade-up .2s ease both",
+    }} onClick={onClose}>
+      <div className="card" style={{ maxWidth: 720, width: "100%", maxHeight: "85vh", overflowY: "auto", padding: 0, animation: "fade-up .3s ease both" }} onClick={e => e.stopPropagation()}>
+        <div style={{
+          padding: "28px 32px",
+          background: a.urgent ? "linear-gradient(135deg, var(--bad), #8B1F1F)" : "linear-gradient(135deg, var(--navy), var(--navy-2))",
+          color: "#fff",
+          position: "relative",
+        }}>
+          <button onClick={onClose} style={{
+            position: "absolute", top: 16, right: 16,
+            width: 36, height: 36, borderRadius: "50%",
+            background: "rgba(255,255,255,.15)", border: 0, color: "#fff",
+            display: "grid", placeItems: "center", cursor: "pointer",
+          }}>
+            <I.close width="18" height="18" />
+          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+            <span className="badge" style={{ background: "rgba(255,255,255,.2)", color: "#fff", border: 0 }}>{a.cat}</span>
+            {a.pinned && <span style={{ fontSize: 12, fontWeight: 700, opacity: 0.85, display: "flex", alignItems: "center", gap: 4 }}><I.pin width="12" height="12" />Sancılıb</span>}
+            <span style={{ marginLeft: "auto", fontSize: 13, opacity: 0.75 }}>{a.date}</span>
+          </div>
+          <h2 style={{ color: "#fff", fontSize: 32 }}>{a.title}</h2>
+          <div style={{ marginTop: 14, fontSize: 13, opacity: 0.85 }}>Yayımlayan: <b style={{ color: "#fff" }}>{a.author}</b></div>
+        </div>
+        <div style={{ padding: 32 }}>
+          <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--ink-2)", marginBottom: 18 }}>{a.summary}</p>
+          <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--ink-2)", marginBottom: 18 }}>
+            Əlavə təfərrüatlar üçün universitet daxili müraciət edə bilərsiniz. Bütün suallar üçün <a style={{ color: "var(--navy)", fontWeight: 600, textDecoration: "underline" }}>kitabxana@mmu.edu.az</a> ünvanına yaza bilərsiniz.
+          </p>
+          {a.tags.length > 0 && (
+            <div style={{ marginTop: 24, display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {a.tags.map(t => <span key={t} className="badge">#{t}</span>)}
+            </div>
+          )}
+          <div style={{ marginTop: 28, display: "flex", gap: 10 }}>
+            <button className="btn btn-primary">Yadda saxla</button>
+            <button className="btn btn-outline">Paylaş</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { ElanPage });

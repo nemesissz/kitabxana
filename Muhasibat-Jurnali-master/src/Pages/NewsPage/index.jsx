@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import Footer from "../../Layouts/Footer";
 import axios from "axios";
-import Base_Url_Server from "../../Constants/baseUrl";
+import Base_Url_Server, { formatServerFilePath } from "../../Constants/baseUrl";
 import { useNavigate } from "react-router-dom";
 
 function NewsPage() {
@@ -118,7 +118,7 @@ function NewsPage() {
                   {ann.image && (
                     <div className={styles.cardImg}>
                       <img
-                        src={ann.image}
+                        src={formatServerFilePath(ann.image)}
                         alt={ann.title}
                         onError={(e) => { e.target.parentElement.style.display = "none"; }}
                       />

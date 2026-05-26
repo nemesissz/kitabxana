@@ -12,6 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
 import Swal from "sweetalert2";
 
+
 function AdminCategoryPagePdfs() {
   const store = useContext(dataContext);
   const navigate = useNavigate();
@@ -57,9 +58,13 @@ function AdminCategoryPagePdfs() {
       });
   }, []);
 
+  const PDF_TYPE_NAMES = ['kitab-elektron', 'kitab-fiziki', 'kitab-hər ikisi'];
+  const filterTypes = (cats) =>
+    (cats || []).filter((c) => !PDF_TYPE_NAMES.includes((c.name || '').toLowerCase()));
+
   const loadCategories = () => {
     axios.get(Base_Url_Server + "categories/pdfs")
-      .then((res) => setCategories(res.data.data.categories))
+      .then((res) => setCategories(filterTypes(res.data.data.categories)))
       .catch((err) => console.log("Kateqoriya çəkilmədi:", err));
   };
 
@@ -73,7 +78,7 @@ function AdminCategoryPagePdfs() {
         headers: { Authorization: `Bearer ${tokenAdmin}` },
       }).catch(() => ({ data: { data: { institutions: [] } } })),
     ]).then(([catRes, instRes]) => {
-      setCategories(catRes.data.data.categories);
+      setCategories(filterTypes(catRes.data.data.categories));
       setInstitutions(instRes.data.data.institutions || []);
     }).catch((err) => console.log(err))
       .finally(() => store.loader.setData(false));
@@ -107,6 +112,14 @@ function AdminCategoryPagePdfs() {
     if (isNonMain === null) return;
     loadRequests();
   }, [isNonMain]);
+
+  const refreshNotifications = () => {
+    const token = localStorage.getItem("tokenAdmin");
+    if (!token) return;
+    axios.get(`${Base_Url_Server}admin/pending-counts`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(r => store.adminNotifications.setData(r.data.data)).catch(() => {});
+  };
 
   const loadRequests = async () => {
     const tokenAdmin = localStorage.getItem("tokenAdmin");
@@ -240,6 +253,7 @@ function AdminCategoryPagePdfs() {
       );
       await loadRequests();
       loadCategories();
+      refreshNotifications();
       Swal.fire({ icon: "success", title: "Təsdiqləndi", timer: 1500, showConfirmButton: false });
     } catch (err) {
       Swal.fire("Xəta!", err.response?.data?.message || "Əməliyyat alınmadı.", "error");
@@ -255,6 +269,7 @@ function AdminCategoryPagePdfs() {
         { headers: { Authorization: `Bearer ${tokenAdmin}` } }
       );
       await loadRequests();
+      refreshNotifications();
       Swal.fire({ icon: "success", title: "Rədd edildi", timer: 1500, showConfirmButton: false });
     } catch (err) {
       Swal.fire("Xəta!", err.response?.data?.message || "Əməliyyat alınmadı.", "error");
@@ -399,36 +414,40 @@ function AdminCategoryPagePdfs() {
             </thead>
             <tbody>
               {categories
-                ? categories.map((cat) => (
-                    <tr key={cat.id}>
-                      <td>{cat.id}</td>
-                      <td>{cat.name}</td>
-                      <td>
-                        <div style={{ display: "flex", gap: "8px" }}>
-                          {categoryPermission !== 'none' && (
-                            <button
-                              className={styles.button}
-                              style={{ background: "#2c3e50", width: "auto", padding: "8px 12px" }}
-                              onClick={() => openEdit(cat)}
-                              title={isNonMain && categoryPermission !== 'direct' ? "Redaktə sorğusu göndər" : "Redaktə et"}
-                            >
-                              <EditIcon fontSize="small" />
-                            </button>
-                          )}
-                          {canDirect && (
-                            <button
-                              className={styles.button}
-                              style={{ background: "#d64545", width: "auto", padding: "8px 12px" }}
-                              onClick={() => handleDelete(cat.id)}
-                              title="Sil"
-                            >
-                              <DeleteIcon fontSize="small" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                ? categories.map((cat) => {
+                    return (
+                      <tr key={cat.id}>
+                        <td>{cat.id}</td>
+                        <td>
+                          {cat.name}
+                        </td>
+                        <td>
+                          <div style={{ display: "flex", gap: "8px" }}>
+                            {categoryPermission !== 'none' && (
+                              <button
+                                className={styles.button}
+                                style={{ background: "#2c3e50", width: "auto", padding: "8px 12px" }}
+                                onClick={() => openEdit(cat)}
+                                title={isNonMain && categoryPermission !== 'direct' ? "Redaktə sorğusu göndər" : "Redaktə et"}
+                              >
+                                <EditIcon fontSize="small" />
+                              </button>
+                            )}
+                            {canDirect && (
+                              <button
+                                className={styles.button}
+                                style={{ background: "#d64545", width: "auto", padding: "8px 12px" }}
+                                onClick={() => handleDelete(cat.id)}
+                                title="Sil"
+                              >
+                                <DeleteIcon fontSize="small" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 : "Yüklənir..."}
             </tbody>
           </table>

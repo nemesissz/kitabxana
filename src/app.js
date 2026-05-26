@@ -30,6 +30,7 @@ import settingsRoutes from './settings/settings.router.js';
 import languageRoutes from './languages/language.router.js';
 import sessionRoutes from './sessions/session.router.js';
 import rentalRoutes from './rentals/rental.router.js';
+import pdfsTypesRouter from './pdfs_types/pdfs-types.router.js';
 
 config(); // Load .env variables
 
@@ -204,6 +205,7 @@ app.use('/settings', settingsRoutes);
 app.use('/languages', languageRoutes);
 app.use('/sessions', sessionRoutes);
 app.use('/rentals', rentalRoutes);
+app.use('/pdfs-types', pdfsTypesRouter);
 
 // Error logging middleware
 app.use(errorLogger);
