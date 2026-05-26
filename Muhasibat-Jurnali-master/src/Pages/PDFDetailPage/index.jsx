@@ -11,7 +11,6 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import BookCover from '../../Components/BookCover';
 import Footer from '../../Layouts/Footer';
-import { displayCategoryName } from '../../Constants/categoryDisplay';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -37,17 +36,14 @@ const PDFDetailPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
-  const [showToc, setShowToc] = useState(false);
-  const [rentalModal, setRentalModal] = useState(false);
-  const [rentalDuration, setRentalDuration] = useState(14);
-  const [rentalLoading, setRentalLoading] = useState(false);
+  const [activeSection, setActiveSection] = useState(null); // null | 'foreword' | 'toc'
   const [previewNumPages, setPreviewNumPages] = useState(null);
   const [isFavorited, setIsFavorited] = useState(false);
   const [favLoading, setFavLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
   const store = useContext(dataContext);
-  const isLoggedIn = !!store?.user?.data;
+  const user = store.user.data;
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Tarix yoxdur';
@@ -98,8 +94,8 @@ const PDFDetailPage = () => {
   };
 
   const typeName = (pdf?.pdf_type?.name || '').toLowerCase();
-  const isHerIkisi = typeName.includes('ikisi');
-  const isFiziki   = typeName.includes('fiziki') && !isHerIkisi;
+  const isHerIkisi = typeName.includes('çap') && typeName.includes('elektron');
+  const isFiziki   = typeName.includes('çap') && !isHerIkisi;
   const isElektron = typeName.includes('elektron') && !isHerIkisi;
   const isPhysical = isFiziki || isHerIkisi;
   const showPreview = (isElektron || isHerIkisi) && !!pdf?.file_path;
@@ -108,29 +104,6 @@ const PDFDetailPage = () => {
   const activeRentals  = parseInt(pdf?.active_rentals_count) || 0;
   const availableCopies = isPhysical ? Math.max(0, totalCopies - activeRentals) : null;
   const fullyRented    = isPhysical && availableCopies === 0;
-
-  const handleRent = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) { navigate('/login'); return; }
-    if (!pdf?.institution_id) {
-      Swal.fire({ icon: 'warning', title: 'Məlumat yoxdur', text: 'Bu kitab üçün müəssisə məlumatı mövcud deyil.', confirmButtonColor: '#0B1F3D' });
-      return;
-    }
-    try {
-      setRentalLoading(true);
-      await axios.post(Base_Url_Server + 'rentals', {
-        pdf_id: pdf.id,
-        institution_id: pdf.institution_id,
-        duration_days: rentalDuration,
-      }, { headers: { Authorization: `Bearer ${token}` } });
-      setRentalModal(false);
-      Swal.fire({ icon: 'success', title: 'Sorğu göndərildi', text: 'Müəssisə tərəfindən təsdiqləndikdən sonra bildiriş alacaqsınız.', confirmButtonColor: '#0B1F3D' });
-    } catch (err) {
-      Swal.fire({ icon: 'error', title: 'Xəta', text: err.response?.data?.message || 'Xəta baş verdi', confirmButtonColor: '#0B1F3D' });
-    } finally {
-      setRentalLoading(false);
-    }
-  };
 
   const handleDownload = async () => {
     const token = localStorage.getItem('token');
@@ -205,39 +178,22 @@ const PDFDetailPage = () => {
         {/* ── Hero ── */}
         <section className={styles.hero} style={{ background: `linear-gradient(150deg, ${heroC1} 0%, ${heroC2} 100%)` }}>
           <div className="mmu-container">
-            <nav className={styles.crumb}>
-              <button onClick={() => navigate('/')}>Ana səhifə</button>
-              <span>/</span>
-              <button onClick={() => navigate('/library/all')}>Kitabxana</button>
-              <span>/</span>
-              <span>{pdf.title}</span>
-            </nav>
-
             <div className={styles.heroBody}>
               <div className={styles.heroCover}>
                 <BookCover pdf={pdf} />
               </div>
 
               <div className={styles.heroInfo}>
-                <div className={styles.heroBadges}>
-                  {pdf.category?.name && (
-                    <span className="mmu-badge mmu-badge-accent">{displayCategoryName(pdf.category.name)}</span>
-                  )}
-                  {pdf.language && (
-                    <span className={styles.langBadge}>{pdf.language}</span>
-                  )}
-                </div>
                 <h1 className={styles.heroTitle}>{pdf.title}</h1>
                 {pdf.author && <p className={styles.heroAuthor}>{pdf.author}</p>}
                 <div className={styles.heroMeta}>
                   {pdf.publication_year && <span>{pdf.publication_year}</span>}
                   {!isFiziki && <span>↓ {pdf.downloads || 0} yüklənmə</span>}
-                  <span>{formatDate(pdf.created_at)}</span>
                 </div>
                 {isPhysical && (
                   <div className={styles.availabilityBadge} style={{
                     display: 'inline-flex', alignItems: 'center', gap: 6,
-                    marginTop: 8, padding: '4px 10px', borderRadius: 20,
+                    marginTop: 8, marginBottom: 16, padding: '4px 10px', borderRadius: 20,
                     fontSize: 13, fontWeight: 600,
                     background: fullyRented ? 'rgba(220,38,38,0.15)' : 'rgba(22,163,74,0.15)',
                     color: fullyRented ? '#fca5a5' : '#86efac',
@@ -274,45 +230,24 @@ const PDFDetailPage = () => {
                       )}
                     </button>
                   )}
-                  {isPhysical && (
+                  {user && (
                     <button
-                      className={styles.btnOutlineWhite}
-                      disabled={fullyRented}
-                      style={fullyRented ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
-                      onClick={() => {
-                        if (fullyRented) return;
-                        if (!isLoggedIn) {
-                          Swal.fire({
-                            icon: 'info', title: 'Giriş tələb olunur',
-                            text: 'Kitab kirayələmək üçün hesabınıza daxil olun.',
-                            confirmButtonText: 'Daxil ol', showCancelButton: true,
-                            cancelButtonText: 'Ləğv et', confirmButtonColor: '#0B1F3D',
-                          }).then(r => { if (r.isConfirmed) navigate('/login'); });
-                          return;
-                        }
-                        setRentalModal(true);
-                      }}
+                      className={styles.btnFav}
+                      onClick={handleToggleFavorite}
+                      disabled={favLoading}
+                      title={isFavorited ? 'Favorilərdən çıxar' : 'Favorilərə əlavə et'}
                     >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22.5v-18Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg>
-                      {fullyRented ? 'Kirayədədir' : 'Kirayələ'}
+                      <svg
+                        width="16" height="16" viewBox="0 0 24 24"
+                        fill={isFavorited ? 'currentColor' : 'none'}
+                        stroke="currentColor" strokeWidth="2"
+                        strokeLinecap="round" strokeLinejoin="round"
+                      >
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                      </svg>
+                      {isFavorited ? 'Favoridədir' : 'Favorilərə əlavə et'}
                     </button>
                   )}
-                  <button
-                    className={styles.btnFav}
-                    onClick={handleToggleFavorite}
-                    disabled={favLoading}
-                    title={isFavorited ? 'Favorilərdən çıxar' : 'Favorilərə əlavə et'}
-                  >
-                    <svg
-                      width="16" height="16" viewBox="0 0 24 24"
-                      fill={isFavorited ? 'currentColor' : 'none'}
-                      stroke="currentColor" strokeWidth="2"
-                      strokeLinecap="round" strokeLinejoin="round"
-                    >
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                    {isFavorited ? 'Favoridədir' : 'Favorilərə əlavə et'}
-                  </button>
                 </div>
               </div>
             </div>
@@ -327,73 +262,87 @@ const PDFDetailPage = () => {
               {/* Main content */}
               <div className={styles.mainCol}>
 
-                {/* TOC + image slider */}
-                {(pdf.table_of_contents || (pdf.content_images_paths && pdf.content_images_paths.length > 0)) && (
-                  <div className={styles.section}>
-                    <div className={styles.sectionHead}>
-                      <h3>Mündericat</h3>
-                      {pdf.table_of_contents && (
-                        <button
-                          className="mmu-btn mmu-btn-outline mmu-btn-sm"
-                          onClick={() => setShowToc(v => !v)}
-                        >
-                          {showToc ? 'Gizlət' : 'Mündericatı gör'}
-                        </button>
-                      )}
-                    </div>
-
-                    {pdf.table_of_contents && showToc && (
-                      <pre className={styles.tocText}>{pdf.table_of_contents}</pre>
-                    )}
-
-                    {pdf.content_images_paths && pdf.content_images_paths.length > 0 && (
-                      <div className={styles.slider}>
-                        <button
-                          className={styles.sliderArrow}
-                          onClick={() => setCurrentImageIndex(p => p === 0 ? pdf.content_images_paths.length - 1 : p - 1)}
-                          aria-label="Əvvəlki şəkil"
-                        >
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                        </button>
-                        <div
-                          className={styles.sliderWrap}
-                          onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
-                        >
-                          <img
-                            src={formatServerFilePath(pdf.content_images_paths[currentImageIndex])}
-                            alt={`Mündericat ${currentImageIndex + 1}`}
-                            onError={(e) => { e.target.style.display = 'none'; }}
-                            draggable={false}
-                          />
-                          <div className={styles.sliderDots}>
-                            {pdf.content_images_paths.map((_, i) => (
-                              <button
-                                key={i}
-                                className={`${styles.dot} ${i === currentImageIndex ? styles.dotActive : ''}`}
-                                onClick={() => setCurrentImageIndex(i)}
-                                aria-label={`Şəkil ${i + 1}`}
-                              />
-                            ))}
-                          </div>
-                          <span className={styles.sliderCount}>{currentImageIndex + 1} / {pdf.content_images_paths.length}</span>
-                        </div>
-                        <button
-                          className={styles.sliderArrow}
-                          onClick={() => setCurrentImageIndex(p => p === pdf.content_images_paths.length - 1 ? 0 : p + 1)}
-                          aria-label="Növbəti şəkil"
-                        >
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-
                 {/* Description */}
                 {pdf.description && (
                   <div className={styles.section}>
                     <div className={styles.sectionHead}><h3>Təsvir</h3></div>
                     <p className={styles.descText}>{pdf.description}</p>
+                  </div>
+                )}
+
+                {/* Ön söz + Mündəricat — bir card */}
+                {(pdf.foreword || pdf.table_of_contents || (pdf.content_images_paths && pdf.content_images_paths.length > 0)) && (
+                  <div className={`${styles.section} ${!activeSection ? styles.sectionCollapsed : ''}`}>
+                    <div className={styles.tabBar}>
+                      {pdf.foreword && (
+                        <button
+                          className={`${styles.tabBtn} ${activeSection === 'foreword' ? styles.tabBtnActive : ''}`}
+                          onClick={() => setActiveSection(v => v === 'foreword' ? null : 'foreword')}
+                        >
+                          Ön söz
+                        </button>
+                      )}
+                      {(pdf.table_of_contents || (pdf.content_images_paths && pdf.content_images_paths.length > 0)) && (
+                        <button
+                          className={`${styles.tabBtn} ${activeSection === 'toc' ? styles.tabBtnActive : ''}`}
+                          onClick={() => setActiveSection(v => v === 'toc' ? null : 'toc')}
+                        >
+                          Mündəricat
+                        </button>
+                      )}
+                    </div>
+
+                    {activeSection === 'foreword' && pdf.foreword && (
+                      <div className={styles.forewordText}>{pdf.foreword}</div>
+                    )}
+
+                    {activeSection === 'toc' && (
+                      <>
+                        {pdf.table_of_contents && (
+                          <pre className={styles.tocText}>{pdf.table_of_contents}</pre>
+                        )}
+                        {pdf.content_images_paths && pdf.content_images_paths.length > 0 && (
+                          <div className={styles.slider}>
+                            <button
+                              className={styles.sliderArrow}
+                              onClick={() => setCurrentImageIndex(p => p === 0 ? pdf.content_images_paths.length - 1 : p - 1)}
+                              aria-label="Əvvəlki şəkil"
+                            >
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                            </button>
+                            <div
+                              className={styles.sliderWrap}
+                              onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
+                            >
+                              <img
+                                src={formatServerFilePath(pdf.content_images_paths[currentImageIndex])}
+                                alt={`Mündəricat ${currentImageIndex + 1}`}
+                                onError={(e) => { e.target.style.display = 'none'; }}
+                                draggable={false}
+                              />
+                              <div className={styles.sliderDots}>
+                                {pdf.content_images_paths.map((_, i) => (
+                                  <button
+                                    key={i}
+                                    className={`${styles.dot} ${i === currentImageIndex ? styles.dotActive : ''}`}
+                                    onClick={() => setCurrentImageIndex(i)}
+                                    aria-label={`Şəkil ${i + 1}`}
+                                  />
+                                ))}
+                              </div>
+                              <span className={styles.sliderCount}>{currentImageIndex + 1} / {pdf.content_images_paths.length}</span>
+                            </div>
+                            <button
+                              className={styles.sliderArrow}
+                              onClick={() => setCurrentImageIndex(p => p === pdf.content_images_paths.length - 1 ? 0 : p + 1)}
+                              aria-label="Növbəti şəkil"
+                            >
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 )}
 
@@ -443,6 +392,7 @@ const PDFDetailPage = () => {
                     { l: 'Yüklənmə', v: !isFiziki ? (pdf.downloads || 0) : null },
                     { l: 'Ümumi nüsxə', v: isPhysical ? totalCopies : null },
                     { l: 'Mövcud nüsxə', v: isPhysical ? availableCopies : null },
+                    { l: 'Rəf №',     v: isPhysical ? (pdf.shelf_number || null) : null },
                     { l: 'Kitabxana', v: pdf.institution?.name },
                   ].filter(item => item.v != null && item.v !== '').map(({ l, v }) => (
                     <div key={l} className={styles.infoRow}>
@@ -458,36 +408,6 @@ const PDFDetailPage = () => {
       </main>
 
       {/* ── Rental modal ── */}
-      {rentalModal && (
-        <div className={styles.rentalOverlay} onClick={() => setRentalModal(false)}>
-          <div className={styles.rentalModal} onClick={e => e.stopPropagation()}>
-            <h3>Kitab Kirayəsi</h3>
-            <p className={styles.rentalBook}>{pdf.title}</p>
-            {pdf.institution?.name && (
-              <p className={styles.rentalInst}>📍 {pdf.institution.name}</p>
-            )}
-            <p className={styles.rentalLabel}>Kirayə müddəti seçin:</p>
-            <div className={styles.durationBtns}>
-              {[7, 14, 30].map(d => (
-                <button
-                  key={d}
-                  className={`${styles.durationBtn} ${rentalDuration === d ? styles.durationActive : ''}`}
-                  onClick={() => setRentalDuration(d)}
-                >
-                  {d} gün
-                </button>
-              ))}
-            </div>
-            <div className={styles.rentalActions}>
-              <button className={styles.rentalCancel} onClick={() => setRentalModal(false)}>Ləğv et</button>
-              <button className={styles.rentalConfirm} onClick={handleRent} disabled={rentalLoading}>
-                {rentalLoading ? <span className={styles.btnSpinnerSm} /> : 'Sorğu Göndər'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <Footer />
     </>
   );

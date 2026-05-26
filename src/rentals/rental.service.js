@@ -128,6 +128,43 @@ class RentalService {
     return await this._getRentalById(rentalId);
   }
 
+  async adminCreateRental({ pdf_id, user_id, end_date, notes, admin_id }) {
+    const pdf = await getOne('SELECT id, institution_id, quantity FROM pdfs WHERE id = ?', [pdf_id]);
+    if (!pdf) throw Object.assign(new Error('PDF tapılmadı'), { statusCode: 404 });
+    if (!pdf.institution_id) throw Object.assign(new Error('Bu kitab üçün müəssisə məlumatı yoxdur'), { statusCode: 400 });
+
+    const quantity = parseInt(pdf.quantity) || 1;
+    const activeRow = await getOne(
+      `SELECT COUNT(*) AS cnt FROM book_rentals WHERE pdf_id = ? AND status IN ('pending', 'approved')`,
+      [pdf_id]
+    );
+    const activeCnt = parseInt(activeRow?.cnt) || 0;
+    if (activeCnt >= quantity) {
+      throw Object.assign(
+        new Error(`Bu kitabın bütün nüsxələri hal-hazırda kirayədədir (${activeCnt}/${quantity})`),
+        { statusCode: 409 }
+      );
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const diffMs = new Date(end_date) - new Date(today);
+    const duration_days = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+
+    const rentalId = await insert('book_rentals', {
+      pdf_id,
+      user_id,
+      institution_id: pdf.institution_id,
+      duration_days,
+      status: 'approved',
+      start_date: today,
+      end_date,
+      reviewed_by: admin_id,
+      notes: notes || null,
+    });
+
+    return await this._getRentalById(rentalId);
+  }
+
   async assertCanManage(user, rentalId) {
     const { role, institutionId } = user;
     if (role >= 4) return;

@@ -18,13 +18,20 @@ const SIDEBAR_MIN = 200;
 const SIDEBAR_MAX = 700;
 const SIDEBAR_DEFAULT = 270;
 
+// Animation timings (ms)
+const EXIT_DURATION  = 210;
+const ENTER_DURATION = 260;
+
 function PdfReaderPage() {
   const { id } = useParams();
   useSessionTracker();
 
   const [pdf, setPdf] = useState(null);
   const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);   // logical (footer, bounds)
+  const [renderPage, setRenderPage] = useState(1);   // what <Page> actually renders
+  const [flipPhase, setFlipPhase] = useState("idle"); // "idle" | "exit" | "enter"
+  const [flipDir, setFlipDir]     = useState("next");
   const [pageWidth, setPageWidth] = useState(700);
   const [showToc, setShowToc] = useState(true);
   const [docError, setDocError] = useState(false);
@@ -32,10 +39,17 @@ function PdfReaderPage() {
   const [sidebarTab, setSidebarTab] = useState("toc");
   const [sidebarWidth, setSidebarWidth] = useState(SIDEBAR_DEFAULT);
 
-  const canvasRef = useRef(null);
-  const draggingRef = useRef(false);
-  const dragStartXRef = useRef(0);
-  const dragStartWidthRef = useRef(SIDEBAR_DEFAULT);
+  const canvasRef    = useRef(null);
+  const draggingRef  = useRef(false);
+  const dragStartXRef      = useRef(0);
+  const dragStartWidthRef  = useRef(SIDEBAR_DEFAULT);
+  const isFlipping   = useRef(false);
+  const pageNumberRef = useRef(1);
+  const numPagesRef   = useRef(null);
+
+  // Keep refs in sync so goToPage closure never goes stale
+  useEffect(() => { pageNumberRef.current = pageNumber; }, [pageNumber]);
+  useEffect(() => { numPagesRef.current = numPages; }, [numPages]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -60,22 +74,45 @@ function PdfReaderPage() {
     return () => ro.disconnect();
   }, [showToc, sidebarWidth]);
 
+  // Scroll to top when the rendered page actually changes
+  useEffect(() => {
+    if (canvasRef.current) canvasRef.current.scrollTop = 0;
+  }, [renderPage]);
+
+  // Two-phase page flip: exit (old page folds away) → enter (new page unfolds)
+  const goToPage = useCallback((target) => {
+    if (isFlipping.current) return;
+    const total = numPagesRef.current || 1;
+    const p = Math.min(Math.max(target, 1), total);
+    if (p === pageNumberRef.current) return;
+
+    const dir = p > pageNumberRef.current ? "next" : "prev";
+    isFlipping.current = true;
+    setFlipDir(dir);
+    setPageNumber(p);       // footer and bounds update immediately
+    setFlipPhase("exit");   // old page plays fold-away
+
+    setTimeout(() => {
+      setRenderPage(p);     // swap to new page
+      setFlipPhase("enter"); // new page plays unfold
+      setTimeout(() => {
+        setFlipPhase("idle");
+        isFlipping.current = false;
+      }, ENTER_DURATION);
+    }, EXIT_DURATION);
+  }, []);
+
   // Keyboard navigation
   useEffect(() => {
     const handler = (e) => {
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") setPageNumber((p) => Math.min(p + 1, numPages || 1));
-      if (e.key === "ArrowLeft"  || e.key === "ArrowUp")   setPageNumber((p) => Math.max(p - 1, 1));
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") goToPage(pageNumberRef.current + 1);
+      if (e.key === "ArrowLeft"  || e.key === "ArrowUp")   goToPage(pageNumberRef.current - 1);
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [numPages]);
+  }, [goToPage]);
 
-  // Scroll to top on page change
-  useEffect(() => {
-    if (canvasRef.current) canvasRef.current.scrollTop = 0;
-  }, [pageNumber]);
-
-  // Drag-to-resize
+  // Drag-to-resize sidebar
   const onDragStart = useCallback((e) => {
     e.preventDefault();
     draggingRef.current = true;
@@ -115,10 +152,10 @@ function PdfReaderPage() {
       token ? { headers: { Authorization: `Bearer ${token}` } } : {}
     ).catch(() => {});
   }, [id]);
-  const onDocLoadError  = useCallback(() => setDocError(true), []);
+  const onDocLoadError = useCallback(() => setDocError(true), []);
 
-  const prev = () => setPageNumber((p) => Math.max(p - 1, 1));
-  const next = () => setPageNumber((p) => Math.min(p + 1, numPages || 1));
+  const prev = () => goToPage(pageNumberRef.current - 1);
+  const next = () => goToPage(pageNumberRef.current + 1);
 
   const hasForeword = !!(pdf?.foreword?.trim());
   const hasToc      = !!(pdf?.table_of_contents?.trim());
@@ -143,6 +180,13 @@ function PdfReaderPage() {
       </>
     );
   };
+
+  // Resolve which CSS class to apply to the page wrapper
+  const pageWrapClass = (() => {
+    if (flipPhase === "exit")  return flipDir === "next" ? styles.flipExitNext  : styles.flipExitPrev;
+    if (flipPhase === "enter") return flipDir === "next" ? styles.flipEnterNext : styles.flipEnterPrev;
+    return "";
+  })();
 
   return (
     <div className={styles.reader}>
@@ -191,13 +235,15 @@ function PdfReaderPage() {
                 </div>
               }
             >
-              <Page
-                pageNumber={pageNumber}
-                width={pageWidth}
-                className={styles.pdfPage}
-                renderTextLayer={true}
-                renderAnnotationLayer={false}
-              />
+              <div className={`${styles.pageWrap} ${pageWrapClass}`}>
+                <Page
+                  pageNumber={renderPage}
+                  width={pageWidth}
+                  className={styles.pdfPage}
+                  renderTextLayer={true}
+                  renderAnnotationLayer={false}
+                />
+              </div>
             </Document>
           ) : (
             <div className={styles.loaderWrap}>
@@ -220,7 +266,6 @@ function PdfReaderPage() {
             {/* Drag handle */}
             <div className={styles.dragHandle} onMouseDown={onDragStart} title="Sürükləyərək genişləndir" />
 
-            {/* Tabs — hər ikisi varsa */}
             {hasForeword && hasToc ? (
               <div className={styles.sidebarTabs}>
                 <button
@@ -241,7 +286,6 @@ function PdfReaderPage() {
               </div>
             )}
 
-            {/* Mündəricat panel */}
             {(sidebarTab === "toc" || !hasForeword) && (
               <>
                 {tocLines.length > 0 && (
@@ -274,7 +318,6 @@ function PdfReaderPage() {
               </>
             )}
 
-            {/* Ön söz panel */}
             {(sidebarTab === "foreword" || (!hasToc && hasForeword)) && (
               <div className={styles.forewordContent}>
                 {pdf.foreword}

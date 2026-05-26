@@ -6,8 +6,8 @@ import { displayCategoryName } from '../../Constants/categoryDisplay';
 export default function BookCard({ pdf, view = 'grid' }) {
   const navigate = useNavigate();
   const typeLower = (pdf?.pdf_type?.name || '').toLowerCase();
-  const isHerIkisi = typeLower.includes('ikisi');
-  const isFiziki = typeLower.includes('fiziki') && !isHerIkisi;
+  const isHerIkisi = typeLower.includes('çap') && typeLower.includes('elektron');
+  const isFiziki = typeLower.includes('çap') && !isHerIkisi;
 
   const year = pdf?.pdfDate || pdf?.created_at
     ? new Date(pdf.pdfDate || pdf.created_at).getFullYear()

@@ -35,6 +35,7 @@ function AddBookPage() {
     publication_year: "",
     publisher_location: "",
     order_number: "",
+    shelf_number: "",
     price: "",
     allow_download: "1",
     language: "az",
@@ -58,16 +59,16 @@ function AddBookPage() {
 
   const selectedType = pdfsTypes.find(t => String(t.id) === String(formData.pdf_type_id));
   const typeName = (selectedType?.name || '').toLowerCase();
-  const isBookElektron = typeName.includes('elektron') && !typeName.includes('ikisi');
-  const isBookFiziki   = typeName.includes('fiziki')   && !typeName.includes('ikisi');
-  const isBookHerIkisi = typeName.includes('ikisi');
+  const isBookHerIkisi = typeName.includes('çap') && typeName.includes('elektron');
+  const isBookElektron = typeName.includes('elektron') && !isBookHerIkisi;
+  const isBookFiziki   = typeName.includes('çap') && !isBookHerIkisi;
   const isBookCategory = isBookElektron || isBookFiziki || isBookHerIkisi;
   const visibleTypes = (adminRole === 2 && adminData?.workerType)
     ? pdfsTypes.filter(t => {
         const n = (t.name || '').toLowerCase();
-        if (n.includes('ikisi')) return false;
+        if (n.includes('çap') && n.includes('elektron')) return false;
         if (adminData.workerType === 'elektron') return n.includes('elektron');
-        if (adminData.workerType === 'fiziki') return n.includes('fiziki');
+        if (adminData.workerType === 'fiziki') return n.includes('çap');
         return true;
       })
     : pdfsTypes;
@@ -81,16 +82,16 @@ function AddBookPage() {
       setLinkedDirection(null);
       const selectedT = pdfsTypes.find(t => String(t.id) === String(e.target.value));
       const newTypeName = (selectedT?.name || '').toLowerCase();
-      const needsInst = newTypeName.includes('fiziki') || newTypeName.includes('ikisi');
+      const newIsBookHerIkisi = newTypeName.includes('çap') && newTypeName.includes('elektron');
+      const needsInst = newTypeName.includes('çap');
       setFormData(prev => ({
         ...prev,
         pdf_type_id: e.target.value,
         institution_id: needsInst && adminInstId ? String(adminInstId) : prev.institution_id,
       }));
       const q = formData.title.trim();
-      const newIsBookFiziki   = newTypeName.includes('fiziki') && !newTypeName.includes('ikisi');
-      const newIsBookElektron = newTypeName.includes('elektron') && !newTypeName.includes('ikisi');
-      const newIsBookHerIkisi = newTypeName.includes('ikisi');
+      const newIsBookFiziki   = newTypeName.includes('çap') && !newIsBookHerIkisi;
+      const newIsBookElektron = newTypeName.includes('elektron') && !newIsBookHerIkisi;
       if (q.length >= 2 && (newIsBookFiziki || newIsBookElektron || newIsBookHerIkisi)) {
         clearTimeout(debounceRef.current);
         clearTimeout(warnDebounceRef.current);
@@ -151,7 +152,7 @@ function AddBookPage() {
     try {
       const elektronType = pdfsTypes.find(t => {
         const n = (t.name || '').toLowerCase();
-        return n.includes('elektron') && !n.includes('ikisi');
+        return n.includes('elektron') && !n.includes('çap');
       });
       if (!elektronType) return;
       const params = { search: q, limit: 5, status: 'approved', pdfTypeId: elektronType.id };
@@ -183,7 +184,7 @@ function AddBookPage() {
       });
       const books = (res.data.data.pdfs || []).filter(b => {
         const n = (b.pdf_type?.name || '').toLowerCase();
-        return n.includes('fiziki') || n.includes('ikisi');
+        return n.includes('çap');
       });
       setWarnSuggestions(books);
     } catch {
@@ -230,15 +231,15 @@ function AddBookPage() {
 
   const selectSuggestion = (book) => {
     const bookTypeName = (book.pdf_type?.name || '').toLowerCase();
-    const herIkisiType = pdfsTypes.find(t => (t.name || '').toLowerCase().includes('ikisi'));
+    const herIkisiType = pdfsTypes.find(t => { const n = (t.name || '').toLowerCase(); return n.includes('çap') && n.includes('elektron'); });
     let direction, newPdfTypeId, newQuantity;
 
     if (isBookHerIkisi) {
-      if (bookTypeName.includes('ikisi')) {
+      if (bookTypeName.includes('çap') && bookTypeName.includes('elektron')) {
         direction = 'qty';
         newPdfTypeId = String(formData.pdf_type_id);
         newQuantity = "1";
-      } else if (bookTypeName.includes('fiziki')) {
+      } else if (bookTypeName.includes('çap')) {
         direction = 'ikisi-fiziki';
         newPdfTypeId = herIkisiType ? String(herIkisiType.id) : String(formData.pdf_type_id);
         newQuantity = String((book.quantity || 1) + 1);
@@ -247,7 +248,7 @@ function AddBookPage() {
         newPdfTypeId = herIkisiType ? String(herIkisiType.id) : String(formData.pdf_type_id);
         newQuantity = "1";
       }
-    } else if (isBookFiziki && bookTypeName.includes('fiziki')) {
+    } else if (isBookFiziki && bookTypeName.includes('çap')) {
       direction = 'qty';
       newPdfTypeId = String(formData.pdf_type_id);
       newQuantity = "1";
@@ -322,6 +323,8 @@ function AddBookPage() {
     data.append("allow_download", isBookFiziki ? "0" : formData.allow_download);
     if ((isBookFiziki || isBookHerIkisi) && formData.institution_id)
       data.append("institution_id", formData.institution_id);
+    if ((isBookFiziki || isBookHerIkisi) && formData.shelf_number.trim())
+      data.append("shelf_number", formData.shelf_number.trim());
     if (formData.description.trim()) data.append("description", formData.description.trim());
     if (formData.table_of_contents.trim()) data.append("table_of_contents", formData.table_of_contents.trim());
     if (formData.author.trim()) data.append("author", formData.author.trim());
@@ -415,7 +418,7 @@ function AddBookPage() {
         setPdfsTypes(types);
         const defaultType = types.find(t => {
           const n = (t.name || '').toLowerCase();
-          return n.includes('elektron') && !n.includes('ikisi');
+          return n.includes('elektron') && !n.includes('çap');
         });
         if (defaultType) {
           setFormData(prev => ({ ...prev, pdf_type_id: String(defaultType.id) }));
@@ -589,6 +592,20 @@ function AddBookPage() {
               </select>
             </div>
           </div>
+
+          {/* Rəf № — fiziki/hər ikisi kateqoriyasında */}
+          {(isBookFiziki || isBookHerIkisi) && (
+            <div className={styles.formGroup} style={{ maxWidth: 260 }}>
+              <label>Rəf № <span className={styles.fieldHint}>(istəyə bağlı)</span></label>
+              <input
+                type="text"
+                name="shelf_number"
+                value={formData.shelf_number}
+                onChange={handleChange}
+                placeholder="Məs: A-12"
+              />
+            </div>
+          )}
 
           {/* Müəssisə — fiziki/hər ikisi kateqoriyasında */}
           {(isBookFiziki || isBookHerIkisi) && (

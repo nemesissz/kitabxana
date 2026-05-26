@@ -195,42 +195,6 @@
   @media (max-width: 480px) { display: none; }
 }
 
-/* ── Theme toggle ── */
-.themeToggle {
-  display: flex;
-  gap: 2px;
-  background: var(--paper-2);
-  padding: 3px;
-  border-radius: var(--r-pill);
-  flex-shrink: 0;
-
-  @media (max-width: 600px) { display: none; }
-}
-
-.themeBtn {
-  padding: 6px 14px;
-  border: none;
-  border-radius: var(--r-pill);
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-  background: transparent;
-  cursor: pointer;
-  transition: background .15s, color .15s, box-shadow .15s;
-  white-space: nowrap;
-
-  &:hover { color: var(--ink); }
-}
-
-.themeBtnActive {
-  background: var(--navy);
-  color: #fff;
-  box-shadow: var(--shadow-sm);
-
-  &:hover { color: #fff; }
-}
-
 /* ── Mobile hamburger ── */
 .hamburger {
   display: none;

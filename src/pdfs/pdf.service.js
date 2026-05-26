@@ -70,9 +70,9 @@ async function checkRdActivityTable() {
 function workerCanEditPdfType(workerType, pdfTypeName) {
   if (!workerType) return true;
   const name = (pdfTypeName || '').toLowerCase();
-  if (name.includes('ikisi')) return false;
+  if (name.includes('çap') && name.includes('elektron')) return false;
   if (workerType === 'elektron') return name.includes('elektron');
-  if (workerType === 'fiziki') return name.includes('fiziki');
+  if (workerType === 'fiziki') return name.includes('çap');
   return false;
 }
 
@@ -212,13 +212,22 @@ class PdfService {
     const countResult = await getOne(countQuery, queryParams);
     const total = countResult.total;
 
+    const hasReads = await checkReadsColumn();
+
     const downloadsResult = await getOne(
       `SELECT COALESCE(SUM(downloads), 0) AS totalDownloads FROM pdfs p LEFT JOIN languages l ON p.language_id = l.id ${whereClause}`,
       queryParams
     );
 
+    const readsResult = hasReads
+      ? await getOne(
+          `SELECT COALESCE(SUM(\`reads\`), 0) AS totalReads FROM pdfs p LEFT JOIN languages l ON p.language_id = l.id ${whereClause}`,
+          queryParams
+        )
+      : { totalReads: 0 };
+
     const hasInstitutionId = await checkInstitutionIdColumn();
-    const hasReads = await checkReadsColumn();
+    const hasRentals = await checkRentalsTable();
 
     let orderBy;
     if (sortBy === 'popular' || sortBy === 'downloads') {
@@ -238,10 +247,12 @@ class PdfService {
         p.price, p.downloads,
         ${hasReads ? 'p.`reads`,' : '0 AS reads,'}
         p.category_id, p.pdf_type_id,
-        p.order_number, p.author, p.isbn, p.status,
+        p.order_number, p.shelf_number, p.author, p.isbn, p.status,
         p.publication_year, p.publisher_location, p.allow_download,
+        p.foreword, p.table_of_contents,
         p.uploaded_by, p.created_at, p.updated_at,
         p.quantity,
+        ${hasRentals ? "(SELECT COUNT(*) FROM book_rentals WHERE pdf_id = p.id AND status IN ('pending','approved')) AS active_rentals_count," : '0 AS active_rentals_count,'}
         ${hasInstitutionId ? 'p.institution_id, inst2.name AS institution_name,' : ''}
         c.name as category_name,
         pt.name as pdf_type_name,
@@ -266,7 +277,8 @@ class PdfService {
         per_page: validLimit,
         total: total,
         total_pages: Math.ceil(total / validLimit),
-        totalDownloads: Number(downloadsResult.totalDownloads) || 0
+        totalDownloads: Number(downloadsResult.totalDownloads) || 0,
+        totalReads: Number(readsResult.totalReads) || 0
       },
       filters: {
         language,
@@ -296,7 +308,7 @@ class PdfService {
         l.code AS language, l.name AS language_name, l.flag AS language_flag,
         p.file_path, p.cover_image_path AS image_path, p.cover_image_path,
         p.content_images_paths, p.price, p.downloads, p.category_id,
-        p.author, p.isbn, p.order_number, p.publication_year,
+        p.author, p.isbn, p.order_number, p.shelf_number, p.publication_year,
         p.publisher_location, p.allow_download, p.foreword,
         p.uploaded_by, p.status, p.created_at, p.updated_at,
         p.linked_pdf_id, p.quantity,
@@ -411,7 +423,7 @@ class PdfService {
     // Book-specific and other optional text fields
     const optionalFields = [
       'author', 'isbn', 'publication_year', 'publisher_location',
-      'table_of_contents', 'order_number', 'allow_download',
+      'table_of_contents', 'order_number', 'shelf_number', 'allow_download',
       'uploaded_by', 'foreword', 'institution_id', 'quantity', 'pdf_type_id',
     ];
     for (const field of optionalFields) {
@@ -650,7 +662,7 @@ class PdfService {
   }
 
   async submitPdf(data, file, coverImage = null) {
-    const { title, description, table_of_contents, order_number, author, isbn, language, category_id,
+    const { title, description, table_of_contents, order_number, shelf_number, author, isbn, language, category_id,
             publication_year, publisher_location, price, allow_download, uploaded_by, foreword, institution_id,
             linked_pdf_id, quantity, pdf_type_id } = data;
 
@@ -717,6 +729,7 @@ class PdfService {
     if (description && description.trim()) pdfData.description = description.trim();
     if (table_of_contents && table_of_contents.trim()) pdfData.table_of_contents = table_of_contents.trim();
     if (order_number && order_number.trim()) pdfData.order_number = order_number.trim();
+    if (shelf_number && shelf_number.trim()) pdfData.shelf_number = shelf_number.trim();
     if (author && author.trim()) pdfData.author = author.trim();
     if (isbn && isbn.trim()) pdfData.isbn = isbn.trim();
     if (publication_year) pdfData.publication_year = parseInt(publication_year) || null;
@@ -788,8 +801,8 @@ class PdfService {
 
       // Hər-ikisi çevirməsi — əlaqəli kitabın tipinə görə davranış
       const linkedTypeName = (linkedBook.pdf_type_name || '').toLowerCase();
-      const linkedIsHerIkisi = linkedTypeName.includes('ikisi');
-      const linkedIsFiziki = linkedTypeName.includes('fiziki') && !linkedIsHerIkisi;
+      const linkedIsHerIkisi = linkedTypeName.includes('çap') && linkedTypeName.includes('elektron');
+      const linkedIsFiziki = linkedTypeName.includes('çap') && !linkedIsHerIkisi;
 
       if (linkedIsHerIkisi) {
         // Əlaqəli kitab artıq hər-ikisidir → yalnız say artırma
@@ -821,7 +834,7 @@ class PdfService {
           actorEmail: adminEmail,
           targetType: 'pdf',
           targetId: existing.linked_pdf_id,
-          details: { title: linkedBook.title, pdf_type_name: 'kitab-hər ikisi' },
+          details: { title: linkedBook.title, pdf_type_name: 'elektron və çap' },
         });
         return await this.getPdfById(existing.linked_pdf_id);
       }
@@ -838,7 +851,7 @@ class PdfService {
           actorEmail: adminEmail,
           targetType: 'pdf',
           targetId: existing.linked_pdf_id,
-          details: { title: linkedBook.title, pdf_type_name: 'kitab-hər ikisi' },
+          details: { title: linkedBook.title, pdf_type_name: 'elektron və çap' },
         });
         return await this.getPdfById(existing.linked_pdf_id);
       }

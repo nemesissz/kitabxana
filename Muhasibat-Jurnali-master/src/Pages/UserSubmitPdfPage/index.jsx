@@ -33,6 +33,7 @@ function UserSubmitPdfPage() {
     description: "",
     table_of_contents: "",
     order_number: "",
+    shelf_number: "",
     author: "",
     isbn: "",
     publication_year: "",
@@ -105,7 +106,7 @@ function UserSubmitPdfPage() {
         setPdfsTypes(types);
         const defaultType = types.find(t => {
           const n = (t.name || '').toLowerCase();
-          return n.includes('elektron') && !n.includes('ikisi');
+          return n.includes('elektron') && !n.includes('çap');
         });
         if (defaultType) {
           setFormData(prev => ({ ...prev, pdf_type_id: String(defaultType.id) }));
@@ -123,8 +124,8 @@ function UserSubmitPdfPage() {
 
   const selectedType = pdfsTypes.find(t => String(t.id) === String(formData.pdf_type_id));
   const typeName = (selectedType?.name || '').toLowerCase();
-  const isBookHerIkisi = typeName.includes('ikisi');
-  const isBookFiziki   = typeName.includes('fiziki')   && !isBookHerIkisi;
+  const isBookHerIkisi = typeName.includes('çap') && typeName.includes('elektron');
+  const isBookFiziki   = typeName.includes('çap') && !isBookHerIkisi;
   const isBookElektron = typeName.includes('elektron') && !isBookHerIkisi;
   const isBookCategory = isBookElektron || isBookFiziki || isBookHerIkisi;
   const selectedCatName = categories.find((c) => String(c.id) === String(formData.category_id))?.name || "";
@@ -133,9 +134,9 @@ function UserSubmitPdfPage() {
   const visibleTypes = (userRole === 2 && wt)
     ? pdfsTypes.filter(t => {
         const n = (t.name || '').toLowerCase();
-        if (n.includes('ikisi')) return false;
+        if (n.includes('çap') && n.includes('elektron')) return false;
         if (wt === 'elektron') return n.includes('elektron');
-        if (wt === 'fiziki') return n.includes('fiziki');
+        if (wt === 'fiziki') return n.includes('çap');
         return true;
       })
     : pdfsTypes;
@@ -174,7 +175,8 @@ function UserSubmitPdfPage() {
       setWarnSelected(false);
       const selectedT = pdfsTypes.find(t => String(t.id) === String(e.target.value));
       const newTypeName = (selectedT?.name || '').toLowerCase();
-      const needsInst = newTypeName.includes('fiziki') || newTypeName.includes('ikisi');
+      const newIsBookHerIkisi = newTypeName.includes('çap') && newTypeName.includes('elektron');
+      const needsInst = newTypeName.includes('çap');
       const userInstId = store.user.data?.institutionId || null;
       setFormData((prev) => ({
         ...prev,
@@ -182,9 +184,8 @@ function UserSubmitPdfPage() {
         institution_id: needsInst && userInstId ? String(userInstId) : prev.institution_id,
       }));
       const q = formData.title.trim();
-      const newIsBookFiziki   = newTypeName.includes('fiziki') && !newTypeName.includes('ikisi');
-      const newIsBookElektron = newTypeName.includes('elektron') && !newTypeName.includes('ikisi');
-      const newIsBookHerIkisi = newTypeName.includes('ikisi');
+      const newIsBookFiziki   = newTypeName.includes('çap') && !newIsBookHerIkisi;
+      const newIsBookElektron = newTypeName.includes('elektron') && !newIsBookHerIkisi;
       if (q.length >= 2 && (newIsBookFiziki || newIsBookElektron || newIsBookHerIkisi)) {
         clearTimeout(debounceRef.current);
         clearTimeout(warnDebounceRef.current);
@@ -250,7 +251,7 @@ function UserSubmitPdfPage() {
     try {
       const elektronType = pdfsTypes.find(t => {
         const n = (t.name || '').toLowerCase();
-        return n.includes('elektron') && !n.includes('ikisi');
+        return n.includes('elektron') && !n.includes('çap');
       });
       if (!elektronType) return;
       const params = { search: q, limit: 5, status: 'approved', pdfTypeId: elektronType.id };
@@ -280,7 +281,7 @@ function UserSubmitPdfPage() {
       });
       const books = (res.data.data.pdfs || []).filter(b => {
         const n = (b.pdf_type?.name || '').toLowerCase();
-        return n.includes('fiziki') || n.includes('ikisi');
+        return n.includes('çap');
       });
       setWarnSuggestions(books);
     } catch {
@@ -327,15 +328,15 @@ function UserSubmitPdfPage() {
 
   const selectSuggestion = (book) => {
     const bookTypeName = (book.pdf_type?.name || '').toLowerCase();
-    const herIkisiType = pdfsTypes.find(t => (t.name || '').toLowerCase().includes('ikisi'));
+    const herIkisiType = pdfsTypes.find(t => { const n = (t.name || '').toLowerCase(); return n.includes('çap') && n.includes('elektron'); });
     let direction, newPdfTypeId, newQuantity;
 
     if (isBookHerIkisi) {
-      if (bookTypeName.includes('ikisi')) {
+      if (bookTypeName.includes('çap') && bookTypeName.includes('elektron')) {
         direction = 'qty';
         newPdfTypeId = String(formData.pdf_type_id);
         newQuantity = "1";
-      } else if (bookTypeName.includes('fiziki')) {
+      } else if (bookTypeName.includes('çap')) {
         direction = 'ikisi-fiziki';
         newPdfTypeId = herIkisiType ? String(herIkisiType.id) : String(formData.pdf_type_id);
         newQuantity = "1";
@@ -344,7 +345,7 @@ function UserSubmitPdfPage() {
         newPdfTypeId = herIkisiType ? String(herIkisiType.id) : String(formData.pdf_type_id);
         newQuantity = "1";
       }
-    } else if (isBookFiziki && bookTypeName.includes('fiziki')) {
+    } else if (isBookFiziki && bookTypeName.includes('çap')) {
       direction = 'qty';
       newPdfTypeId = String(formData.pdf_type_id);
       newQuantity = "1";
@@ -448,6 +449,7 @@ function UserSubmitPdfPage() {
     data.append("category_id", formData.category_id);
     data.append("allow_download", isBookFiziki ? "0" : formData.allow_download);
     if ((isBookFiziki || isBookHerIkisi) && formData.institution_id) data.append("institution_id", formData.institution_id);
+    if ((isBookFiziki || isBookHerIkisi) && formData.shelf_number.trim()) data.append("shelf_number", formData.shelf_number.trim());
     if (formData.description.trim()) data.append("description", formData.description.trim());
     if (formData.table_of_contents.trim()) data.append("table_of_contents", formData.table_of_contents.trim());
     if (formData.author.trim()) data.append("author", formData.author.trim());
@@ -782,6 +784,20 @@ function UserSubmitPdfPage() {
                     )}
 
                     {(isBookFiziki || isBookHerIkisi) && (
+                      <div className={styles.field} style={{ maxWidth: 260 }}>
+                        <label className={styles.label}>Rəf № <span className={styles.hint}>(istəyə bağlı)</span></label>
+                        <input
+                          className="mmu-input"
+                          name="shelf_number"
+                          type="text"
+                          placeholder="Məs: A-12"
+                          value={formData.shelf_number}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    )}
+
+                    {(isBookFiziki || isBookHerIkisi) && (
                       <div className={styles.field}>
                         <label className={styles.label}>
                           Müəssisə (kitabın saxlanıldığı yer) <span className={styles.req}>*</span>
@@ -1047,6 +1063,7 @@ function UserSubmitPdfPage() {
                         { l: "Kateqoriya",   v: categories.find(c => String(c.id) === String(formData.category_id))?.name },
                         { l: "Dil",          v: formData.language },
                         { l: "Müəllif",      v: formData.author },
+                        { l: "Rəf №",        v: formData.shelf_number },
                         { l: "Nəşr ili",     v: formData.publication_year },
                         { l: "ISBN",         v: formData.isbn },
                         { l: "Qiymət",       v: formData.price ? `${formData.price} AZN` : "Pulsuz" },

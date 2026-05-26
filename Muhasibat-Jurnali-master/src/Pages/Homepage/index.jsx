@@ -1,14 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState } from "react";
 import dataContext from "../../Contexts/GlobalState";
 import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
-import Footer from "../../Layouts/Footer";
 import BookCover from "../../Components/BookCover";
-import FeaturedShelf from "../../Components/FeaturedShelf";
-import { displayCategoryName } from "../../Constants/categoryDisplay";
-
 const COLLAGE_TILES = [
   { x: "6%",  y: "6%",  w: 130, rot: -6, delay: 0   },
   { x: "31%", y: "2%",  w: 160, rot: 4,  delay: 0.4 },
@@ -23,11 +19,9 @@ const COLLAGE_TILES = [
 function HomePage() {
   const navigator = useNavigate();
   const store = useContext(dataContext);
-  const [categories, setCategories] = useState([]);
-  const [stats, setStats] = useState({ pdfs: 0, categories: 0, downloads: 0, announcements: 0 });
   const [collagePdfs, setCollagePdfs] = useState([]);
-  const [topPdfs, setTopPdfs] = useState([]);
-  const [recentPdfs, setRecentPdfs] = useState([]);
+  const [typeStats, setTypeStats] = useState([]);
+  const [globalStats, setGlobalStats] = useState({ downloads: 0 });
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -54,50 +48,32 @@ function HomePage() {
     const token = localStorage.getItem("token");
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    // Stats (total PDFs, downloads) — popular sorğusundan
-    axios
-      .get(Base_Url_Server + "pdfs?limit=1&sortBy=popular&status=approved", { headers })
-      .then((res) => {
-        setStats((s) => ({
-          ...s,
-          pdfs: res.data.data.pagination?.total || 0,
-          downloads: res.data.data.pagination?.totalDownloads || 0,
-        }));
-      })
-      .catch(() => {});
-
     // Collage PDFs — superadmin tərəfindən seçilmiş və ya avtomatik popular
     axios
       .get(Base_Url_Server + "settings/homepage-collage", { headers })
       .then((res) => setCollagePdfs(res.data.data.pdfs || []))
       .catch(() => {});
 
-    // Top PDFs for shelf
-    axios
-      .get(Base_Url_Server + "pdfs?limit=6&sortBy=popular&status=approved", { headers })
-      .then((res) => setTopPdfs(res.data.data.pdfs || []))
-      .catch(() => {});
-
-    // Recent PDFs for shelf
-    axios
-      .get(Base_Url_Server + "pdfs?limit=6&sortBy=recent&status=approved", { headers })
-      .then((res) => setRecentPdfs(res.data.data.pdfs || []))
-      .catch(() => {});
-
-    // Categories
-    axios
-      .get(Base_Url_Server + "categories/pdfs")
-      .then((res) => {
-        const cats = res.data.data.categories || [];
-        setCategories(cats);
-        setStats((s) => ({ ...s, categories: cats.length }));
+    // Ümumi statistika (baxış + yükləmə)
+    axios.get(Base_Url_Server + "pdfs?status=approved&limit=1")
+      .then(r => {
+        const p = r.data.data.pagination || {};
+        setGlobalStats({ downloads: p.totalDownloads || 0 });
       })
       .catch(() => {});
 
-    // Announcements count
-    axios
-      .get(Base_Url_Server + "announcements")
-      .then((res) => setStats((s) => ({ ...s, announcements: (res.data.data.announcements || []).length })))
+    // PDF tipi statistikası
+    axios.get(Base_Url_Server + "pdfs-types")
+      .then((res) => {
+        const types = res.data.data.types || [];
+        Promise.all(
+          types.map(t =>
+            axios.get(Base_Url_Server + `pdfs?pdfTypeId=${t.id}&status=approved&limit=1`)
+              .then(r => ({ typeId: t.id, label: t.name, count: r.data.data.pagination?.total || 0 }))
+              .catch(() => ({ typeId: t.id, label: t.name, count: 0 }))
+          )
+        ).then(stats => setTypeStats(stats.filter(s => s.count > 0)));
+      })
       .catch(() => {});
   }, []);
 
@@ -115,14 +91,12 @@ function HomePage() {
 
             {/* Left */}
             <div className={styles.heroLeft}>
-              <span className="mmu-eyebrow">MMU-ya xoş gəldiniz</span>
               <h1 className={styles.heroTitle}>
                 Biliklərə<br />
                 <span className={styles.heroAccent}>açılan qapınız.</span>
               </h1>
               <p className={styles.heroDesc}>
-                Minlərlə PDF, jurnal və rəqəmsal akademik resurs — bir yerdə.{" "}
-                <strong>Universitet daxilində pulsuz.</strong>
+                Minlərlə PDF, jurnal və rəqəmsal akademik resurs — bir yerdə.
               </p>
 
               {/* Search */}
@@ -143,35 +117,34 @@ function HomePage() {
                 </button>
               </form>
 
-              {/* Category tags */}
-              {categories.length > 0 && (
-                <div className={styles.tagRow}>
-                  <span style={{ fontSize: 13, color: "var(--muted)" }}>Populyar:</span>
-                  {categories.slice(0, 5).map((cat) => (
-                    <button
-                      key={cat.id}
-                      className="mmu-tag"
-                      onClick={() => navigator(`/library?category=${cat.id}`)}
-                    >
-                      {displayCategoryName(cat.name)}
-                    </button>
+              {/* Statistika */}
+              {(typeStats.length > 0 || globalStats.downloads > 0) && (
+                <div className={styles.inlineStats}>
+                  {typeStats.map((s, i) => (
+                    <>
+                      <div
+                        key={s.typeId}
+                        className={styles.inlineStat}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => navigator(`/library/all?pdfTypeId=${s.typeId}`)}
+                      >
+                        <div className={styles.inlineStatN}>{s.count.toLocaleString()}</div>
+                        <div className={styles.inlineStatL}>{s.label}</div>
+                      </div>
+                      {i === typeStats.length - 1 && globalStats.downloads > 0 && (
+                        <div className={styles.inlineStatDivider} />
+                      )}
+                    </>
                   ))}
+                  {globalStats.downloads > 0 && (
+                    <div className={styles.inlineStat}>
+                      <div className={styles.inlineStatN}>{globalStats.downloads.toLocaleString()}</div>
+                      <div className={styles.inlineStatL}>Ümumi yükləmə</div>
+                    </div>
+                  )}
                 </div>
               )}
 
-              {/* Inline stats */}
-              <div className={styles.inlineStats}>
-                {[
-                  { n: stats.pdfs ? `${stats.pdfs}+` : "—", l: "PDF resurs" },
-                  { n: stats.categories || "—", l: "Kateqoriya" },
-                  { n: stats.downloads ? `${stats.downloads}+` : "—", l: "Yüklənmə" },
-                ].map((s, i) => (
-                  <div key={i} className={styles.inlineStat}>
-                    <div className={styles.inlineStatN}>{s.n}</div>
-                    <div className={styles.inlineStatL}>{s.l}</div>
-                  </div>
-                ))}
-              </div>
             </div>
 
             {/* Right — book collage */}
@@ -210,106 +183,13 @@ function HomePage() {
                 <circle cx="200" cy="200" r="194" fill="none" stroke="var(--navy)" strokeWidth="1" strokeDasharray="2 6" opacity="0.15" />
               </svg>
 
-              {/* Floating stat card */}
-              {collagePdfs[0] && (
-                <div className={`${styles.floatCard} mmu-card`}>
-                  <div className={styles.floatCover}>
-                    <BookCover pdf={collagePdfs[0]} />
-                  </div>
-                  <div>
-                    <div style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600 }}>Ən populyar</div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: "var(--ink)", marginTop: 2, maxWidth: 120, lineHeight: 1.3 }}>
-                      {collagePdfs[0].title}
-                    </div>
-                    <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>
-                      {(() => {
-                        const p = collagePdfs[0];
-                        const cat = (p.pdf_type?.name || p.category_name || p.category?.name || "").toLowerCase();
-                        const dl  = p.downloads || 0;
-                        const rd  = p.reads || 0;
-                        const rnt = p.rentals || 0;
-                        const isFiziki   = cat.includes("fiziki") && !cat.includes("ikisi");
-                        const isHerIkisi = cat.includes("ikisi");
-                        if (isFiziki)   return `📚 ${rnt} kirayə`;
-                        if (isHerIkisi) return `↓ ${dl} · 👁 ${rd} · 📚 ${rnt}`;
-                        return `↓ ${dl} · 👁 ${rd}`;
-                      })()}
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
           </div>
         </section>
 
-        {/* ── Stat band ── */}
-        <section className={styles.statBand}>
-          <div className="mmu-container">
-            <div className={styles.statGrid}>
-              {[
-                { n: stats.pdfs, l: "PDF resurs", icon: "📚" },
-                { n: stats.categories, l: "Kateqoriya", icon: "🗂" },
-                { n: stats.downloads, l: "Ümumi yüklənmə", icon: "⬇️" },
-                { n: stats.announcements, l: "Aktiv elan", icon: "📢" },
-              ].map((s, i) => (
-                <div key={i} className={styles.statCard}>
-                  <span className={styles.statIcon}>{s.icon}</span>
-                  <div className={styles.statN}>{s.n?.toLocaleString?.() ?? s.n}</div>
-                  <div className={styles.statL}>{s.l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Featured shelves ── */}
-        <FeaturedShelf
-          title="Ən çox yüklənənlər"
-          subtitle="Bu ay icma tərəfindən ən populyar olan resurslar."
-          eyebrow="Trend"
-          icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>}
-          pdfs={topPdfs}
-          viewAllPath="/library/all"
-        />
-
-        <FeaturedShelf
-          title="Son əlavə olunanlar"
-          subtitle="Kitabxana fonduna yenicə əlavə olunmuş PDF və mənbələr."
-          eyebrow="Yeniliklər"
-          icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>}
-          pdfs={recentPdfs}
-          viewAllPath="/library/all"
-        />
-
-        {/* ── Category band ── */}
-        {categories.length > 0 && (
-          <section className={styles.catBand}>
-            <div className="mmu-container">
-              <div className="mmu-section-head">
-                <div>
-                  <span className="mmu-eyebrow">Kateqoriyalar</span>
-                  <h2 style={{ marginTop: 10 }}>Resurs fondunu kəşf edin</h2>
-                </div>
-              </div>
-              <div className={styles.catGrid}>
-                {categories.map((cat, i) => (
-                  <button
-                    key={cat.id}
-                    className={styles.catCard}
-                    onClick={() => navigator(`/library?category=${cat.id}`)}
-                  >
-                    <span className={styles.catLabel}>{displayCategoryName(cat.name)}</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
 
       </main>
-      <Footer />
     </>
   );
 }

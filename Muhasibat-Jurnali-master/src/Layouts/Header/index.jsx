@@ -33,14 +33,12 @@ function Header() {
   const [categories, setCategories] = useState([]);
   const [showLibraryDropdown, setShowLibraryDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [variant, setVariant] = useState(() => localStorage.getItem("mmu-variant") || "editorial");
   const libTimer = useRef(null);
   const userTimer = useRef(null);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-variant", variant);
-    localStorage.setItem("mmu-variant", variant);
-  }, [variant]);
+    document.documentElement.setAttribute("data-variant", "editorial");
+  }, []);
 
   useEffect(() => {
     axios
@@ -156,22 +154,6 @@ function Header() {
               Admin
             </button>
           )}
-        </div>
-
-        {/* ── Variant toggle ── */}
-        <div className={styles.themeToggle}>
-          <button
-            className={`${styles.themeBtn} ${variant === "editorial" ? styles.themeBtnActive : ""}`}
-            onClick={() => setVariant("editorial")}
-          >
-            Editorial
-          </button>
-          <button
-            className={`${styles.themeBtn} ${variant === "modern" ? styles.themeBtnActive : ""}`}
-            onClick={() => setVariant("modern")}
-          >
-            Modern
-          </button>
         </div>
 
         {/* ── Right: user chip or login ── */}

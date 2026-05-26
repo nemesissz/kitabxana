@@ -58,7 +58,7 @@ function AdminCategoryPagePdfs() {
       });
   }, []);
 
-  const PDF_TYPE_NAMES = ['kitab-elektron', 'kitab-fiziki', 'kitab-hər ikisi'];
+  const PDF_TYPE_NAMES = ['elektron kitab', 'çap kitab', 'elektron və çap'];
   const filterTypes = (cats) =>
     (cats || []).filter((c) => !PDF_TYPE_NAMES.includes((c.name || '').toLowerCase()));
 

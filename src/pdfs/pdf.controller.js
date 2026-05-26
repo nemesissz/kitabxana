@@ -8,9 +8,9 @@ import activityLog from '../activity-logs/activity-log.service.js';
 function workerCanEditPdfType(workerType, pdfTypeName) {
   if (!workerType) return true;
   const name = (pdfTypeName || '').toLowerCase();
-  if (name.includes('ikisi')) return false;
+  if (name.includes('çap') && name.includes('elektron')) return false;
   if (workerType === 'elektron') return name.includes('elektron');
-  if (workerType === 'fiziki') return name.includes('fiziki');
+  if (workerType === 'fiziki') return name.includes('çap');
   return false;
 }
 
@@ -287,6 +287,7 @@ export const getAllPdfs = async (req, res, next) => {
           title: pdf.title,
           description: pdf.description,
           language: pdf.language,
+          language_flag: pdf.language_flag || null,
           file_path: toWebPath(pdf.file_path),
           image_path: toWebPath(pdf.image_path),
           price: pdf.price,
@@ -298,8 +299,12 @@ export const getAllPdfs = async (req, res, next) => {
           isbn: pdf.isbn || null,
           publication_year: pdf.publication_year || null,
           publisher_location: pdf.publisher_location || null,
+          foreword: pdf.foreword || null,
+          table_of_contents: pdf.table_of_contents || null,
           allow_download: pdf.allow_download !== undefined ? Number(pdf.allow_download) : 1,
           quantity: pdf.quantity || 1,
+          shelf_number: pdf.shelf_number || null,
+          active_rentals_count: parseInt(pdf.active_rentals_count) || 0,
           category_id: pdf.category_id,
           uploaded_by: pdf.uploaded_by,
           uploader_email: pdf.uploader_email,
@@ -375,8 +380,12 @@ export const getAllPdfs = async (req, res, next) => {
         isbn: pdf.isbn || null,
         publication_year: pdf.publication_year || null,
         publisher_location: pdf.publisher_location || null,
+        foreword: pdf.foreword || null,
+        table_of_contents: pdf.table_of_contents || null,
         allow_download: pdf.allow_download !== undefined ? Number(pdf.allow_download) : 1,
         quantity: pdf.quantity || 1,
+        shelf_number: pdf.shelf_number || null,
+        active_rentals_count: parseInt(pdf.active_rentals_count) || 0,
         category_id: pdf.category_id,
         uploaded_by: pdf.uploaded_by,
         uploader_email: pdf.uploader_email,
@@ -478,6 +487,7 @@ export const getPdfById = async (req, res, next) => {
       author: pdf.author || null,
       isbn: pdf.isbn || null,
       order_number: pdf.order_number || null,
+      shelf_number: pdf.shelf_number || null,
       publication_year: pdf.publication_year || null,
       publisher_location: pdf.publisher_location || null,
       foreword: pdf.foreword || null,
@@ -619,7 +629,7 @@ export const updatePdf = async (req, res, next) => {
           const newType = newTypeId
             ? await getOne('SELECT name FROM pdfs_types WHERE id = ?', [newTypeId])
             : null;
-          const isHerIkisiConversion = (newType?.name || '').toLowerCase().includes('ikisi');
+          const isHerIkisiConversion = (() => { const n = (newType?.name || '').toLowerCase(); return n.includes('çap') && n.includes('elektron'); })();
           if (!isHerIkisiConversion) {
             return res.status(403).json({ status: 'error', message: 'Yalnız özünüzün yüklədiyiniz PDF-ləri redaktə edə bilərsiniz' });
           }
@@ -633,7 +643,7 @@ export const updatePdf = async (req, res, next) => {
       const currentPdfRow = await getOne('SELECT pdf_type_id FROM pdfs WHERE id = ?', [id]);
       const typeId = newTypeId || currentPdfRow?.pdf_type_id;
       const pdfType = typeId ? await getOne('SELECT name FROM pdfs_types WHERE id = ?', [typeId]) : null;
-      const targetIsHerIkisi = (pdfType?.name || '').toLowerCase().includes('ikisi');
+      const targetIsHerIkisi = (() => { const n = (pdfType?.name || '').toLowerCase(); return n.includes('çap') && n.includes('elektron'); })();
       // "hər ikisi"-yə çevirməyə icazə var (fiziki işçi mövcud elektron kitabı link edir)
       if (!workerCanEditPdfType(req.user.workerType, pdfType?.name) && !targetIsHerIkisi) {
         return res.status(403).json({ status: 'error', message: 'Bu tipli PDF-ə əməliyyat etmək icazəniz yoxdur' });
@@ -688,7 +698,7 @@ export const updatePdf = async (req, res, next) => {
         targetId: Number(id),
         details: {
           title: pdf?.title || updateData.title || null,
-          category_name: 'kitab-hər ikisi',
+          category_name: 'elektron və çap',
         },
       });
     }
@@ -902,7 +912,7 @@ export const submitPdf = async (req, res, next) => {
     const file = req.files?.file?.[0] || null;
     const coverImage = req.files?.coverImage?.[0] || null;
 
-    const { title, description, table_of_contents, order_number, author, isbn, language, category_id,
+    const { title, description, table_of_contents, order_number, shelf_number, author, isbn, language, category_id,
             pdf_type_id,
             publication_year, publisher_location, price, allow_download, foreword, institution_id,
             linked_pdf_id, quantity } = req.body;
@@ -912,7 +922,7 @@ export const submitPdf = async (req, res, next) => {
     }
 
     const pdf = await pdfService.submitPdf(
-      { title, description, table_of_contents, order_number, author, isbn, language, category_id,
+      { title, description, table_of_contents, order_number, shelf_number, author, isbn, language, category_id,
         pdf_type_id,
         publication_year, publisher_location, price, allow_download, foreword, institution_id,
         linked_pdf_id, quantity,

@@ -1,0 +1,2 @@
+ALTER TABLE pdfs
+  ADD COLUMN IF NOT EXISTS shelf_number VARCHAR(100) NULL AFTER order_number;

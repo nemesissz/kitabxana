@@ -5,31 +5,35 @@ import dataContext from "../../Contexts/GlobalState";
 import axios from "axios";
 import Base_Url_Server from "../../Constants/baseUrl";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import BookCard from "../../Components/BookCard";
+import BookCover from "../../Components/BookCover";
 import Swal from "sweetalert2";
+import { downloadPdf } from "../../Services/pdfService";
 import { displayCategoryName } from "../../Constants/categoryDisplay";
+
 
 function LibraryPage() {
   const store = useContext(dataContext);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState([]);
+  const [pdfsTypes, setPdfsTypes] = useState([]);
   const [pdfs, setPdfs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({ total: 0, page: 1, totalPages: 1 });
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [language, setLanguage] = useState("");
   const [sortBy, setSortBy] = useState("recent");
-  const [view, setView] = useState("grid");
   const [page, setPage] = useState(1);
+  const [downloadingId, setDownloadingId] = useState(null);
 
-  // selectedCat is derived directly from URL — single source of truth
-  const selectedCat = searchParams.get("category") || "";
+  const selectedCat  = searchParams.get("category")   || "";
+  const selectedType = searchParams.get("pdfTypeId")   || "";
 
-  const selectCat = (id) => {
+  const setParam = (key, val) => {
     setPage(1);
-    if (id) setSearchParams({ category: String(id) });
-    else setSearchParams({});
+    const next = new URLSearchParams(searchParams);
+    if (val) next.set(key, val); else next.delete(key);
+    setSearchParams(next);
   };
 
   useEffect(() => {
@@ -37,15 +41,19 @@ function LibraryPage() {
     axios.get(Base_Url_Server + "categories/pdfs")
       .then((res) => setCategories(res.data.data.categories || []))
       .catch(() => {});
+    axios.get(Base_Url_Server + "pdfs-types")
+      .then((res) => setPdfsTypes(res.data.data.types || []))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     setLoading(true);
-    const params = { status: "approved", limit: 18, page, sortBy };
-    if (search.trim()) params.search = search.trim();
-    if (selectedCat) params.categoryId = selectedCat;
-    if (language) params.language = language;
+    const params = { status: "approved", limit: 20, page, sortBy };
+    if (search.trim())  params.search    = search.trim();
+    if (selectedCat)    params.categoryId = selectedCat;
+    if (selectedType)   params.pdfTypeId  = selectedType;
+    if (language)       params.language   = language;
 
     axios
       .get(Base_Url_Server + "pdfs", {
@@ -55,25 +63,44 @@ function LibraryPage() {
       .then((res) => {
         setPdfs(res.data.data.pdfs || []);
         setPagination({
-          total: res.data.data.pagination?.total || 0,
-          page: res.data.data.pagination?.page || 1,
-          totalPages: res.data.data.pagination?.totalPages || 1,
+          total:      res.data.data.pagination?.total      || 0,
+          page:       res.data.data.pagination?.current_page || 1,
+          totalPages: res.data.data.pagination?.total_pages  || 1,
         });
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [selectedCat, search, sortBy, page, language]);
+  }, [selectedCat, selectedType, search, sortBy, page, language]);
 
   const user = store.user.data;
-  const activeCatName = selectedCat
-    ? displayCategoryName(categories.find((c) => String(c.id) === String(selectedCat))?.name || "")
-    : "";
 
-  const countText = loading
-    ? "Yüklənir…"
-    : `${pagination.total} resurs — ${activeCatName || "bütün kateqoriyalarda"}.`;
+  const handleDownload = async (pdf) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({ icon: "warning", title: "Giriş tələb olunur", text: "Yükləmək üçün daxil olun.", confirmButtonColor: "#0B1F3D" });
+      return;
+    }
+    try {
+      setDownloadingId(pdf.id);
+      const blob = await downloadPdf(pdf.id, token);
+      const url  = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${pdf.title || "document"}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      Swal.fire({ icon: "error", title: "Xəta", text: "Yükləmə zamanı xəta baş verdi.", confirmButtonColor: "#0B1F3D" });
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
-  const hasFilter = search || selectedCat || language;
+  const hasFilter = search || selectedCat || selectedType || language;
+  const activeCatName  = selectedCat  ? displayCategoryName(categories.find(c => String(c.id) === selectedCat)?.name || "") : "";
+  const activeTypeName = selectedType ? pdfsTypes.find(t => String(t.id) === selectedType)?.name || "" : "";
 
   return (
     <>
@@ -87,25 +114,46 @@ function LibraryPage() {
               <div className={styles.catList}>
                 <button
                   className={`${styles.catItem} ${!selectedCat ? styles.catItemActive : ""}`}
-                  onClick={() => selectCat("")}
+                  onClick={() => setParam("category", "")}
                 >
                   <span>Hamısı</span>
-                  {!loading && <span className={styles.catCount}>{pagination.total}</span>}
+                  {!loading && !selectedCat && <span className={styles.catCount}>{pagination.total}</span>}
                 </button>
                 {categories.map((c) => (
                   <button
                     key={c.id}
                     className={`${styles.catItem} ${String(selectedCat) === String(c.id) ? styles.catItemActive : ""}`}
-                    onClick={() => selectCat(c.id)}
+                    onClick={() => setParam("category", String(c.id))}
                   >
                     <span>{displayCategoryName(c.name)}</span>
-                    {c.count !== undefined && (
-                      <span className={styles.catCount}>{c.count}</span>
-                    )}
+                    {c.count !== undefined && <span className={styles.catCount}>{c.count}</span>}
                   </button>
                 ))}
               </div>
             </div>
+
+            {pdfsTypes.length > 0 && (
+              <div className={styles.sideSection}>
+                <div className={styles.sideLabel}>PDF TİPİ</div>
+                <div className={styles.catList}>
+                  <button
+                    className={`${styles.catItem} ${!selectedType ? styles.catItemActive : ""}`}
+                    onClick={() => setParam("pdfTypeId", "")}
+                  >
+                    <span>Hamısı</span>
+                  </button>
+                  {pdfsTypes.map((t) => (
+                    <button
+                      key={t.id}
+                      className={`${styles.catItem} ${String(selectedType) === String(t.id) ? styles.catItemActive : ""}`}
+                      onClick={() => setParam("pdfTypeId", String(t.id))}
+                    >
+                      <span>{t.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className={styles.sideSection}>
               <div className={styles.sideLabel}>DİL</div>
@@ -147,11 +195,9 @@ function LibraryPage() {
 
           {/* ── Main area ── */}
           <div className={styles.mainArea}>
-            {/* Result count */}
-            <p className={styles.resultCount}>{countText}</p>
 
             {/* Filter bar */}
-            <form className={styles.filterBar} onSubmit={(e) => e.preventDefault()}>
+            <div className={styles.filterBar}>
               <div className={styles.searchWrap}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--muted)", flexShrink: 0 }}>
                   <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
@@ -160,15 +206,12 @@ function LibraryPage() {
                   className={styles.searchField}
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                  placeholder="Başlıq və ya müəllifə görə axtarın…"
+                  placeholder="Başlıq, müəllif və ya açar söz…"
                 />
                 {search && (
-                  <button type="button" className={styles.clearBtn} onClick={() => { setSearch(""); setPage(1); }}>
-                    ✕
-                  </button>
+                  <button type="button" className={styles.clearBtn} onClick={() => { setSearch(""); setPage(1); }}>✕</button>
                 )}
               </div>
-
               <select
                 className={`mmu-input mmu-select ${styles.filterSelect}`}
                 value={sortBy}
@@ -178,63 +221,35 @@ function LibraryPage() {
                 <option value="downloads">Ən populyar</option>
                 <option value="title">A–Z</option>
               </select>
-
-              <div className={styles.viewToggle}>
-                <button
-                  type="button"
-                  className={`${styles.viewBtn} ${view === "grid" ? styles.viewBtnActive : ""}`}
-                  onClick={() => setView("grid")}
-                  title="Grid"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
-                    <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.viewBtn} ${view === "list" ? styles.viewBtnActive : ""}`}
-                  onClick={() => setView("list")}
-                  title="List"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
-                  </svg>
-                </button>
-              </div>
-            </form>
-
-            {/* Active filters */}
-            <div className={styles.activeFilters}>
-              <span className={styles.activeLabel}>AKTİV:</span>
-              {!hasFilter && (
-                <span style={{ fontSize: 12, color: "var(--muted-2)" }}>filter yoxdur</span>
-              )}
-              {search && (
-                <span className={styles.activeTag}>
-                  "{search}"
-                  <button onClick={() => { setSearch(""); setPage(1); }}>✕</button>
-                </span>
-              )}
-              {selectedCat && (
-                <span className={styles.activeTag}>
-                  {activeCatName}
-                  <button onClick={() => selectCat("")}>✕</button>
-                </span>
-              )}
-              {language && (
-                <span className={styles.activeTag}>
-                  {language.toUpperCase()}
-                  <button onClick={() => { setLanguage(""); setPage(1); }}>✕</button>
-                </span>
-              )}
             </div>
 
-            {/* Results */}
-            {loading ? (
-              <div className={styles.loader}>
-                <div className={styles.spinner} />
+            {/* Active filters */}
+            {hasFilter && (
+              <div className={styles.activeFilters}>
+                <span className={styles.activeLabel}>FİLTR:</span>
+                {search && (
+                  <span className={styles.activeTag}>"{search}" <button onClick={() => { setSearch(""); setPage(1); }}>✕</button></span>
+                )}
+                {selectedCat && (
+                  <span className={styles.activeTag}>{activeCatName} <button onClick={() => setParam("category", "")}>✕</button></span>
+                )}
+                {selectedType && (
+                  <span className={styles.activeTag}>{activeTypeName} <button onClick={() => setParam("pdfTypeId", "")}>✕</button></span>
+                )}
+                {language && (
+                  <span className={styles.activeTag}>{language.toUpperCase()} <button onClick={() => { setLanguage(""); setPage(1); }}>✕</button></span>
+                )}
               </div>
+            )}
+
+            {/* Result count */}
+            <p className={styles.resultCount}>
+              {loading ? "Yüklənir…" : `${pagination.total} nəticə`}
+            </p>
+
+            {/* Table */}
+            {loading ? (
+              <div className={styles.loader}><div className={styles.spinner} /></div>
             ) : pdfs.length === 0 ? (
               <div className={styles.empty}>
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--muted)", margin: "0 auto 12px", display: "block" }}>
@@ -243,30 +258,107 @@ function LibraryPage() {
                 </svg>
                 <p>Heç bir nəticə tapılmadı.</p>
               </div>
-            ) : view === "grid" ? (
-              <div className={styles.grid}>
-                {pdfs.map((pdf) => <BookCard key={pdf.id} pdf={pdf} view="grid" />)}
-              </div>
             ) : (
-              <div className={styles.list}>
-                {pdfs.map((pdf) => <BookCard key={pdf.id} pdf={pdf} view="list" />)}
+              <div className={styles.tableWrap}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th className={styles.thNum}>№</th>
+                      <th className={styles.thCover}></th>
+                      <th>Ad</th>
+                      <th>Müəllif</th>
+                      <th>Kateqoriya</th>
+                      <th>Dil</th>
+                      <th>Tip</th>
+                      <th>Müəssisə / Rəf №</th>
+                      <th className={styles.thActions}></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pdfs.map((pdf, idx) => {
+                      const typeName   = (pdf.pdf_type?.name || "").toLowerCase();
+                      const isHerIkisi = typeName.includes("çap") && typeName.includes("elektron");
+                      const isFiziki   = typeName.includes("çap") && !isHerIkisi;
+                      const isElektron = typeName.includes("elektron") && !isHerIkisi;
+                      const showInst   = isFiziki || isHerIkisi;
+                      const canDownload = !isFiziki && (pdf.allow_download === 1 || pdf.allow_download === "1" || pdf.allow_download === true);
+                      const rowNum = (page - 1) * 20 + idx + 1;
+
+                      return (
+                        <tr key={pdf.id} className={styles.row} onClick={() => navigate(`/library/${pdf.id}`)}>
+                          <td className={styles.tdNum}>{rowNum}</td>
+                          <td className={styles.tdCover} onClick={e => e.stopPropagation()}>
+                            <div className={styles.thumb} onClick={() => navigate(`/library/${pdf.id}`)}>
+                              <BookCover pdf={pdf} />
+                            </div>
+                          </td>
+                          <td className={styles.tdTitle}>
+                            <span className={styles.title}>{pdf.title}</span>
+                          </td>
+                          <td className={styles.tdAuthor}>{pdf.author || <span className={styles.dash}>—</span>}</td>
+                          <td className={styles.tdCat}>
+                            {pdf.category?.name ? displayCategoryName(pdf.category.name) : <span className={styles.dash}>—</span>}
+                          </td>
+                          <td className={styles.tdLang}>
+                            {pdf.language && (
+                              <span className={styles.langBadge}>
+                                {pdf.language_flag && <span>{pdf.language_flag}</span>}
+                                {pdf.language.toUpperCase()}
+                              </span>
+                            )}
+                          </td>
+                          <td className={styles.tdType}>
+                            {pdf.pdf_type?.name
+                              ? <span className={styles.typeTag}>{pdf.pdf_type.name}</span>
+                              : <span className={styles.dash}>—</span>
+                            }
+                          </td>
+                          <td className={styles.tdInst}>
+                            {showInst ? (
+                              (pdf.institution_name || pdf.shelf_number)
+                                ? <span>
+                                    {pdf.institution_name || ""}
+                                    {pdf.institution_name && pdf.shelf_number && " / "}
+                                    {pdf.shelf_number || ""}
+                                  </span>
+                                : <span className={styles.dash}>—</span>
+                            ) : <span className={styles.dash}>—</span>}
+                          </td>
+                          <td className={styles.tdActions} onClick={e => e.stopPropagation()}>
+                            <button
+                              className={styles.btnRead}
+                              onClick={() => navigate(`/library/${pdf.id}`)}
+                              title="Oxu"
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                              Oxu
+                            </button>
+                            {canDownload && (
+                              <button
+                                className={styles.btnDl}
+                                disabled={downloadingId === pdf.id}
+                                onClick={() => handleDownload(pdf)}
+                                title="Yüklə"
+                              >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                {downloadingId === pdf.id ? "…" : "Yüklə"}
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
 
             {/* Pagination */}
             {pagination.totalPages > 1 && (
               <div className={styles.pagination}>
-                <button
-                  className="mmu-btn mmu-btn-outline mmu-btn-sm"
-                  disabled={page <= 1}
-                  onClick={() => setPage((p) => p - 1)}
-                >← Əvvəlki</button>
+                <button className="mmu-btn mmu-btn-outline mmu-btn-sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>← Əvvəlki</button>
                 <span className={styles.pageInfo}>{page} / {pagination.totalPages}</span>
-                <button
-                  className="mmu-btn mmu-btn-outline mmu-btn-sm"
-                  disabled={page >= pagination.totalPages}
-                  onClick={() => setPage((p) => p + 1)}
-                >Növbəti →</button>
+                <button className="mmu-btn mmu-btn-outline mmu-btn-sm" disabled={page >= pagination.totalPages} onClick={() => setPage(p => p + 1)}>Növbəti →</button>
               </div>
             )}
           </div>

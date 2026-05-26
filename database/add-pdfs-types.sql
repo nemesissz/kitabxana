@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS pdfs_types (
 
 -- Addım 2: 3 sabit tipi əlavə et
 INSERT IGNORE INTO pdfs_types (name) VALUES
-  ('kitab-elektron'),
-  ('kitab-fiziki'),
-  ('kitab-hər ikisi');
+  ('elektron kitab'),
+  ('çap kitab'),
+  ('elektron və çap');
 
 -- Addım 3: pdfs cədvəlinə pdf_type_id sütunu əlavə et
 ALTER TABLE pdfs

@@ -26,7 +26,6 @@ import NewsDetailPage from "../Pages/NewsDetailPage";
 import AdminHistoryPage from "../Pages/AdminHistoryPage";
 import AdminAdsPage from "../Pages/AdminAdsPage";
 import UserSubmitPdfPage from "../Pages/UserSubmitPdfPage";
-import AllPdfsPage from "../Pages/AllPdfsPage";
 import AnnouncementsPage from "../Pages/AnnouncementsPage";
 import AdminInstitutionsPage from "../Pages/AdminInstitutionsPage";
 import AdminLanguagesPage from "../Pages/AdminLanguagesPage";
@@ -59,7 +58,7 @@ const router = createBrowserRouter([
       },
       {
         path: "library/all",
-        element: <AllPdfsPage />,
+        element: <LibraryPage />,
       },
       {
         path: "about",

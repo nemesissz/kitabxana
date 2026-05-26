@@ -72,6 +72,26 @@ export const rejectRental = async (req, res, next) => {
   }
 };
 
+export const adminCreateRental = async (req, res, next) => {
+  try {
+    const { pdf_id, user_id, end_date, notes } = req.body;
+    if (!pdf_id || !user_id || !end_date) {
+      return res.status(400).json({ status: 'error', message: 'pdf_id, user_id və end_date tələb olunur' });
+    }
+    const rental = await rentalService.adminCreateRental({
+      pdf_id: Number(pdf_id),
+      user_id: Number(user_id),
+      end_date,
+      notes: notes || null,
+      admin_id: req.user.id,
+    });
+    res.status(201).json({ status: 'success', data: { rental } });
+  } catch (error) {
+    if (error.statusCode) return res.status(error.statusCode).json({ status: 'error', message: error.message });
+    next(error);
+  }
+};
+
 export const markReturned = async (req, res, next) => {
   try {
     const { id } = req.params;
